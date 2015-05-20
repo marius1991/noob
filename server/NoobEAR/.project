@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>NoobOnlineService</project>
+		<project>NoobOnlineServiceClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
