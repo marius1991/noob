@@ -1,4 +1,4 @@
-package de.fh_muenster.noobservice;
+package de.fh_muenster.noob.noobservice;
 
 public class NoobException extends Exception {
 
