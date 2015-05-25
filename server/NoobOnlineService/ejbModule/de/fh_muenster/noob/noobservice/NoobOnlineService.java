@@ -2,9 +2,10 @@ package de.fh_muenster.noob.noobservice;
 
 import java.util.List;
 
-import de.fh_muenster.noob.location.Comment;
-import de.fh_muenster.noob.location.Location;
-import de.fh_muenster.noob.user.User;
+import de.fh_muenster.noob.entities.Comment;
+import de.fh_muenster.noob.entities.Location;
+import de.fh_muenster.noob.entities.User;
+
 
 
 /**

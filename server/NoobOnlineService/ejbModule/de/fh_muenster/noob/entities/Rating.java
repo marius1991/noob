@@ -1,6 +1,7 @@
-package de.fh_muenster.noob.location;
+package de.fh_muenster.noob.entities;
 
-import de.fh_muenster.noob.user.User;
+
+
 
 public class Rating {
 	

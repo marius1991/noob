@@ -1,10 +1,9 @@
-package de.fh_muenster.noob.location;
+package de.fh_muenster.noob.entities;
 
 import java.util.ArrayList;
 
-import de.fh_muenster.noob.user.User;
 
-public class LocationImpl implements Location{
+public class Location{
 	
 	private int id;
 	
@@ -34,7 +33,7 @@ public class LocationImpl implements Location{
 	
 	
 	
-	public LocationImpl(){
+	public Location(){
 		
 	}
 	

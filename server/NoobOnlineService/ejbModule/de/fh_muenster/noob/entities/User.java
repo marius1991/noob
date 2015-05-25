@@ -1,12 +1,9 @@
-package de.fh_muenster.noob.user;
+package de.fh_muenster.noob.entities;
 
 import java.util.ArrayList;
 
-import de.fh_muenster.noob.location.Comment;
-import de.fh_muenster.noob.location.Location;
-import de.fh_muenster.noob.location.Rating;
 
-public class UserImpl implements User{
+public class User{
 	
 	private int id;
 	
@@ -22,7 +19,7 @@ public class UserImpl implements User{
 	
 	private ArrayList<Comment> comments;
 	
-	public UserImpl(String username, String email, String password){
+	public User(String username, String email, String password){
 		
 		this.name=username;
 		this.password=password;
@@ -58,6 +55,18 @@ public class UserImpl implements User{
 		this.email = email;
 	}
 	
+	public ArrayList<Location> getLocations() {
+		return locations;
+	}
+
+	public ArrayList<Rating> getRatings() {
+		return ratings;
+	}
+
+	public ArrayList<Comment> getComments() {
+		return comments;
+	}
+
 	public boolean createLocation(String name, String adresse, String category, String description){
 		return false;
 	

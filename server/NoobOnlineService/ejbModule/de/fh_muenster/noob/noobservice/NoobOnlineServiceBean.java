@@ -1,20 +1,25 @@
 package de.fh_muenster.noob.noobservice;
 
-import de.fh_muenster.noob.location.Comment;
-import de.fh_muenster.noob.location.Location;
-import de.fh_muenster.noob.user.User;
+import de.fh_muenster.noob.entities.Comment;
+import de.fh_muenster.noob.entities.Location;
+import de.fh_muenster.noob.entities.User;
 
 import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.jws.WebService;
+
+import org.jboss.ws.api.annotation.WebContext;
 
 /**
  * @author philipp
  * Session Bean implementation class NoobOnlineServiceBean
  */
+@WebService
+@WebContext(contextRoot="/noob")
 @Stateless
-@Remote(NoobOnlineService.class)
+//@Remote(NoobOnlineService.class)
 public class NoobOnlineServiceBean implements NoobOnlineService {
 
     /**
