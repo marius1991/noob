@@ -32,8 +32,5 @@ public class NoobSession {
 
 	public Date getCreationTime() {
 		return creationTime;
-	}
-
-	
-	
+	}	
 }
