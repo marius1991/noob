@@ -29,7 +29,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws InvalidDataException
 	 */
-	public ReturncodeResponse register(String username, String email, String password, String passwordConfirmation) throws InvalidDataException;
+	public ReturncodeResponse register(String username, String email, String password, String passwordConfirmation);
 	
 	/**
 	 * Login an User.
@@ -39,7 +39,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws InvalidLoginException
 	 */
-	public LoginResponse login(String email, String password) throws InvalidLoginException;
+	public LoginResponse login(String email, String password);
 	
 	/**
 	 * Logout an User
@@ -47,7 +47,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse logout() throws NoSessionException;
+	public ReturncodeResponse logout();
 	
 	/**
 	 * Create a new Location.
@@ -64,7 +64,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse createLocation(String name, String category, String description, String street, String number, String plz, String city, String coordinates, User owner)throws NoSessionException;
+	public ReturncodeResponse createLocation(String name, String category, String description, String street, String number, String plz, String city, String coordinates, User owner);
 	
 	/**
 	 * Returns a list of all categories
@@ -72,7 +72,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public CategoryListResponse listCategories() throws NoSessionException;
+	public CategoryListResponse listCategories();
 	
 	/**
 	 * Returns a List of locations in a specific city, matching a specific category.
@@ -82,7 +82,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public LocationListResponse listLocationWithCategory(String category, String city) throws NoSessionException;
+	public LocationListResponse listLocationWithCategory(String category, String city);
 	
 	/**
 	 * Returns a list of all locations in a specific city.
@@ -91,7 +91,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public LocationListResponse listAllLocations(String city) throws NoSessionException;
+	public LocationListResponse listAllLocations(String city);
 	
 	/**
 	 * Returns a list of locations with a specific name in a city.
@@ -101,7 +101,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public LocationListResponse listLocationsWithName(String name, String city) throws NoSessionException;
+	public LocationListResponse listLocationsWithName(String name, String city);
 	
 	/**
 	 * Create a new comment on a location.
@@ -112,7 +112,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse commentOnLocation(User user, Location location, String text) throws NoSessionException;
+	public ReturncodeResponse commentOnLocation(User user, Location location, String text);
 	
 	/**
 	 * Create a new comment on a comment.
@@ -122,7 +122,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse commentOnComment(User user, Comment comment, String text) throws NoSessionException;
+	public ReturncodeResponse commentOnComment(User user, Comment comment, String text);
 	
 	/**
 	 * Delete an User.
@@ -130,7 +130,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse deleteUser(User user) throws NoSessionException;
+	public ReturncodeResponse deleteUser(User user);
 	
 	/**
 	 * Returns a location, so that you can update the details of it. After that you have to send the Location back to Server with "setLocationDetails".
@@ -139,7 +139,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public LocationTO getLocationDetails(Location location) throws NoSessionException;
+	public LocationTO getLocationDetails(Location location);
 	
 	/**
 	 * Sends a location back to the Server so that updates of the locationdetails can persisted.
@@ -148,7 +148,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse setLocationDetails(Location location) throws NoSessionException;
+	public ReturncodeResponse setLocationDetails(Location location);
 	
 	/**
 	 * ??obsolet??
@@ -158,7 +158,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws NoSessionException
 	 */
-	public UserTO getUserDetails(User user) throws NoSessionException;
+	public UserTO getUserDetails(User user);
 	
 	/**
 	 * Sends an user back to the server, so that user-details can be persisted.
@@ -167,7 +167,7 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse setUserDetails(User user) throws NoSessionException;
+	public ReturncodeResponse setUserDetails(User user);
 	
 	/**
 	 * Give a Rating from 1 to 10 to a Location.
@@ -178,6 +178,6 @@ public interface NoobOnlineService {
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse giveRating(User user, Location location, int value) throws NoSessionException;
+	public ReturncodeResponse giveRating(User user, Location location, int value);
 	
 }
