@@ -12,6 +12,8 @@ public interface NoobDAOLocal {
 	
 	public User findUserById(int id);
 	
+	public User findUserByEmail(String email);
+	
 	public Location findLocationByName(String name);
 	
 	public Location findLocationById(int id);

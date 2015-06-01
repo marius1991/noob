@@ -6,31 +6,15 @@ import de.noob.entities.Comment;
 import de.noob.entities.Rating;
 import de.noob.entities.User;
 
-
+/**
+ * 
+ * @author philipp
+ *
+ */
 public class LocationTO extends ReturncodeResponse {
 
 	private static final long serialVersionUID = -5498069855610055362L;
 	
-	public LocationTO(int id, String name, String category, String description,
-			String street, String number, int plz, String city,
-			String coordinates, int averageRating, ArrayList<Rating> ratings,
-			ArrayList<Comment> comments, User owner) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.category = category;
-		this.description = description;
-		this.street = street;
-		this.number = number;
-		this.plz = plz;
-		this.city = city;
-		this.coordinates = coordinates;
-		this.averageRating = averageRating;
-		this.ratings = ratings;
-		this.comments = comments;
-		this.owner = owner;
-	}
-
 	private int id;
 	
 	private String name;
@@ -57,6 +41,25 @@ public class LocationTO extends ReturncodeResponse {
 	
 	private User owner;
 	
+	public LocationTO(int id, String name, String category, String description,
+			String street, String number, int plz, String city,
+			String coordinates, int averageRating, ArrayList<Rating> ratings,
+			ArrayList<Comment> comments, User owner) {
+		this.id = id;
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.street = street;
+		this.number = number;
+		this.plz = plz;
+		this.city = city;
+		this.coordinates = coordinates;
+		this.averageRating = averageRating;
+		this.ratings = ratings;
+		this.comments = comments;
+		this.owner = owner;
+	}
+
 	public LocationTO() {
 	}
 

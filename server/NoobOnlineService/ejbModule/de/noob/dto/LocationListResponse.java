@@ -8,10 +8,6 @@ public class LocationListResponse extends ReturncodeResponse {
 	
 	private List<LocationTO> locations;
 	
-	public LocationListResponse() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public List<LocationTO> getLocations() {
 		return locations;
 	}

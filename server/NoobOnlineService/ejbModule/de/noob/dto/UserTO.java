@@ -1,18 +1,13 @@
 package de.noob.dto;
 
-import java.util.ArrayList;
-
-import de.noob.entities.Comment;
-import de.noob.entities.Location;
-import de.noob.entities.Rating;
+import java.util.List;
 
 
 public class UserTO extends ReturncodeResponse {
 
 	private static final long serialVersionUID = 6907767619451988547L;
 	
-	private int id;
-	
+	private int id;	
 
 	private String name;
 	
@@ -20,16 +15,15 @@ public class UserTO extends ReturncodeResponse {
 	
 	private String email;
 	
-	private ArrayList<Location> locations;
+	private List<LocationTO> locations;
 	
-	private ArrayList<Rating> ratings;
+	private List<RatingTO> ratings;
 	
-	private ArrayList<Comment> comments;
+	private List<CommentTO> comments;
 	
 	public UserTO(int id, String name, String password, String email,
-			ArrayList<Location> locations, ArrayList<Rating> ratings,
-			ArrayList<Comment> comments) {
-		super();
+			List<LocationTO> locations, List<RatingTO> ratings,
+			List<CommentTO> comments) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
@@ -71,27 +65,27 @@ public class UserTO extends ReturncodeResponse {
 		this.email = email;
 	}
 
-	public ArrayList<Location> getLocations() {
+	public List<LocationTO> getLocations() {
 		return locations;
 	}
 
-	public void setLocations(ArrayList<Location> locations) {
+	public void setLocations(List<LocationTO> locations) {
 		this.locations = locations;
 	}
 
-	public ArrayList<Rating> getRatings() {
+	public List<RatingTO> getRatings() {
 		return ratings;
 	}
 
-	public void setRatings(ArrayList<Rating> ratings) {
+	public void setRatings(List<RatingTO> ratings) {
 		this.ratings = ratings;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<CommentTO> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(List<CommentTO> comments) {
 		this.comments = comments;
 	}
 	

@@ -19,13 +19,18 @@ public class NoobDAO implements NoobDAOLocal {
 	private EntityManager em;
 
 	@Override
+	public User findUserById(int id) {
+		return em.find(User.class, id);
+	}
+
+	@Override
 	public User findUserByName(String name) {
 		return em.find(User.class, name);
 	}
 
 	@Override
-	public User findUserById(int id) {
-		return em.find(User.class, id);
+	public User findUserByEmail(String email) {
+		return em.find(User.class, email);
 	}
 
 	@Override

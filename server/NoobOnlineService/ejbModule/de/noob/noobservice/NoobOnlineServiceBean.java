@@ -4,7 +4,7 @@ import de.noob.dao.NoobDAOLocal;
 import de.noob.dto.CategoryListResponse;
 import de.noob.dto.LocationListResponse;
 import de.noob.dto.LocationTO;
-import de.noob.dto.LoginResponse;
+import de.noob.dto.UserLoginResponse;
 import de.noob.dto.ReturncodeResponse;
 import de.noob.dto.UserTO;
 import de.noob.entities.Comment;
@@ -44,14 +44,14 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	 * @see NoobOnlineService#register(String, String, String, String)
 	 */
 	public ReturncodeResponse register(String username, String email, String password, String passwordConfirmation) {
-	    // TODO Auto-generated method stub
-			return null;
+	    
+		return null;
 	}
 
 	/**
 	 * @see NoobOnlineService#login(String, String)
 	 */
-	public LoginResponse login(String email, String password) {
+	public UserLoginResponse login(String email, String password) {
 	    // TODO Auto-generated method stub
 			return null;
 	}

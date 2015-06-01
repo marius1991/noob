@@ -8,10 +8,6 @@ public class CategoryListResponse extends ReturncodeResponse {
 	
 	private List<String> categories;
 	
-	public CategoryListResponse() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public List<String> getCategories() {
 		return categories;
 	}

@@ -1,6 +1,6 @@
 package de.noob.dto;
 
-public class LoginResponse extends ReturncodeResponse {
+public class UserLoginResponse extends ReturncodeResponse {
 
 	private static final long serialVersionUID = -3173158310918408228L;
 

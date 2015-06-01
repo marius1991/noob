@@ -7,7 +7,7 @@ public class Rating {
 	
 	private int id;
 	
-	private int[] value;
+	private int value;
 	
 	private Location location;
 	
@@ -24,11 +24,11 @@ public class Rating {
 		this.id = id;
 	}
 
-	public int[] getValue() {
+	public int getValue() {
 		return value;
 	}
 
-	public void setValue(int[] value) {
+	public void setValue(int value) {
 		this.value = value;
 	}
 

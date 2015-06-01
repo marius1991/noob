@@ -4,7 +4,7 @@ package de.noob.noobservice;
 import de.noob.dto.CategoryListResponse;
 import de.noob.dto.LocationListResponse;
 import de.noob.dto.LocationTO;
-import de.noob.dto.LoginResponse;
+import de.noob.dto.UserLoginResponse;
 import de.noob.dto.ReturncodeResponse;
 import de.noob.dto.UserTO;
 import de.noob.entities.Comment;
@@ -39,7 +39,7 @@ public interface NoobOnlineService {
 	 * @return
 	 * @throws InvalidLoginException
 	 */
-	public LoginResponse login(String email, String password);
+	public UserLoginResponse login(String email, String password);
 	
 	/**
 	 * Logout an User
@@ -125,13 +125,16 @@ public interface NoobOnlineService {
 	public ReturncodeResponse commentOnComment(User user, Comment comment, String text);
 	
 	/**
-	 * Delete an User.
+	 * Give a Rating from 1 to 10 to a Location.
+	 * 
 	 * @param user
+	 * @param location
+	 * @param value (1 to 10!)
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse deleteUser(User user);
-	
+	public ReturncodeResponse giveRating(User user, Location location, int value);
+
 	/**
 	 * Returns a location, so that you can update the details of it. After that you have to send the Location back to Server with "setLocationDetails".
 	 * 
@@ -170,14 +173,11 @@ public interface NoobOnlineService {
 	public ReturncodeResponse setUserDetails(User user);
 	
 	/**
-	 * Give a Rating from 1 to 10 to a Location.
-	 * 
+	 * Delete an User.
 	 * @param user
-	 * @param location
-	 * @param value (1 to 10!)
 	 * @return 
 	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse giveRating(User user, Location location, int value);
+	public ReturncodeResponse deleteUser(User user);
 	
 }
