@@ -2,17 +2,24 @@ package de.noob.entities;
 
 import java.util.ArrayList;
 
+import javax.persistence.*;
 
+@Entity
 public class Comment {
 
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	private String text;
 	
+	@OneToMany (cascade = CascadeType.REMOVE)
 	private ArrayList<Comment> comments;
 	
+	@ManyToOne
 	private Location location;
 	
+	@ManyToOne
 	private User owner;
 	
 	
