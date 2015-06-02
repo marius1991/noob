@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class User{
 	
-	@Id
+	
 	@GeneratedValue
 	private int id;
 	
@@ -15,6 +15,7 @@ public class User{
 	
 	private String password;
 	
+	@Id
 	private String email;
 	
 	@OneToMany (mappedBy ="locations")

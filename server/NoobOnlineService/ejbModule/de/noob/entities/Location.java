@@ -13,7 +13,7 @@ public class Location{
 	
 	private String name;
 	
-	private String category;
+	private Category category;
 	
 	private String description;
 	
@@ -63,11 +63,11 @@ public class Location{
 	}
 
 	public String getCategory() {
-		return category;
+		return category.getName();
 	}
 
 	public void setCategory(String category) {
-		this.category = category;
+		this.category.setName(category);
 	}
 
 	public String getDescription() {
