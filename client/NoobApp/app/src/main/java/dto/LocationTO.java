@@ -1,10 +1,6 @@
-package de.noob.dto;
+package dto;
 
 import java.util.ArrayList;
-
-import de.noob.entities.Comment;
-import de.noob.entities.Rating;
-import de.noob.entities.User;
 
 /**
  * 
@@ -35,16 +31,16 @@ public class LocationTO extends ReturncodeResponse {
 	
 	private int averageRating;
 	
-	private ArrayList<Rating> ratings;
+	private ArrayList<RatingTO> ratings;
 	
-	private ArrayList<Comment> comments;
+	private ArrayList<CommentTO> comments;
 	
-	private User owner;
+	private UserTO owner;
 	
 	public LocationTO(int id, String name, String category, String description,
 			String street, String number, int plz, String city,
-			String coordinates, int averageRating, ArrayList<Rating> ratings,
-			ArrayList<Comment> comments, User owner) {
+			String coordinates, int averageRating, ArrayList<RatingTO> ratings,
+			ArrayList<CommentTO> comments, UserTO owner) {
 		this.id = id;
 		this.name = name;
 		this.category = category;
@@ -143,27 +139,27 @@ public class LocationTO extends ReturncodeResponse {
 		this.averageRating = averageRating;
 	}
 
-	public ArrayList<Rating> getRatings() {
+	public ArrayList<RatingTO> getRatings() {
 		return ratings;
 	}
 
-	public void setRatings(ArrayList<Rating> ratings) {
+	public void setRatings(ArrayList<RatingTO> ratings) {
 		this.ratings = ratings;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public ArrayList<CommentTO> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(ArrayList<CommentTO> comments) {
 		this.comments = comments;
 	}
 
-	public User getOwner() {
+	public UserTO getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(UserTO owner) {
 		this.owner = owner;
 	}
 	

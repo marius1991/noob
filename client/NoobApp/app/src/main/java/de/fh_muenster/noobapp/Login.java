@@ -19,13 +19,14 @@ public class Login extends ActionBarActivity {
 
     private Button loginButton;
     private TextView registerView;
-
+    private NoobOnlineServiceImpl onlineService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        onlineService = new NoobOnlineServiceImpl();
 
         ((TextView) findViewById(R.id.textView3)).setOnClickListener(new View.OnClickListener() {
 
@@ -51,6 +52,7 @@ public class Login extends ActionBarActivity {
                     case MotionEvent.ACTION_UP: {
                         v.getBackground().clearColorFilter();
                         v.invalidate();
+                        onlineService.register("Test", "test", "test", "test");
                         break;
                     }
                 }

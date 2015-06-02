@@ -44,8 +44,9 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	 * @see NoobOnlineService#register(String, String, String, String)
 	 */
 	public ReturncodeResponse register(String username, String email, String password, String passwordConfirmation) {
-	    
-		return null;
+	    ReturncodeResponse re = new ReturncodeResponse();
+	    re.setMessage("Es hat funktioniert");
+		return re;
 	}
 
 	/**
