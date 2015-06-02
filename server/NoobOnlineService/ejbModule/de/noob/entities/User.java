@@ -2,22 +2,32 @@ package de.noob.entities;
 
 import java.util.ArrayList;
 
+import javax.persistence.*;
 
+@Entity
 public class User{
 	
+	
+	@GeneratedValue
 	private int id;
 	
 	private String name;
 	
 	private String password;
 	
+	@Id
 	private String email;
 	
+	@OneToMany (mappedBy ="locations")
 	private ArrayList<Location> locations;
 	
+	@OneToMany (mappedBy ="ratings", cascade = CascadeType.REMOVE)
 	private ArrayList<Rating> ratings;
 	
+	@OneToMany (mappedBy ="comments", cascade = CascadeType.REMOVE)
 	private ArrayList<Comment> comments;
+	
+	
 	
 	public User(String username, String email, String password){
 		

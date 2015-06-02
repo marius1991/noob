@@ -2,14 +2,18 @@ package de.noob.entities;
 
 import java.util.ArrayList;
 
+import javax.persistence.*;
 
+@Entity
 public class Location{
 	
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	private String name;
 	
-	private String category;
+	private Category category;
 	
 	private String description;
 	
@@ -25,10 +29,13 @@ public class Location{
 	
 	private int averageRating;
 	
+	@OneToMany (mappedBy="ratings", cascade = CascadeType.REMOVE)
 	private ArrayList<Rating> ratings;
 	
+	@OneToMany (mappedBy ="comments", cascade = CascadeType.REMOVE)
 	private ArrayList<Comment> comments;
 	
+	@ManyToOne
 	private User owner;
 	
 	
@@ -56,11 +63,11 @@ public class Location{
 	}
 
 	public String getCategory() {
-		return category;
+		return category.getName();
 	}
 
 	public void setCategory(String category) {
-		this.category = category;
+		this.category.setName(category);
 	}
 
 	public String getDescription() {

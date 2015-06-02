@@ -1,16 +1,22 @@
 package de.noob.entities;
 
+import javax.persistence.*;
 
 
 
+@Entity
 public class Rating {
 	
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	private int value;
 	
+	@ManyToOne
 	private Location location;
 	
+	@ManyToOne
 	private User owner;
 	
 	
