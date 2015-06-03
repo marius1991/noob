@@ -1,8 +1,10 @@
 package de.fh_muenster.noobapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class Login extends ActionBarActivity {
@@ -52,7 +55,7 @@ public class Login extends ActionBarActivity {
                     case MotionEvent.ACTION_UP: {
                         v.getBackground().clearColorFilter();
                         v.invalidate();
-                        onlineService.register("Test", "test", "test", "test");
+                        new PostLoginToServer().execute("test");
                         break;
                     }
                 }
@@ -110,5 +113,22 @@ public class Login extends ActionBarActivity {
         Intent i = new Intent(Login.this, Register.class);
         startActivity(i);
     }
+
+    //Asynchron senden (Innere Klasse)
+    class PostLoginToServer extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            onlineService.register("Test", "test", "test", "test");
+            return "Erfolg";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(Login.this, result, Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 }
 
