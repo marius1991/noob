@@ -51,12 +51,11 @@ public class DtoAssembler {
 				location.getStreet(), 
 				location.getNumber(), 
 				location.getPlz(), 
-				location.getCity(), 
-				location.getCoordinates(), 
+				location.getCity(),  
 				location.getAverageRating(), 
-				location.getRatings(), 
-				location.getComments(), 
-				location.getOwner());
+				makeRatingsDTO(location.getRatings()), 
+				makeCommentsDTO(location.getComments()), 
+				makeDTO(location.getOwner()));
 		return dto;
 	}
 

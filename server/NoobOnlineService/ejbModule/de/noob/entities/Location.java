@@ -13,7 +13,7 @@ public class Location{
 	
 	private String name;
 	
-	private Category category;
+	private String category;
 	
 	private String description;
 	
@@ -24,8 +24,6 @@ public class Location{
 	private int plz;
 	
 	private String city;
-	
-	private String coordinates;
 	
 	private int averageRating;
 	
@@ -38,13 +36,20 @@ public class Location{
 	@ManyToOne
 	private User owner;
 	
-	
-	
-	public Location(){
-		
+	public Location() {
 	}
 	
-	
+	public Location(String name, String category, String description,
+			String street, String number, int plz, String city, User owner) {
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.street = street;
+		this.number = number;
+		this.plz = plz;
+		this.city = city;
+		this.owner = owner;
+	}	
 
 	public int getId() {
 		return id;
@@ -63,11 +68,11 @@ public class Location{
 	}
 
 	public String getCategory() {
-		return category.getName();
+		return category;
 	}
 
 	public void setCategory(String category) {
-		this.category.setName(category);
+		this.category = category;
 	}
 
 	public String getDescription() {
@@ -110,14 +115,6 @@ public class Location{
 		this.city = city;
 	}
 
-	public String getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(String coordinates) {
-		this.coordinates = coordinates;
-	}
-
 	public int getAverageRating() {
 		return averageRating;
 	}
@@ -148,6 +145,14 @@ public class Location{
 
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+
+	public void addRating(User user, int value) {
+		// TODO Neues Rating eines Users hinzufügen, falls User schon geratet altes Rating überschreiben.		
+	}
+
+	public void addComment(User user, String text) {
+		// TODO Neuen Kommentar zur location hinzufügen
 	}
 
 }

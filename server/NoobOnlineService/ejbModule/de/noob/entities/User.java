@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 public class User{
 	
-	
 	@GeneratedValue
 	private int id;
 	
@@ -79,12 +78,8 @@ public class User{
 
 	public boolean createLocation(String name, String adresse, String category, String description){
 		return false;
-	
 	}
 	
-	public boolean deleteUser(){
-		return false;
-		
-	}
+	
 
 }

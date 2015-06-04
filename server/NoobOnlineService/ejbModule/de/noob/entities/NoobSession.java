@@ -2,11 +2,21 @@ package de.noob.entities;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
+@Entity
 public class NoobSession {
-
+	
+	@Id
+	@GeneratedValue
 	private int id;
+	
+	@OneToOne
 	private User user;
+	
 	private Date creationTime;
 		
 	public NoobSession(User user) {

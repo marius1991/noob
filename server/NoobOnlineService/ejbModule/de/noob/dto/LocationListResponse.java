@@ -2,7 +2,7 @@ package de.noob.dto;
 
 import java.util.List;
 
-public class LocationListResponse extends ReturncodeResponse {
+public class LocationListResponse extends ReturnCodeResponse {
 	
 	private static final long serialVersionUID = 7195725464159927947L;
 	

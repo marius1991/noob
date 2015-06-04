@@ -64,12 +64,9 @@ public class Comment {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	
-	public void answer(Comment answerComment){
-	
-	}
-	
-	public void delete(){
+
+	public void addComment(User user, String text) {
+		// TODO Kommentar hinzufügen
 		
 	}
 	
