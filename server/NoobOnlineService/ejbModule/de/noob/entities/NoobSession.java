@@ -1,5 +1,6 @@
 package de.noob.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -8,8 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-public class NoobSession {
+public class NoobSession implements Serializable  {
 	
+	private static final long serialVersionUID = -5959083437227421525L;
+
 	@Id
 	@GeneratedValue
 	private int id;
@@ -22,6 +25,9 @@ public class NoobSession {
 	public NoobSession(User user) {
 		this.user = user;
 		this.creationTime = new Date();
+	}
+	
+	public NoobSession() {
 	}
 
 	public int getId() {

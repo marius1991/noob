@@ -1,11 +1,14 @@
 package de.noob.entities;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
 @Entity
-public class Comment {
+public class Comment implements Serializable {
+
+	private static final long serialVersionUID = -682681573951550447L;
 
 	@Id
 	@GeneratedValue
@@ -13,8 +16,8 @@ public class Comment {
 	
 	private String text;
 	
-	@OneToMany (cascade = CascadeType.REMOVE)
-	private ArrayList<Comment> comments;
+	@OneToMany (mappedBy = "superComment", cascade = CascadeType.REMOVE)
+	private List<Comment> comments;
 	
 	@ManyToOne
 	private Location location;
@@ -22,7 +25,11 @@ public class Comment {
 	@ManyToOne
 	private User owner;
 	
+	@ManyToOne
+	private Comment superComment;
 	
+	public Comment() {
+	}
 	
 
 	public int getId() {
@@ -41,11 +48,11 @@ public class Comment {
 		this.text = text;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 

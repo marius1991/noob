@@ -126,7 +126,7 @@ public class DtoAssembler {
 	 * @param comments
 	 * @return
 	 */
-	private List<CommentTO> makeCommentsDTO(ArrayList<Comment> comments) {
+	private List<CommentTO> makeCommentsDTO(List<Comment> comments) {
 		List<CommentTO> toList = new ArrayList<CommentTO>();
 		for(Comment comment: comments) {
 			toList.add(makeDTO(comment));

@@ -1,12 +1,16 @@
 package de.noob.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 
 
 @Entity
-public class Rating {
-	
+public class Rating implements Serializable {
+
+	private static final long serialVersionUID = 8544212870790206964L;
+
 	@Id
 	@GeneratedValue
 	private int id;
@@ -19,7 +23,8 @@ public class Rating {
 	@ManyToOne
 	private User owner;
 	
-	
+	public Rating() {
+	}
 	
 
 	public int getId() {

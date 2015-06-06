@@ -1,12 +1,15 @@
 package de.noob.entities;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
 @Entity
-public class User{
+public class User implements Serializable {
 	
+	private static final long serialVersionUID = 6341269371900561214L;
+
 	@GeneratedValue
 	private int id;
 	
@@ -17,16 +20,17 @@ public class User{
 	@Id
 	private String email;
 	
-	@OneToMany (mappedBy ="locations")
-	private ArrayList<Location> locations;
+	@OneToMany (mappedBy ="owner")
+	private List<Location> locations;
 	
-	@OneToMany (mappedBy ="ratings", cascade = CascadeType.REMOVE)
-	private ArrayList<Rating> ratings;
+	@OneToMany (mappedBy ="owner", cascade = CascadeType.REMOVE)
+	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="comments", cascade = CascadeType.REMOVE)
-	private ArrayList<Comment> comments;
+	@OneToMany (mappedBy ="owner", cascade = CascadeType.REMOVE)
+	private List<Comment> comments;
 	
-	
+	public User() {
+	}
 	
 	public User(String username, String email, String password){
 		
@@ -64,15 +68,15 @@ public class User{
 		this.email = email;
 	}
 	
-	public ArrayList<Location> getLocations() {
+	public List<Location> getLocations() {
 		return locations;
 	}
 
-	public ArrayList<Rating> getRatings() {
+	public List<Rating> getRatings() {
 		return ratings;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
