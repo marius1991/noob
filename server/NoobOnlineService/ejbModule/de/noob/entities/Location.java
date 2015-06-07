@@ -5,6 +5,11 @@ import java.util.List;
 
 import javax.persistence.*;
 
+/**
+ * 
+ * @author Tim
+ *
+ */
 @Entity
 public class Location implements Serializable {
 

@@ -5,7 +5,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 
-
+/**
+ * 
+ * @author Tim
+ *
+ */
 @Entity
 public class Rating implements Serializable {
 

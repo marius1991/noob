@@ -5,6 +5,11 @@ import java.util.List;
 
 import javax.persistence.*;
 
+/**
+ * 
+ * @author Tim, Philipp
+ *
+ */
 @Entity
 public class User implements Serializable {
 	

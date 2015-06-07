@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+/*
+ * @author Tim, Philipp
+ */
 @Entity
 public class Comment implements Serializable {
 
