@@ -1,4 +1,4 @@
-package de.fh_muenster.noobapp;
+package de.fh_muenster.noobApp;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 

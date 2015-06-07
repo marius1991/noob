@@ -1,16 +1,15 @@
-package de.fh_muenster.noobapp;
+package de.fh_muenster.noobApp;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,40 +17,41 @@ import java.util.List;
 /**
  * Created by marius on 02.06.15.
  * @author marius
- * Activity zum Auswählen der Stadt
+ * Activity zeigt die Kategorien von Locations der ausgewählten Stadt
  */
-public class CitySelectionActivity extends Activity implements OnItemSelectedListener {
+public class CategorySelectionActivity extends ActionBarActivity implements OnItemSelectedListener {
 
     private String selected = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_city_selection);
+        setContentView(R.layout.activity_category_selection);
+
+        //Titel der Activity durch den Namen der ausgewählten Stadt ersetzen
+        NoobApplication myApp = (NoobApplication) getApplication();
+        setTitle(myApp.getCity());
 
         //Liste mit Testdaten füllen
         List valueList = new ArrayList<String>();
-        valueList.add("Münster");
-        valueList.add("Dortmund");
-        valueList.add("Essen");
-        valueList.add("Osnabrück");
-        valueList.add("Hamburg");
-        valueList.add("Bremen");
+        valueList.add("Kneipe");
+        valueList.add("Arzt");
+        valueList.add("Supermarkt");
+        valueList.add("Bar");
+        valueList.add("Fastfood");
+        valueList.add("Tankstelle");
 
-        //Spinner Objekt mit Liste füllen
+        //Spinner Objekt mit Testdaten füllen
         ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
         Spinner sp = (Spinner)findViewById(R.id.spinner);
         sp.setAdapter(adapter);
         sp.setOnItemSelectedListener(this);
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_city_selection, menu);
+        getMenuInflater().inflate(R.menu.menu_category_selection, menu);
         return true;
     }
 
@@ -70,11 +70,9 @@ public class CitySelectionActivity extends Activity implements OnItemSelectedLis
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         selected = parent.getItemAtPosition(position).toString();
-        //Toast.makeText(parent.getContext(), selected, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -82,12 +80,12 @@ public class CitySelectionActivity extends Activity implements OnItemSelectedLis
 
     }
 
-    //Bei Klick auf Login Button wird die nächste Activity aufgerufen und die ausgewählte Stadt zentral gespeichert
+    //Beim Klick auf den Button "Aüswählen" wird die nächste Activity aufgerufen und die ausgewählte Kategorie zetral gespeichert
     public void clickFunc(View view){
         NoobApplication myApp = (NoobApplication) getApplication();
-        myApp.setCity(selected);
-        //Toast.makeText(CitySelectionActivity.this, selected, Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(CitySelectionActivity.this, CategorySelectionActivity.class);
+        myApp.setCategory(selected);
+        //Toast.makeText(CategorySelectionActivity.this, selected, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(CategorySelectionActivity.this, CategoryListActivity.class);
         startActivity(i);
     }
 }
