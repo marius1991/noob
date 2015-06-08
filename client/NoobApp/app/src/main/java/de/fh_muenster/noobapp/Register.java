@@ -65,7 +65,7 @@ public class Register extends ActionBarActivity {
 
     private boolean validPassword(String password){
 
-        if(password!=null&&password.length()>8){
+        if(password!=null&&password.length()>=8){
             return true;
         }
         return false;
