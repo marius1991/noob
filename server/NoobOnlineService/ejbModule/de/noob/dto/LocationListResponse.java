@@ -8,6 +8,7 @@ public class LocationListResponse extends ReturnCodeResponse {
 	
 	private List<LocationTO> locations;
 	
+	
 	public List<LocationTO> getLocations() {
 		return locations;
 	}

@@ -27,7 +27,7 @@ public class LocationTO extends ReturnCodeResponse {
 	
 	private String city;
 	
-	private int averageRating;
+	private double averageRating;
 	
 	private List<RatingTO> ratings;
 	
@@ -120,11 +120,11 @@ public class LocationTO extends ReturnCodeResponse {
 		this.city = city;
 	}
 
-	public int getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(int averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 

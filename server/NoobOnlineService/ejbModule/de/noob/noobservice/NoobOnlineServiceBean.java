@@ -1,9 +1,11 @@
 package de.noob.noobservice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.noob.dao.NoobDAOLocal;
 import de.noob.dto.CategoryListResponse;
+import de.noob.dto.CityListResponse;
 import de.noob.dto.LocationListResponse;
 import de.noob.dto.LocationTO;
 import de.noob.dto.UserLoginResponse;
@@ -29,7 +31,7 @@ import org.jboss.ws.api.annotation.WebContext;
 @WebService
 @WebContext(contextRoot="/noob")
 @Stateless
-public class NoobOnlineServiceBean {
+public class NoobOnlineServiceBean implements NoobOnlineService {
 	
 	private static final Logger logger = Logger.getLogger(NoobOnlineServiceBean.class);
 	
@@ -45,9 +47,7 @@ public class NoobOnlineServiceBean {
 	@EJB
 	private DtoAssembler dtoAssembler;
 
-	/**
-	 * @see NoobOnlineService#register(String, String, String, String)
-	 */
+	@Override
 	public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
 		
 		logger.info("register() aufgerufen.");
@@ -79,6 +79,7 @@ public class NoobOnlineServiceBean {
 	 * Im Erfolgsfall gibt es ein UserLoginResponse Objekt zurück, welches eine SessionID enthält.
 	 * @return UserLoginResponse
 	 */
+	@Override
 	public UserLoginResponse login(String email, String password) {
 		UserLoginResponse re = new UserLoginResponse();
 		NoobSession session;
@@ -111,6 +112,7 @@ public class NoobOnlineServiceBean {
 	 * 
 	 * @return ReturncodeResponse
 	 */
+	@Override
 	public ReturnCodeResponse logout(int sessionId) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);		
@@ -127,19 +129,28 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#listCategories()
-	 */
+	@Override
 	public CategoryListResponse listCategories() {
 		CategoryListResponse re = new CategoryListResponse();
-		//TODO Category Klasse erstellen!!
-		
+		ArrayList<String> categories = new ArrayList<String>();
+		categories.add("Bar");
+		categories.add("Kneipe");
+		categories.add("Supermarkt");
+		categories.add("Arzt");
+		categories.add("Tankstelle");
+		categories.add("Friseur");
+		re.setCategories(categories);
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#listLocationWithCategory(String, String)
-	 */
+	@Override
+	public CityListResponse listCities() {
+		CityListResponse re = new CityListResponse();
+		//dao.listCities();
+		return re;
+	}
+
+	@Override
 	public LocationListResponse listLocationsWithCategory(String category, String city) {
 		LocationListResponse re = new LocationListResponse();
 		List<Location> locations = dao.findLocationsByCategory(category, city);
@@ -149,9 +160,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#listLocationsWithName(String, String)
-	 */
+	@Override
 	public LocationListResponse listLocationsWithName(String name, String city) {
 		LocationListResponse re = new LocationListResponse();
 		List<Location> locations = dao.findLocationsByName(name, city);
@@ -161,9 +170,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#listAllLocations(String)
-	 */
+	@Override
 	public LocationListResponse listAllLocations(String city) {
 		LocationListResponse re = new LocationListResponse();
 		List<Location> locations = dao.findLocationsByCity(city);
@@ -173,9 +180,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#giveRating(User, Location, int)
-	 */
+	@Override
 	public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
@@ -200,9 +205,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#commentOnLocation(User, Location, String)
-	 */
+	@Override
 	public ReturnCodeResponse commentOnLocation(int sessionId, int locationId, String text) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
@@ -227,9 +230,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#commentOnComment(User, Comment, String)
-	 */
+	@Override
 	public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Comment comment = dao.findCommentById(commentId);
@@ -254,9 +255,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#createLocation(String, String, String, String, String, String, String, String, User)
-	 */
+	@Override
 	public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
@@ -281,9 +280,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#setLocationDetails(Location)
-	 */
+	@Override
 	public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
@@ -320,9 +317,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#setUserDetails(User)
-	 */
+	@Override
 	public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
@@ -345,9 +340,7 @@ public class NoobOnlineServiceBean {
 		return re;
 	}
 
-	/**
-	 * @see NoobOnlineService#getUserDetails(User)
-	 */
+	@Override
 	public UserTO getUserDetails(int sessionId) {
 		UserTO userTO = new UserTO();
 		NoobSession session = dao.findSessionById(sessionId);
@@ -363,9 +356,7 @@ public class NoobOnlineServiceBean {
 		return userTO;
 	}
 
-	/**
-	 * @see NoobOnlineService#deleteUser(User)
-	 */
+	@Override
 	public ReturnCodeResponse deleteUser(int sessionId) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);

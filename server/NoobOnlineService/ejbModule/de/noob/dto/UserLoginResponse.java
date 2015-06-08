@@ -6,6 +6,7 @@ public class UserLoginResponse extends ReturnCodeResponse {
 
 	private int sessionId;
 	
+	
 	public int getSessionId() {
 		return sessionId;
 	}
