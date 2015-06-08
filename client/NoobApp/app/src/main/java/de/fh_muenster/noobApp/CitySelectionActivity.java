@@ -2,6 +2,7 @@ package de.fh_muenster.noobApp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,42 +11,31 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.fh_muenster.noob.CategoryListResponse;
+import de.fh_muenster.noob.CityListResponse;
 
 /**
  * Created by marius on 02.06.15.
  * @author marius
  * Activity zum Auswählen der Stadt
  */
-public class CitySelectionActivity extends Activity implements OnItemSelectedListener {
+public class CitySelectionActivity extends Activity {
 
-    private String selected = null;
+    private String selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_selection);
 
-        //Liste mit Testdaten füllen
-        List valueList = new ArrayList<String>();
-        valueList.add("Münster");
-        valueList.add("Dortmund");
-        valueList.add("Essen");
-        valueList.add("Osnabrück");
-        valueList.add("Hamburg");
-        valueList.add("Bremen");
-
-        //Spinner Objekt mit Liste füllen
-        ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
-        Spinner sp = (Spinner)findViewById(R.id.spinner);
-        sp.setAdapter(adapter);
-        sp.setOnItemSelectedListener(this);
+        //Cities asynchron abrufen
+        new getCitiesFromServer().execute();
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,24 +59,44 @@ public class CitySelectionActivity extends Activity implements OnItemSelectedLis
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selected = parent.getItemAtPosition(position).toString();
-        //Toast.makeText(parent.getContext(), selected, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
     //Bei Klick auf Login Button wird die nächste Activity aufgerufen und die ausgewählte Stadt zentral gespeichert
     public void clickFunc(View view){
         NoobApplication myApp = (NoobApplication) getApplication();
         myApp.setCity(selected);
-        //Toast.makeText(CitySelectionActivity.this, selected, Toast.LENGTH_SHORT).show();
         Intent i = new Intent(CitySelectionActivity.this, CategorySelectionActivity.class);
         startActivity(i);
+    }
+
+    class getCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
+
+        @Override
+        protected CityListResponse doInBackground(String... params) {
+            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            CityListResponse response = onlineService.listCities();
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute (CityListResponse response) {
+            Integer returnCode = response.getReturnCode();
+            List<String> valueList;
+            //Toast.makeText(CitySelectionActivity.this, returnCode.toString(), Toast.LENGTH_LONG).show();
+            valueList = response.getCities();
+            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
+            Spinner sp = (Spinner)findViewById(R.id.spinner);
+            sp.setAdapter(adapter);
+            sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    selected = parentView.getItemAtPosition(position).toString();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // Nichts machen
+                }
+
+            });
+        }
     }
 }

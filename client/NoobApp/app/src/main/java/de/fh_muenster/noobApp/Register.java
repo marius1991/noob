@@ -1,5 +1,6 @@
 package de.fh_muenster.noobApp;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,18 +13,22 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.fh_muenster.exceptions.InvalidRegisterException;
+import de.fh_muenster.noob.ReturnCodeResponse;
+
 
 public class Register extends ActionBarActivity {
 
     private EditText email;
     private EditText password;
     private Button registerButton;
-
+    private NoobOnlineServiceImpl onlineService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        onlineService = new NoobOnlineServiceImpl();
     //Instanzen in die Variable speichern
     email=(EditText) findViewById(R.id.editText);
     password=(EditText) findViewById(R.id.editText2);
@@ -47,6 +52,7 @@ public class Register extends ActionBarActivity {
                 Toast.makeText(view.getContext(), "Account wurde erfolgreich erstellt",
                 Toast.LENGTH_SHORT).show();
             }
+            new PostLoginToServer().execute();
 
         }
 
@@ -91,5 +97,24 @@ public class Register extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    //Asynchron senden (Innere Klasse)
+    class PostLoginToServer extends AsyncTask<String, String, ReturnCodeResponse> {
+
+        @Override
+        protected ReturnCodeResponse doInBackground(String... params) {
+            ReturnCodeResponse response = null;
+            try {
+                response = onlineService.register("Test", "test@test.de", "12345678", "12345678");
+            } catch (InvalidRegisterException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(ReturnCodeResponse response) {
+            Toast.makeText(Register.this, response.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -1,5 +1,4 @@
 package de.fh_muenster.noob;
-
 import java.io.Serializable;
 import java.util.List;
 

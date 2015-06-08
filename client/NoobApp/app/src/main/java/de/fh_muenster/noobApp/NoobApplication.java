@@ -2,6 +2,8 @@ package de.fh_muenster.noobApp;
 
 import android.app.Application;
 
+import de.fh_muenster.noob.CategoryListResponse;
+
 /**
  * Created by marius on 02.06.15.
  * @author marius
@@ -35,4 +37,5 @@ public class NoobApplication extends Application {
     public void setLocation(String location) {
         this.location = location;
     }
+
 }

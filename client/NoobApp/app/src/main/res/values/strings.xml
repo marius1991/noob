@@ -18,7 +18,7 @@
     <string name="activity_category_selection_kategorieauswahlen">Bitte wählen Sie Ihre Kategorie</string>
     <string name="activity_category_selection_auswahlen">Auswählen</string>
 
-    <!-- String für die CategoryListActivity -->
+    <!-- String für die LocationListActivity -->
     <string name="title_activity_category_list">CategoryListActivity</string>
     <string name="activity_category_list_filter">Filter</string>
 

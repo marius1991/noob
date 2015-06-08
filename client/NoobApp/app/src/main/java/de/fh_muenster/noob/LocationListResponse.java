@@ -2,11 +2,12 @@ package de.fh_muenster.noob;
 
 import java.util.List;
 
-public class LocationListResponse extends ReturncodeResponse {
+public class LocationListResponse extends ReturnCodeResponse {
 
     private static final long serialVersionUID = 7195725464159927947L;
 
     private List<LocationTO> locations;
+
 
     public List<LocationTO> getLocations() {
         return locations;
