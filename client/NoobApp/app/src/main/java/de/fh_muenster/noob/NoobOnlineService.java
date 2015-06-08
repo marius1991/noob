@@ -1,8 +1,5 @@
 package de.fh_muenster.noob;
 
-import de.fh_muenster.noob.*;
-
-
 
 /**
  * @author philipp
@@ -11,75 +8,42 @@ import de.fh_muenster.noob.*;
 public interface NoobOnlineService {
 
     /**
-     * Register a new User.
-     *
      * @param username
      * @param email
      * @param password
      * @param passwordConfirmation
      * @return
      */
-    public void register(String username, String email, String password, String passwordConfirmation);
+    public ReturncodeResponse register(String username, String email,
+                                       String password, String passwordConfirmation);
 
     /**
-     * Login an User.
-     *
-     * @param email
-     * @param password
-     * @return
+     * Mit dieser Methode kann ein User eingeloggt werden. Dazu Email und Passwort angeben.
+     * Im Erfolgsfall gibt es ein UserLoginResponse Objekt zurück, welches eine SessionID enthält.
+     * @return UserLoginResponse
      */
     public UserLoginResponse login(String email, String password);
 
     /**
-     * Logout an User
-     *
+     * @param sessionId
      * @return
      */
-    public ReturncodeResponse logout();
+    public ReturncodeResponse logout(int sessionId);
 
     /**
-     * Create a new Location.
-     *
-     * @param name
-     * @param category
-     * @param description
-     * @param street
-     * @param number
-     * @param plz
-     * @param city
-     * @param coordinates
-     * @param owner
-     * @return
-     */
-    public ReturncodeResponse createLocation(String name, String category, String description, String street, String number, String plz, String city, String coordinates, UserTO owner);
-
-    /**
-     * Returns a list of all categories
-     *
      * @return
      */
     public CategoryListResponse listCategories();
 
     /**
-     * Returns a List of locations in a specific city, matching a specific category.
-     *
      * @param category
      * @param city
      * @return
      */
-    public LocationListResponse listLocationWithCategory(String category, String city);
+    public LocationListResponse listLocationsWithCategory(String category,
+                                                          String city);
 
     /**
-     * Returns a list of all locations in a specific city.
-     *
-     * @param city
-     * @return
-     */
-    public LocationListResponse listAllLocations(String city);
-
-    /**
-     * Returns a list of locations with a specific name in a city.
-     *
      * @param name
      * @param city
      * @return
@@ -87,72 +51,78 @@ public interface NoobOnlineService {
     public LocationListResponse listLocationsWithName(String name, String city);
 
     /**
-     * Create a new comment on a location.
-     *
-     * @param user
-     * @param location
+     * @param city
+     * @return
+     */
+    public LocationListResponse listAllLocations(String city);
+
+    /**
+     * @param sessionId
+     * @param locationId
+     * @param value
+     * @return
+     */
+    public ReturncodeResponse giveRating(int sessionId, int locationId,
+                                         int value);
+
+    /**
+     * @param sessionId
+     * @param locationId
      * @param text
      * @return
      */
-    public ReturncodeResponse commentOnLocation(UserTO user, LocationTO location, String text);
+    public ReturncodeResponse commentOnLocation(int sessionId, int locationId,
+                                                String text);
 
     /**
-     * Create a new comment on a comment.
-     * @param user
-     * @param comment
+     * @param sessionId
+     * @param commentId
      * @param text
      * @return
      */
-    public ReturncodeResponse commentOnComment(UserTO user, CommentTO comment, String text);
+    public ReturncodeResponse commentOnComment(int sessionId, int commentId,
+                                               String text);
 
     /**
-     * Give a Rating from 1 to 10 to a Location.
-     *
-     * @param user
-     * @param location
-     * @param value (1 to 10!)
+     * @param sessionId
+     * @param name
+     * @param category
+     * @param description
+     * @param street
+     * @param number
+     * @param plz
+     * @param city
      * @return
      */
-    public ReturncodeResponse giveRating(UserTO user, LocationTO location, int value);
+    public ReturncodeResponse createLocation(int sessionId, String name,
+                                             String category, String description, String street, String number,
+                                             int plz, String city);
 
     /**
-     * Returns a location, so that you can update the details of it. After that you have to send the Location back to Server with "setLocationDetails".
-     *
-     * @param location
+     * @param sessionId
+     * @param newLocationDetails
      * @return
      */
-    public LocationTO getLocationDetails(LocationTO location);
+    public ReturncodeResponse setLocationDetails(int sessionId,
+                                                 LocationTO newLocationDetails);
 
     /**
-     * Sends a location back to the Server so that updates of the locationdetails can persisted.
-     *
-     * @param location
+     * @param sessionId
+     * @param newUser
      * @return
      */
-    public ReturncodeResponse setLocationDetails(LocationTO location);
+    public ReturncodeResponse setUserDetails(int sessionId, UserTO newUser);
 
     /**
-     * ??obsolet??
-     * Returns an user, so that you can update the details of it. After that you have to send the User back to Server with "setUserDetails".
-     *
-     * @param user
+     * @param sessionId
      * @return
      */
-    public UserTO getUserDetails(UserTO user);
+    public UserTO getUserDetails(int sessionId);
 
     /**
-     * Sends an user back to the server, so that user-details can be persisted.
-     *
-     * @param user
-     * @return n
-     */
-    public ReturncodeResponse setUserDetails(UserTO user);
-
-    /**
-     * Delete an User.
-     * @param user
+     * @param sessionId
      * @return
      */
-    public ReturncodeResponse deleteUser(UserTO user);
+    public ReturncodeResponse deleteUser(int sessionId);
 
 }
