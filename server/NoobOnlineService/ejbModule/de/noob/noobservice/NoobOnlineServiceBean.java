@@ -146,7 +146,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	@Override
 	public CityListResponse listCities() {
 		CityListResponse re = new CityListResponse();
-		//dao.listCities();
+		re.setCities(dao.listCities());
 		return re;
 	}
 

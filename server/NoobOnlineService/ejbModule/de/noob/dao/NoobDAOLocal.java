@@ -18,6 +18,8 @@ public interface NoobDAOLocal {
 	
 	public User findUserByEmail(String email);
 	
+	public List<String> listCities();
+
 	public List<Location> findLocationsByName(String name, String city);
 
 	public Location findLocationById(int id);
@@ -28,10 +30,10 @@ public interface NoobDAOLocal {
 	
 	public NoobSession findSessionById(int sessionId);
 	
+	public Comment findCommentById(int commentId);
+
 	public void persist(Object o);
 	
 	public void remove(Object o);
-
-	public Comment findCommentById(int commentId);
 	
 }

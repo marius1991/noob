@@ -37,7 +37,7 @@ public class LocationTO extends ReturnCodeResponse {
 	
 	public LocationTO(int id, String name, String category, String description,
 			String street, String number, int plz, String city,
-			int averageRating, List<RatingTO> ratings,
+			double averageRating, List<RatingTO> ratings,
 			List<CommentTO> comments, UserTO owner) {
 		this.id = id;
 		this.name = name;

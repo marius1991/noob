@@ -166,6 +166,13 @@ public class NoobDAO implements NoobDAOLocal {
 	public void remove(Object o) {
 		em.remove(o);
 	}
+
+
+	@Override
+	public List<String> listCities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 	
