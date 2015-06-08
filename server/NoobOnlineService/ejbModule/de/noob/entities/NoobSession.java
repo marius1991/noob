@@ -8,6 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+/**
+ * 
+ * @author Tim, Philipp
+ *
+ */
 @Entity
 public class NoobSession implements Serializable  {
 	

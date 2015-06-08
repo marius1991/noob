@@ -25,12 +25,8 @@ public interface NoobDAOLocal {
 	public List<Location> findLocationsByCategory(String category, String city);
 	
 	public List<Location> findLocationsByCity(String city);
-
-	public void createSession(User user);
 	
 	public NoobSession findSessionById(int sessionId);
-	
-	public void closeSession(int id);
 	
 	public void persist(Object o);
 	

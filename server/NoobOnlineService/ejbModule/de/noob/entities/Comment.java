@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+/*
+ * @author Tim, Philipp
+ */
 @Entity
 public class Comment implements Serializable {
 
@@ -28,7 +31,14 @@ public class Comment implements Serializable {
 	@ManyToOne
 	private Comment superComment;
 	
+	
+	
 	public Comment() {
+	}
+	
+	public Comment( User user, String text){
+		this.setOwner(user);
+		this.setText(text);
 	}
 	
 
@@ -73,7 +83,7 @@ public class Comment implements Serializable {
 	}
 
 	public void addComment(User user, String text) {
-		// TODO Kommentar hinzufügen
+		this.comments.add(new Comment(user,text));
 		
 	}
 	

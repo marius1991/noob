@@ -5,7 +5,11 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 
-
+/**
+ * 
+ * @author Tim
+ *
+ */
 @Entity
 public class Rating implements Serializable {
 
@@ -26,6 +30,11 @@ public class Rating implements Serializable {
 	public Rating() {
 	}
 	
+
+	public Rating(User user, int value) {
+		this.setOwner(user);
+		this.setValue(value);
+	}
 
 	public int getId() {
 		return id;

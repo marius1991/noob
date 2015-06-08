@@ -5,6 +5,11 @@ import java.util.List;
 
 import javax.persistence.*;
 
+/**
+ * 
+ * @author Tim, Philipp
+ *
+ */
 @Entity
 public class User implements Serializable {
 	
@@ -80,10 +85,5 @@ public class User implements Serializable {
 		return comments;
 	}
 
-	public boolean createLocation(String name, String adresse, String category, String description){
-		return false;
-	}
-	
-	
 
 }
