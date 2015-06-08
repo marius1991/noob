@@ -120,6 +120,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 			dao.remove(session);
 			re.setReturnCode(0);
 			re.setMessage("Erfolgreich ausgeloggt.");
+			logger.info("Ergolgreich ausgeloggt");
 		}
 		else {
 			re.setReturnCode(1);
@@ -131,15 +132,28 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public CategoryListResponse listCategories() {
+		logger.info("Erfolgreich aufgerufen!!");
 		CategoryListResponse re = new CategoryListResponse();
 		ArrayList<String> categories = new ArrayList<String>();
+		
 		categories.add("Bar");
 		categories.add("Kneipe");
 		categories.add("Supermarkt");
 		categories.add("Arzt");
 		categories.add("Tankstelle");
 		categories.add("Friseur");
+		categories.add("Diskothek");
+		categories.add("Hochschule/Universität");
+		categories.add("Schule");
+		categories.add("Bank");
+		categories.add("Park");
+		categories.add("Kirche");
+		categories.add("Sehenswürdigkeit");
+		
 		re.setCategories(categories);
+		re.setReturnCode(0);
+		re.setMessage("Kategorien erfolgreich abgerufen.");
+		logger.info("Kategorien erfolgreich abgerufen.");
 		return re;
 	}
 

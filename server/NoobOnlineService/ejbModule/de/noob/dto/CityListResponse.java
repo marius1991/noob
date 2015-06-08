@@ -6,9 +6,8 @@ public class CityListResponse extends ReturnCodeResponse {
 
 	private static final long serialVersionUID = -2079105107018093442L;
 
-	public List<String> cities;
+	private List<String> cities;
 
-	
 	public List<String> getCities() {
 		return cities;
 	}
@@ -16,4 +15,5 @@ public class CityListResponse extends ReturnCodeResponse {
 	public void setCities(List<String> cities) {
 		this.cities = cities;
 	}
+	
 }

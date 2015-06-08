@@ -6,6 +6,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.jboss.logging.Logger;
+
 import de.noob.entities.Comment;
 import de.noob.entities.Location;
 import de.noob.entities.NoobSession;
@@ -18,6 +20,8 @@ import de.noob.entities.User;
  */
 @Stateless
 public class NoobDAO implements NoobDAOLocal {
+	
+	private static final Logger logger = Logger.getLogger(NoobDAO.class);
 	
 	@PersistenceContext
 	private EntityManager em;
@@ -33,7 +37,8 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserById(int id) {
-		return (User) em.createQuery("SELCET u FROM USER u WHERE u.id = '" + id + "' ").getSingleResult();
+		logger.info("SELECT u FROM USER u WHERE u.id = '" + id + "' ");
+		return (User) em.createQuery("SELCET u FROM USER u WHERE u.id = '" + id + "' ").getSingleResult();	
 	}
 
 	
@@ -47,7 +52,8 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserByName(String name) {
-		return (User) em.createQuery("SELCET u FROM USER u WHERE u.name = '" + name + "' ").getSingleResult();
+		logger.info("DB-Query: " + "SELECT u FROM USER u WHERE u.name = '" + name + "' ");
+		return (User) em.createQuery("SELECT u FROM USER u WHERE u.name = '" + name + "' ").getSingleResult();
 	}
 
 
@@ -63,6 +69,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserByEmail(String email) {
+		logger.info("DB-Query: em.find(User.class, email);");
 		return em.find(User.class, email);
 	}
 
@@ -78,7 +85,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByName(String name, String city) {
-		
+		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name");
 		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name").setParameter("stadt",city).setParameter("name",name).getResultList();
 	}
 
@@ -91,7 +98,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public Location findLocationById(int id) {
-		
+		logger.info("DB-Query: em.find(Location.class, id);");
 		return em.find(Location.class, id);
 	}
 	
@@ -106,7 +113,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByCategory(String category, String city) {
-		
+		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category");
 		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category").setParameter("stadt",city).setParameter("category",category).getResultList();
 	}
 
@@ -119,7 +126,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByCity(String city) {	
-		
+		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt");
 		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt").setParameter("stadt",city).getResultList();
 	}
 
@@ -135,7 +142,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public Comment findCommentById(int commentId) {
-		
+		logger.info("DB-Query: em.find(Comment.class, commentId);");
 		return em.find(Comment.class, commentId);
 	}
 
@@ -152,18 +159,20 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public NoobSession findSessionById(int sessionId) {
-		
+		logger.info("DB-Query: em.find(NoobSession.class, sessionId);");
 		return em.find(NoobSession.class, sessionId);
 	}
 
 	
 	@Override
 	public void persist(Object o) {
+		logger.info("DB-Query: em.persist(o);");
 		em.persist(o);
 	}
 
 	@Override
 	public void remove(Object o) {
+		logger.info("DB-Query: em.remove(o);");
 		em.remove(o);
 	}
 
