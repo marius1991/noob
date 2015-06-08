@@ -14,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/editText"
         android:layout_alignEnd="@+id/editText"
-        android:layout_marginTop="69dp" />
+        android:layout_marginTop="69dp"
+        android:contentDescription="@null" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -22,9 +23,9 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/editText"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/bordershape"/>
+        android:background="@drawable/bordershape"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,7 +76,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Noch kein Account? Register here!"
         android:id="@+id/textView3"
-        android:layout_below="@+id/button"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
