@@ -1,10 +1,22 @@
 package de.noob.entities;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.*;
 
-public class Location{
-	
+/**
+ * 
+ * @author Tim
+ *
+ */
+@Entity
+public class Location implements Serializable {
+
+	private static final long serialVersionUID = 2566351654426224522L;
+
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	private String name;
@@ -21,23 +33,31 @@ public class Location{
 	
 	private String city;
 	
-	private String coordinates;
+	private double averageRating;
 	
-	private int averageRating;
+	@OneToMany (mappedBy="location", cascade = CascadeType.REMOVE)
+	private List<Rating> ratings;
 	
-	private ArrayList<Rating> ratings;
+	@OneToMany (mappedBy ="location", cascade = CascadeType.REMOVE)
+	private List<Comment> comments;
 	
-	private ArrayList<Comment> comments;
-	
+	@ManyToOne
 	private User owner;
 	
-	
-	
-	public Location(){
-		
+	public Location() {
 	}
 	
-	
+	public Location(String name, String category, String description,
+			String street, String number, int plz, String city, User owner) {
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.street = street;
+		this.number = number;
+		this.plz = plz;
+		this.city = city;
+		this.owner = owner;
+	}	
 
 	public int getId() {
 		return id;
@@ -103,35 +123,27 @@ public class Location{
 		this.city = city;
 	}
 
-	public String getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(String coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	public int getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(int averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 
-	public ArrayList<Rating> getRatings() {
+	public List<Rating> getRatings() {
 		return ratings;
 	}
 
-	public void setRatings(ArrayList<Rating> ratings) {
+	public void setRatings(List<Rating> ratings) {
 		this.ratings = ratings;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -143,4 +155,47 @@ public class Location{
 		this.owner = owner;
 	}
 
+	public void addRating(User user, int value) {
+		
+		//Prüfen ob die Liste ratings leer ist, wenn ja Rating hinzufügen
+		if (this.ratings.isEmpty()) {
+			this.ratings.add(new Rating(user,value));
+		}
+		
+		//falls die Liste nicht leer ist
+		else {
+			
+			//Prüfen ob der User bereits ein Rating abgegeben hat. Dafür jedes Element 
+			//innerhalb der Liste die ID abfragen und mit dem aktuellen User vergleichen.
+			//Wenn der User bereits ein Rating abgegeben hat, wird der alte Wert überschrieben.
+			boolean newRating = true;
+			for(int i=0;i<this.ratings.size();i++) {
+				if (this.ratings.get(i).getId() == user.getId() ) {
+					this.ratings.get(i).setValue(value);
+					newRating=false;
+				}
+			}
+			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
+			if (newRating == true) {
+				this.ratings.add(new Rating(user,value));
+			}
+			
+		}
+		//Durchschnittsbewertung berechen
+		this.calcAverageRating();
+	}
+
+	public void addComment(User user, String text) {
+		this.comments.add(new Comment(user,text));
+	}
+	
+	private void calcAverageRating() {
+		
+		double sum=0;
+		
+		for(int i=0; i<this.ratings.size();i++) {
+			sum = sum + ratings.get(i).getValue();
+		}
+		this.setAverageRating( ( sum / this.ratings.size() ) );
+	}
 }

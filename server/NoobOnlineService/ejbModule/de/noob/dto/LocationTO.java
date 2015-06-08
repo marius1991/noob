@@ -1,17 +1,13 @@
 package de.noob.dto;
 
-import java.util.ArrayList;
-
-import de.noob.entities.Comment;
-import de.noob.entities.Rating;
-import de.noob.entities.User;
+import java.util.List;
 
 /**
  * 
  * @author philipp
  *
  */
-public class LocationTO extends ReturncodeResponse {
+public class LocationTO extends ReturnCodeResponse {
 
 	private static final long serialVersionUID = -5498069855610055362L;
 	
@@ -31,20 +27,18 @@ public class LocationTO extends ReturncodeResponse {
 	
 	private String city;
 	
-	private String coordinates;
+	private double averageRating;
 	
-	private int averageRating;
+	private List<RatingTO> ratings;
 	
-	private ArrayList<Rating> ratings;
+	private List<CommentTO> comments;
 	
-	private ArrayList<Comment> comments;
-	
-	private User owner;
+	private UserTO owner;
 	
 	public LocationTO(int id, String name, String category, String description,
 			String street, String number, int plz, String city,
-			String coordinates, int averageRating, ArrayList<Rating> ratings,
-			ArrayList<Comment> comments, User owner) {
+			double averageRating, List<RatingTO> ratings,
+			List<CommentTO> comments, UserTO owner) {
 		this.id = id;
 		this.name = name;
 		this.category = category;
@@ -53,7 +47,6 @@ public class LocationTO extends ReturncodeResponse {
 		this.number = number;
 		this.plz = plz;
 		this.city = city;
-		this.coordinates = coordinates;
 		this.averageRating = averageRating;
 		this.ratings = ratings;
 		this.comments = comments;
@@ -127,43 +120,35 @@ public class LocationTO extends ReturncodeResponse {
 		this.city = city;
 	}
 
-	public String getCoordinates() {
-		return coordinates;
-	}
-
-	public void setCoordinates(String coordinates) {
-		this.coordinates = coordinates;
-	}
-
-	public int getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(int averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 
-	public ArrayList<Rating> getRatings() {
+	public List<RatingTO> getRatings() {
 		return ratings;
 	}
 
-	public void setRatings(ArrayList<Rating> ratings) {
+	public void setRatings(List<RatingTO> ratings) {
 		this.ratings = ratings;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<CommentTO> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Comment> comments) {
+	public void setComments(List<CommentTO> comments) {
 		this.comments = comments;
 	}
 
-	public User getOwner() {
+	public UserTO getOwner() {
 		return owner;
 	}
 
-	public void setOwner(User owner) {
+	public void setOwner(UserTO owner) {
 		this.owner = owner;
 	}
 	

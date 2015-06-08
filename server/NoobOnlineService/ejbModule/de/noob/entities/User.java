@@ -1,23 +1,41 @@
 package de.noob.entities;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.*;
 
-public class User{
+/**
+ * 
+ * @author Tim, Philipp
+ *
+ */
+@Entity
+public class User implements Serializable {
 	
+	private static final long serialVersionUID = 6341269371900561214L;
+
+	@GeneratedValue
 	private int id;
 	
 	private String name;
 	
 	private String password;
 	
+	@Id
 	private String email;
 	
-	private ArrayList<Location> locations;
+	@OneToMany (mappedBy ="owner")
+	private List<Location> locations;
 	
-	private ArrayList<Rating> ratings;
+	@OneToMany (mappedBy ="owner", cascade = CascadeType.REMOVE)
+	private List<Rating> ratings;
 	
-	private ArrayList<Comment> comments;
+	@OneToMany (mappedBy ="owner", cascade = CascadeType.REMOVE)
+	private List<Comment> comments;
+	
+	public User() {
+	}
 	
 	public User(String username, String email, String password){
 		
@@ -55,26 +73,17 @@ public class User{
 		this.email = email;
 	}
 	
-	public ArrayList<Location> getLocations() {
+	public List<Location> getLocations() {
 		return locations;
 	}
 
-	public ArrayList<Rating> getRatings() {
+	public List<Rating> getRatings() {
 		return ratings;
 	}
 
-	public ArrayList<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public boolean createLocation(String name, String adresse, String category, String description){
-		return false;
-	
-	}
-	
-	public boolean deleteUser(){
-		return false;
-		
-	}
 
 }

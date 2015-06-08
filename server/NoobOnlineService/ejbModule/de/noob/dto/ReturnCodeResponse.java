@@ -2,7 +2,7 @@ package de.noob.dto;
 
 import java.io.Serializable;
 
-public class ReturncodeResponse implements Serializable {
+public class ReturnCodeResponse implements Serializable {
 
 	private static final long serialVersionUID = 3397348747136795401L;
 	private static final int CODE_OK = 0;
@@ -10,7 +10,7 @@ public class ReturncodeResponse implements Serializable {
 	private int returnCode;
 	private String message;
 	
-	public ReturncodeResponse() {
+	public ReturnCodeResponse() {
 		this.returnCode = CODE_OK;
 	}
 
