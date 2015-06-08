@@ -85,10 +85,5 @@ public class User implements Serializable {
 		return comments;
 	}
 
-	public boolean createLocation(String name, String adresse, String category, String description){
-		return false;
-	}
-	
-	
 
 }

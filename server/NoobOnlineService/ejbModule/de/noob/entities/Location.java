@@ -33,7 +33,7 @@ public class Location implements Serializable {
 	
 	private String city;
 	
-	private int averageRating;
+	private double averageRating;
 	
 	@OneToMany (mappedBy="location", cascade = CascadeType.REMOVE)
 	private List<Rating> ratings;
@@ -123,11 +123,11 @@ public class Location implements Serializable {
 		this.city = city;
 	}
 
-	public int getAverageRating() {
+	public double getAverageRating() {
 		return averageRating;
 	}
 
-	public void setAverageRating(int averageRating) {
+	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
 
@@ -156,11 +156,46 @@ public class Location implements Serializable {
 	}
 
 	public void addRating(User user, int value) {
-		// TODO Neues Rating eines Users hinzufügen, falls User schon geratet altes Rating überschreiben.		
+		
+		//Prüfen ob die Liste ratings leer ist, wenn ja Rating hinzufügen
+		if (this.ratings.isEmpty()) {
+			this.ratings.add(new Rating(user,value));
+		}
+		
+		//falls die Liste nicht leer ist
+		else {
+			
+			//Prüfen ob der User bereits ein Rating abgegeben hat. Dafür jedes Element 
+			//innerhalb der Liste die ID abfragen und mit dem aktuellen User vergleichen.
+			//Wenn der User bereits ein Rating abgegeben hat, wird der alte Wert überschrieben.
+			boolean newRating = true;
+			for(int i=0;i<this.ratings.size();i++) {
+				if (this.ratings.get(i).getId() == user.getId() ) {
+					this.ratings.get(i).setValue(value);
+					newRating=false;
+				}
+			}
+			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
+			if (newRating == true) {
+				this.ratings.add(new Rating(user,value));
+			}
+			
+		}
+		//Durchschnittsbewertung berechen
+		this.calcAverageRating();
 	}
 
 	public void addComment(User user, String text) {
-		// TODO Neuen Kommentar zur location hinzufügen
+		this.comments.add(new Comment(user,text));
 	}
-
+	
+	private void calcAverageRating() {
+		
+		double sum=0;
+		
+		for(int i=0; i<this.ratings.size();i++) {
+			sum = sum + ratings.get(i).getValue();
+		}
+		this.setAverageRating( ( sum / this.ratings.size() ) );
+	}
 }
