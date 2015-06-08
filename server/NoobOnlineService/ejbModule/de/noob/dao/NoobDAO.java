@@ -33,7 +33,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserById(int id) {
-		return (User) em.createQuery("SELCET u FROM USER u WHERE u.id = '" + id + "' ").getResultList();
+		return (User) em.createQuery("SELCET u FROM USER u WHERE u.id = '" + id + "' ").getSingleResult();
 	}
 
 	
@@ -47,7 +47,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserByName(String name) {
-		return (User) em.createQuery("SELCET u FROM USER u WHERE u.name = '" + name + "' ").getResultList();
+		return (User) em.createQuery("SELCET u FROM USER u WHERE u.name = '" + name + "' ").getSingleResult();
 	}
 
 
@@ -139,11 +139,6 @@ public class NoobDAO implements NoobDAOLocal {
 		return em.find(Comment.class, commentId);
 	}
 
-	@Override
-	public void createSession(User user) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	/**
 	 * Session über die ID finden.
@@ -161,11 +156,6 @@ public class NoobDAO implements NoobDAOLocal {
 		return em.find(NoobSession.class, sessionId);
 	}
 
-	@Override
-	public void closeSession(int id) {
-		// TODO Auto-generated method stub
-
-	}
 	
 	@Override
 	public void persist(Object o) {
