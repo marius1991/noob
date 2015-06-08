@@ -118,7 +118,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 * @return Liste von Locations
 	 */
 	@Override
-	public List<Location> findLocationsByCity(String city) {
+	public List<Location> findLocationsByCity(String city) {	
 		
 		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt").setParameter("stadt",city).getResultList();
 	}
