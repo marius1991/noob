@@ -1,57 +1,102 @@
 package de.noob.noobservice;
 
-
 import de.noob.dto.CategoryListResponse;
+import de.noob.dto.CityListResponse;
 import de.noob.dto.LocationListResponse;
 import de.noob.dto.LocationTO;
+import de.noob.dto.ReturnCodeResponse;
 import de.noob.dto.UserLoginResponse;
-import de.noob.dto.ReturncodeResponse;
 import de.noob.dto.UserTO;
-import de.noob.entities.Comment;
-import de.noob.entities.Location;
-import de.noob.entities.User;
-
-
 
 /**
  * @author philipp
  *
  */
 public interface NoobOnlineService {
-	
+
 	/**
-	 * Register a new User.
-	 * 
 	 * @param username
 	 * @param email
 	 * @param password
 	 * @param passwordConfirmation
-	 * @return 
-	 * @throws InvalidDataException
-	 */
-	public ReturncodeResponse register(String username, String email, String password, String passwordConfirmation);
-	
-	/**
-	 * Login an User.
-	 * 
-	 * @param email
-	 * @param password
 	 * @return
-	 * @throws InvalidLoginException
+	 */
+	public ReturnCodeResponse register(String username, String email,
+			String password, String passwordConfirmation);
+
+	/**
+	 * Mit dieser Methode kann ein User eingeloggt werden. Dazu Email und Passwort angeben.
+	 * Im Erfolgsfall gibt es ein UserLoginResponse Objekt zurück, welches eine SessionID enthält.
+	 * @return UserLoginResponse
 	 */
 	public UserLoginResponse login(String email, String password);
-	
+
 	/**
-	 * Logout an User
-	 * 
+	 * @param sessionId
 	 * @return
-	 * @throws NoSessionException
 	 */
-	public ReturncodeResponse logout();
+	public ReturnCodeResponse logout(int sessionId);
+
+	/**
+	 * @return
+	 */
+	public CategoryListResponse listCategories();
 	
 	/**
-	 * Create a new Location.
-	 * 
+	 * @return
+	 */
+	public CityListResponse listCities();
+
+	/**
+	 * @param category
+	 * @param city
+	 * @return
+	 */
+	public LocationListResponse listLocationsWithCategory(String category,
+			String city);
+
+	/**
+	 * @param name
+	 * @param city
+	 * @return
+	 */
+	public LocationListResponse listLocationsWithName(String name, String city);
+
+	/**
+	 * @param city
+	 * @return
+	 */
+	public LocationListResponse listAllLocations(String city);
+
+	/**
+	 * @param sessionId
+	 * @param locationId
+	 * @param value
+	 * @return
+	 */
+	public ReturnCodeResponse giveRating(int sessionId, int locationId,
+			int value);
+
+	/**
+	 * @param sessionId
+	 * @param locationId
+	 * @param text
+	 * @return
+	 */
+	public ReturnCodeResponse commentOnLocation(int sessionId, int locationId,
+			String text);
+
+	/**
+	 * @param sessionId
+	 * @param commentId
+	 * @param text
+	 * @return
+	 */
+	public ReturnCodeResponse commentOnComment(int sessionId, int commentId,
+			String text);
+
+	/**
+	 * @param sessionId
 	 * @param name
 	 * @param category
 	 * @param description
@@ -59,125 +104,37 @@ public interface NoobOnlineService {
 	 * @param number
 	 * @param plz
 	 * @param city
-	 * @param coordinates
-	 * @param owner
-	 * @return 
-	 * @throws NoSessionException
-	 */
-	public ReturncodeResponse createLocation(String name, String category, String description, String street, String number, String plz, String city, String coordinates, User owner);
-	
-	/**
-	 * Returns a list of all categories
-	 * 
 	 * @return
-	 * @throws NoSessionException
 	 */
-	public CategoryListResponse listCategories();
-	
-	/**
-	 * Returns a List of locations in a specific city, matching a specific category.
-	 * 
-	 * @param category
-	 * @param city
-	 * @return
-	 * @throws NoSessionException
-	 */
-	public LocationListResponse listLocationWithCategory(String category, String city);
-	
-	/**
-	 * Returns a list of all locations in a specific city.
-	 * 
-	 * @param city
-	 * @return
-	 * @throws NoSessionException
-	 */
-	public LocationListResponse listAllLocations(String city);
-	
-	/**
-	 * Returns a list of locations with a specific name in a city.
-	 * 
-	 * @param name
-	 * @param city
-	 * @return
-	 * @throws NoSessionException
-	 */
-	public LocationListResponse listLocationsWithName(String name, String city);
-	
-	/**
-	 * Create a new comment on a location.
-	 * 
-	 * @param user
-	 * @param location
-	 * @param text
-	 * @return 
-	 * @throws NoSessionException
-	 */
-	public ReturncodeResponse commentOnLocation(User user, Location location, String text);
-	
-	/**
-	 * Create a new comment on a comment.
-	 * @param user
-	 * @param comment
-	 * @param text
-	 * @return 
-	 * @throws NoSessionException
-	 */
-	public ReturncodeResponse commentOnComment(User user, Comment comment, String text);
-	
-	/**
-	 * Give a Rating from 1 to 10 to a Location.
-	 * 
-	 * @param user
-	 * @param location
-	 * @param value (1 to 10!)
-	 * @return 
-	 * @throws NoSessionException
-	 */
-	public ReturncodeResponse giveRating(User user, Location location, int value);
+	public ReturnCodeResponse createLocation(int sessionId, String name,
+			String category, String description, String street, String number,
+			int plz, String city);
 
 	/**
-	 * Returns a location, so that you can update the details of it. After that you have to send the Location back to Server with "setLocationDetails".
-	 * 
-	 * @param location
+	 * @param sessionId
+	 * @param newLocationDetails
 	 * @return
-	 * @throws NoSessionException
 	 */
-	public LocationTO getLocationDetails(Location location);
+	public ReturnCodeResponse setLocationDetails(int sessionId,
+			LocationTO newLocationDetails);
 	
 	/**
-	 * Sends a location back to the Server so that updates of the locationdetails can persisted.
-	 * 
-	 * @param location
-	 * @return 
-	 * @throws NoSessionException
-	 */
-	public ReturncodeResponse setLocationDetails(Location location);
-	
-	/**
-	 * ??obsolet??
-	 * Returns an user, so that you can update the details of it. After that you have to send the User back to Server with "setUserDetails".
-	 * 
-	 * @param user
+	 * @param sessionId
+	 * @param newUser
 	 * @return
-	 * @throws NoSessionException
 	 */
-	public UserTO getUserDetails(User user);
-	
+	public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser);
+
 	/**
-	 * Sends an user back to the server, so that user-details can be persisted.
-	 * 
-	 * @param user
-	 * @return 
-	 * @throws NoSessionException
+	 * @param sessionId
+	 * @return
 	 */
-	public ReturncodeResponse setUserDetails(User user);
-	
+	public UserTO getUserDetails(int sessionId);
+
 	/**
-	 * Delete an User.
-	 * @param user
-	 * @return 
-	 * @throws NoSessionException
+	 * @param sessionId
+	 * @return
 	 */
-	public ReturncodeResponse deleteUser(User user);
-	
+	public ReturnCodeResponse deleteUser(int sessionId);
+
 }
