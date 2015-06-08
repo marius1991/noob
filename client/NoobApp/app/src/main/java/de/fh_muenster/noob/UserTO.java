@@ -3,7 +3,7 @@ package de.fh_muenster.noob;
 import java.util.List;
 
 
-public class UserTO extends ReturncodeResponse {
+public class UserTO extends ReturnCodeResponse {
 
     private static final long serialVersionUID = 6907767619451988547L;
 
@@ -31,6 +31,9 @@ public class UserTO extends ReturncodeResponse {
         this.locations = locations;
         this.ratings = ratings;
         this.comments = comments;
+    }
+
+    public UserTO() {
     }
 
     public int getId() {

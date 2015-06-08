@@ -1,6 +1,9 @@
 package de.fh_muenster.noob;
 
 
+import de.fh_muenster.exceptions.BadConnectionException;
+import de.fh_muenster.exceptions.InvalidRegisterException;
+
 /**
  * @author philipp
  *
@@ -14,8 +17,8 @@ public interface NoobOnlineService {
      * @param passwordConfirmation
      * @return
      */
-    public ReturncodeResponse register(String username, String email,
-                                       String password, String passwordConfirmation);
+    public ReturnCodeResponse register(String username, String email,
+                                       String password, String passwordConfirmation) throws InvalidRegisterException;
 
     /**
      * Mit dieser Methode kann ein User eingeloggt werden. Dazu Email und Passwort angeben.
@@ -28,12 +31,17 @@ public interface NoobOnlineService {
      * @param sessionId
      * @return
      */
-    public ReturncodeResponse logout(int sessionId);
+    public ReturnCodeResponse logout(int sessionId);
 
     /**
      * @return
      */
-    public CategoryListResponse listCategories();
+    public CategoryListResponse listCategories() throws BadConnectionException;
+
+    /**
+     * @return
+     */
+    public CityListResponse listCities();
 
     /**
      * @param category
@@ -62,7 +70,7 @@ public interface NoobOnlineService {
      * @param value
      * @return
      */
-    public ReturncodeResponse giveRating(int sessionId, int locationId,
+    public ReturnCodeResponse giveRating(int sessionId, int locationId,
                                          int value);
 
     /**
@@ -71,7 +79,7 @@ public interface NoobOnlineService {
      * @param text
      * @return
      */
-    public ReturncodeResponse commentOnLocation(int sessionId, int locationId,
+    public ReturnCodeResponse commentOnLocation(int sessionId, int locationId,
                                                 String text);
 
     /**
@@ -80,7 +88,7 @@ public interface NoobOnlineService {
      * @param text
      * @return
      */
-    public ReturncodeResponse commentOnComment(int sessionId, int commentId,
+    public ReturnCodeResponse commentOnComment(int sessionId, int commentId,
                                                String text);
 
     /**
@@ -94,7 +102,7 @@ public interface NoobOnlineService {
      * @param city
      * @return
      */
-    public ReturncodeResponse createLocation(int sessionId, String name,
+    public ReturnCodeResponse createLocation(int sessionId, String name,
                                              String category, String description, String street, String number,
                                              int plz, String city);
 
@@ -103,7 +111,7 @@ public interface NoobOnlineService {
      * @param newLocationDetails
      * @return
      */
-    public ReturncodeResponse setLocationDetails(int sessionId,
+    public ReturnCodeResponse setLocationDetails(int sessionId,
                                                  LocationTO newLocationDetails);
 
     /**
@@ -111,7 +119,7 @@ public interface NoobOnlineService {
      * @param newUser
      * @return
      */
-    public ReturncodeResponse setUserDetails(int sessionId, UserTO newUser);
+    public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser);
 
     /**
      * @param sessionId
@@ -123,6 +131,6 @@ public interface NoobOnlineService {
      * @param sessionId
      * @return
      */
-    public ReturncodeResponse deleteUser(int sessionId);
+    public ReturnCodeResponse deleteUser(int sessionId);
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.fh_muenster.noobApp" >
-
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <application
         android:name="de.fh_muenster.noobApp.NoobApplication"
         android:allowBackup="true"
@@ -38,7 +38,7 @@
             android:label="@string/title_activity_category_selection" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.CategoryListActivity"
+            android:name=".LocationListActivity"
             android:label="@string/title_activity_category_list" >
         </activity>
         <activity
