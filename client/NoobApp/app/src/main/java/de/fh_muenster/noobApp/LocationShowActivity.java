@@ -1,23 +1,31 @@
-package de.fh_muenster.noobapp;
+package de.fh_muenster.noobApp;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
-public class Maintenance extends ActionBarActivity {
+/**
+ * Created by marius on 02.06.15.
+ * @author marius
+ * Die Activity zeigt eine Location und deren Details
+ */
+public class LocationShowActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maintenance);
+        setContentView(R.layout.activity_location_show);
+
+        //Titel der Activity ersetzen
+        NoobApplication myApp = (NoobApplication) getApplication();
+        setTitle(myApp.getLocation() + " in " + myApp.getCity());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_maintenance, menu);
+        getMenuInflater().inflate(R.menu.menu_location_show, menu);
         return true;
     }
 

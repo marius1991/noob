@@ -1,4 +1,4 @@
-package de.fh_muenster.noobapp;
+package de.fh_muenster.noobApp;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -46,6 +45,8 @@ public class Login extends ActionBarActivity {
                     case MotionEvent.ACTION_DOWN: {
                         v.getBackground().setColorFilter(Color.parseColor("#2F4F4F"), PorterDuff.Mode.SRC_ATOP);
                         v.invalidate();
+                        Intent i = new Intent(Login.this, CitySelectionActivity.class);
+                        startActivity(i);
                         break;
                     }
                     case MotionEvent.ACTION_UP: {
