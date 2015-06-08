@@ -53,7 +53,13 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public User findUserByName(String name) {
 		logger.info("DB-Query: " + "SELECT u FROM USER u WHERE u.name = '" + name + "' ");
-		return (User) em.createQuery("SELECT u FROM USER u WHERE u.name = '" + name + "' ").getSingleResult();
+		try {
+			return (User) em.createQuery("SELECT u FROM User u WHERE u.name LIKE '" + name + "' ").getSingleResult();
+		}
+		catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+		return null;
 	}
 
 
@@ -86,7 +92,14 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public List<Location> findLocationsByName(String name, String city) {
 		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name");
-		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name").setParameter("stadt",city).setParameter("name",name).getResultList();
+		try {
+			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name", Location.class).setParameter("stadt",city).setParameter("name",name).getResultList();
+		}
+		catch(Exception e) {
+			logger.info(e.getMessage());
+		}
+		
+		return null;
 	}
 
 	/**
@@ -114,7 +127,13 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public List<Location> findLocationsByCategory(String category, String city) {
 		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category");
-		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category").setParameter("stadt",city).setParameter("category",category).getResultList();
+		try {
+			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category", Location.class).setParameter("stadt",city).setParameter("category",category).getResultList();
+		}
+		catch (Exception e) {
+			logger.info(e.getMessage());
+		}
+		return null;
 	}
 
 	/**
@@ -127,7 +146,13 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public List<Location> findLocationsByCity(String city) {	
 		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt");
-		return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt").setParameter("stadt",city).getResultList();
+		try {
+			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt", Location.class).setParameter("stadt",city).getResultList();
+		}
+		catch(Exception e) {
+			logger.info(e.getMessage());
+		}
+		return null;
 	}
 
 	/**
