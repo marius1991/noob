@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 /**
  * Created by marius on 02.06.15.
@@ -19,7 +20,15 @@ public class LocationShowActivity extends ActionBarActivity {
 
         //Titel der Activity ersetzen
         NoobApplication myApp = (NoobApplication) getApplication();
-        setTitle(myApp.getLocation() + " in " + myApp.getCity());
+        setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
+
+        TextView textViewAdress = (TextView)findViewById(R.id.textView14);
+        textViewAdress.setText(myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity());
+
+        TextView textViewDescription = (TextView)findViewById(R.id.textView15);
+        textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Inhaber: " + myApp.getLocation().getOwner().getName());
+
+
     }
 
     @Override

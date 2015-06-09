@@ -17,12 +17,28 @@
     <string name="title_activity_category_selection">Kategorieauswahl</string>
     <string name="activity_category_selection_kategorieauswahlen">Bitte wählen Sie Ihre Kategorie</string>
     <string name="activity_category_selection_auswahlen">Auswählen</string>
+    <string name="activity_category_selection_oder">oder</string>
+    <string name="activity_category_selection_nachLocSuchen">Nach Lacation suchen</string>
+    <string name="activity_category_selection_LocName">Locationname</string>
+    <string name="activity_category_selection_Suchen">Suchen</string>
 
     <!-- String für die LocationListActivity -->
     <string name="title_activity_category_list">CategoryListActivity</string>
-    <string name="activity_category_list_filter">Filter</string>
+    <string name="activity_location_list_filter">Filter</string>
 
     <!-- String für die ShowLocationActivity -->
     <string name="title_activity_location_show">LocationShowActivity</string>
+    <string name="title_activity_location_adresse">Adresse</string>
+    <string name="title_activity_location_beschreibung">Beschreibung</string>
+    <string name="title_activity_location_bewertung">Bewertung</string>
+    <string name="title_activity_location_kommentare">Kommentare</string>
 
+    <!-- String für die LocationSortActivity -->
+    <string name="title_activity_location_sort">Filtern und Sortieren</string>
+    <string name="activity_location_sort_sortieren">Sortieren</string>
+    <string name="activity_location_sort_filtern">Filtern</string>
+    <string name="activity_location_sort_nachName1">nach Name (aufwärts)</string>
+    <string name="activity_location_sort_nachName2">nach Name (abwärts)</string>
+    <string name="activity_location_sort_anwenden">Anwenden</string>
+    <string name="title_activity_location_search">LocationSearchActivity</string>
 </resources>

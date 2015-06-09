@@ -1,8 +1,10 @@
 package de.fh_muenster.noobApp;
 
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fh_muenster.exceptions.BadConnectionException;
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.CityListResponse;
 import de.fh_muenster.noob.CommentTO;
@@ -53,7 +55,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     }
 
     @Override
-    public CategoryListResponse listCategories() {
+    public CategoryListResponse listCategories() throws BadConnectionException{
         CategoryListResponse response = new CategoryListResponse();
         response.setCategories(categoryList);
         response.setReturnCode(100);
@@ -74,11 +76,22 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         LocationTO lo = new LocationTO();
         LocationTO lo1 = new LocationTO();
         LocationTO lo2 = new LocationTO();
+        UserTO owner = new UserTO();
         List<LocationTO> locationTOList = new ArrayList<>();
         if(category.equals("Bar") && city.equals("Münster")) {
             lo.setName("Gorilla Bar");
             lo1.setName("Rote Liebe");
             lo2.setName("Blaues Haus");
+            lo.setDescription("Tolle Bar in der Altstadt von MS!");
+            lo1.setDescription("Noch ein tolle Bar in der Altstadt von MS!");
+            lo2.setDescription("und noch eine tolle Bar in der Altstadt von MS!");
+            lo.setCity("Münster");
+            lo.setPlz(48145);
+            lo.setStreet("Jüdefelder Str.");
+            lo.setNumber("15");
+            lo.setCategory("Bar");
+            owner.setName("Peter Lustig");
+            lo.setOwner(owner);
             locationTOList.add(lo);
             locationTOList.add(lo1);
             locationTOList.add(lo2);
@@ -93,7 +106,36 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
 
     @Override
     public LocationListResponse listLocationsWithName(String name, String city) {
-        return null;
+        LocationListResponse response = new LocationListResponse();
+        LocationTO lo = new LocationTO();
+        LocationTO lo1 = new LocationTO();
+        LocationTO lo2 = new LocationTO();
+        UserTO owner = new UserTO();
+        List<LocationTO> locationTOList = new ArrayList<>();
+        if(city.equals("Münster") && name.equals("bar")) {
+            lo.setName("Gorilla Bar");
+            lo1.setName("Atellier Bar");
+            lo2.setName("Hafenbar");
+            lo.setDescription("Tolle Bar in der Altstadt von MS!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa sssssssssssssssssssssssssssss sdddddddddddd ff ggg");
+            lo1.setDescription("Noch ein tolle Bar in der Altstadt von MS!");
+            lo2.setDescription("und noch eine tolle Bar in der Altstadt von MS!");
+            lo.setCity("Münster");
+            lo.setPlz(48145);
+            lo.setStreet("Jüdefelder Str.");
+            lo.setNumber("15");
+            lo.setCategory("Bar");
+            owner.setName("Peter Lustig");
+            lo.setOwner(owner);
+            locationTOList.add(lo);
+            locationTOList.add(lo1);
+            locationTOList.add(lo2);
+            response.setReturnCode(100);
+            response.setLocations(locationTOList);
+            return response;
+        }
+        else {
+            return null;
+        }
     }
 
     @Override

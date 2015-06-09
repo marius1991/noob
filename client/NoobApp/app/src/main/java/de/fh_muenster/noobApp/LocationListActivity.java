@@ -10,13 +10,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import de.fh_muenster.noob.CityListResponse;
 import de.fh_muenster.noob.LocationListResponse;
 import de.fh_muenster.noob.LocationTO;
 
@@ -32,7 +30,7 @@ public class LocationListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_list);
+        setContentView(R.layout.activity_location_list);
 
         //Titel der Activity ersetzen
         NoobApplication myApp = (NoobApplication) getApplication();
@@ -68,6 +66,12 @@ public class LocationListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Bei Klick auf Filter Button wird die Filter Activity aufgerufen
+    public void clickFunc(View view){
+        Intent i = new Intent(LocationListActivity.this, LocationSortActivity.class);
+        startActivity(i);
+    }
+
     class getLocationsFromServer extends AsyncTask<String, String, LocationListResponse> {
 
         @Override
@@ -81,12 +85,21 @@ public class LocationListActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute (LocationListResponse response) {
             Integer returnCode = response.getReturnCode();
-            List<LocationTO> valueListLocation;
+            final List<LocationTO> valueListLocation;
             valueListLocation = response.getLocations();
-            List<String> valueList = new ArrayList<>();
+            final List<String> valueList = new ArrayList<>();
             //Toast.makeText(LocationListActivity.this, returnCode.toString(), Toast.LENGTH_LONG).show();
             for(int i=0; i<valueListLocation.size(); i++) {
                 valueList.add(valueListLocation.get(i).getName());
+            }
+            NoobApplication myApp = (NoobApplication) getApplication();
+            if (myApp.getSortBy() != null) {
+                if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName1))) {
+                    Collections.sort(valueList);
+                }
+                if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName2))) {
+                    Collections.sort(valueList, Collections.reverseOrder());
+                }
             }
             //ListView Objekt mit Testdaten füllen
             ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
@@ -99,7 +112,13 @@ public class LocationListActivity extends ActionBarActivity {
                     selectedFromList = (String) (lv.getItemAtPosition(myItemInt));
                     //Toast.makeText(getApplicationContext(), selectedFromList + " ausgewählt", Toast.LENGTH_SHORT).show();
                     NoobApplication myApp = (NoobApplication) getApplication();
-                    myApp.setLocation(selectedFromList);
+                    LocationTO selected = null;
+                    for(int i=0; i<valueListLocation.size(); i++) {
+                        if(valueListLocation.get(i).getName().equals(selectedFromList)) {
+                            selected = valueListLocation.get(i);
+                        }
+                    }
+                    myApp.setLocation(selected);
                     Intent i = new Intent(LocationListActivity.this, LocationShowActivity.class);
                     startActivity(i);
                 }

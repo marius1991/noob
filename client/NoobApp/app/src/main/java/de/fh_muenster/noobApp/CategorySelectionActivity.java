@@ -4,19 +4,24 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.method.TextKeyListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.exceptions.BadConnectionException;
 import de.fh_muenster.noob.CategoryListResponse;
+import de.fh_muenster.noob.LocationListResponse;
+import de.fh_muenster.noob.LocationTO;
 
 /**
  * Created by marius on 02.06.15.
@@ -26,11 +31,22 @@ import de.fh_muenster.noob.CategoryListResponse;
 public class CategorySelectionActivity extends ActionBarActivity {
 
     private String selected;
+    private EditText editText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selection);
+        editText = (EditText)findViewById(R.id.editText3);
+//        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    TextKeyListener.clear((editText).getText());
+//                }
+//            }
+//        });
         NoobApplication myApp = (NoobApplication) getApplication();
 
         //Titel der Activity durch den Namen der ausgewählten Stadt ersetzen
@@ -65,10 +81,18 @@ public class CategorySelectionActivity extends ActionBarActivity {
 
 
     //Beim Klick auf den Button "Aüswählen" wird die nächste Activity aufgerufen und die ausgewählte Kategorie zetral gespeichert
-    public void clickFunc(View view){
+    public void clickFunc(View view) {
         NoobApplication myApp = (NoobApplication) getApplication();
         myApp.setCategory(selected);
         Intent i = new Intent(CategorySelectionActivity.this, LocationListActivity.class);
+        startActivity(i);
+    }
+
+    public void clickFunc1(View view) {
+        NoobApplication myApp = (NoobApplication) getApplication();
+        myApp.setSearch(editText.getText().toString());
+        new searchLocationOnServer().execute(editText.getText().toString());
+        Intent i = new Intent(CategorySelectionActivity.this, LocationSearchActivity.class);
         startActivity(i);
     }
 
@@ -76,7 +100,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
 
         @Override
         protected CategoryListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
             CategoryListResponse response = null;
             try {
                 response = onlineService.listCategories();
@@ -107,6 +131,28 @@ public class CategorySelectionActivity extends ActionBarActivity {
                 }
 
             });
+        }
+    }
+
+    class searchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
+
+        @Override
+        protected LocationListResponse doInBackground(String... params) {
+            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            LocationListResponse response;
+            NoobApplication myApp = (NoobApplication) getApplication();
+            response = onlineService.listLocationsWithName(params[0], myApp.getCity());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute (LocationListResponse response){
+            NoobApplication myApp = (NoobApplication) getApplication();
+            List<LocationTO> locationNames = new ArrayList<>();
+            for(int i=0; i<response.getLocations().size(); i++) {
+                locationNames.add(response.getLocations().get(i));
+            }
+            myApp.setLocationSearchResults(locationNames);
         }
     }
 

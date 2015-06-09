@@ -152,6 +152,9 @@ public class LocationTO extends ReturnCodeResponse {
         this.owner = owner;
     }
 
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
 }
