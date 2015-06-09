@@ -3,4 +3,50 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_new_location">NewLocation</string>
+    <string name="action_aktualisieren">Aktualisieren</string>
+    <string name="title_activity_maintenance">Maintenance</string>
+
+    <!-- Strings für die CitySelectionActivity -->
+    <string name="title_activity_city_selection">Städteauswahl</string>
+    <string name="activity_city_selection_staedteauswahl">Wählen Sie Ihre Stadt aus!</string>
+    <string name="activity_city_selection_uebernehmenbutton">Übernehmen</string>
+
+    <!-- Strings für die CategorySelectionActivity -->
+    <string name="title_activity_category_selection">Kategorieauswahl</string>
+    <string name="activity_category_selection_kategorieauswahlen">Bitte wählen Sie Ihre Kategorie</string>
+    <string name="activity_category_selection_auswahlen">Auswählen</string>
+    <string name="activity_category_selection_oder">oder</string>
+    <string name="activity_category_selection_nachLocSuchen">Nach Location suchen</string>
+    <string name="activity_category_selection_LocName">Locationname</string>
+    <string name="activity_category_selection_Suchen">Suchen</string>
+
+    <!-- Strings für die LocationListActivity -->
+    <string name="title_activity_category_list">CategoryListActivity</string>
+    <string name="activity_location_list_filter">Filter</string>
+
+    <!-- Strings für die ShowLocationActivity -->
+    <string name="title_activity_location_show">LocationShowActivity</string>
+    <string name="title_activity_location_adresse">Adresse</string>
+    <string name="title_activity_location_beschreibung">Beschreibung</string>
+    <string name="title_activity_location_bewertung">Bewertung</string>
+    <string name="title_activity_location_kommentare">Kommentare</string>
+    <string name="title_activity_location_kommentieren">Kommentieren</string>
+
+    <!-- Strings für die LocationSortActivity -->
+    <string name="title_activity_location_sort">Filtern und Sortieren</string>
+    <string name="activity_location_sort_sortieren">Sortieren</string>
+    <string name="activity_location_sort_filtern">Filtern</string>
+    <string name="activity_location_sort_nachName1">nach Name (aufwärts)</string>
+    <string name="activity_location_sort_nachName2">nach Name (abwärts)</string>
+    <string name="activity_location_sort_anwenden">Anwenden</string>
+    <string name="title_activity_location_search">LocationSearchActivity</string>
+    <string name="title_activity_location_comment">LocationCommentActivity</string>
+
+    <!-- Strings für die Menüs -->
+    <string name="menu_neueLoc">Neue Location</string>
+    <string name="menu_kontoverw">Konto verwalten</string>
+    <string name="menu_ausloggen">Ausloggen</string>
+    <string name="menu_locBearb">Location bearbeiten</string>
 </resources>
