@@ -52,7 +52,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="70dp"
-        android:onClick="clickFunc" />
+        android:onClick="clickFuncSort" />
 
     <TextView
         android:layout_width="wrap_content"

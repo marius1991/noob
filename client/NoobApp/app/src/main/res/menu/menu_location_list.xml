@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.fh_muenster.noobApp.LocationShowActivity">
+    tools:context="de.fh_muenster.noobApp.LocationListActivity">
 
     <item
-        android:id="@+id/action_locBearb"
-        android:title="@string/menu_locBearb"
+        android:id="@+id/action_neueLoc"
+        android:title="@string/menu_neueLoc"
         android:orderInCategory="100" app:showAsAction="never" />
 
     <item
@@ -19,3 +19,4 @@
         android:orderInCategory="100" app:showAsAction="never" />
 
 </menu>
+

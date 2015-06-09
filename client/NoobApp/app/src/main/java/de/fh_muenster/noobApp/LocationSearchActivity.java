@@ -15,6 +15,10 @@ import android.widget.Toast;
 import de.fh_muenster.noob.LocationTO;
 import de.fh_muenster.noobApp.R;
 
+/**
+ * @author marius
+ * Diese Activity zeigt die Suchergebnisse an,nachdem nach einer Location gesucht wurde
+ */
 public class LocationSearchActivity extends ActionBarActivity {
 
     private LocationTO selectedFromList = null;
@@ -25,9 +29,11 @@ public class LocationSearchActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_search);
         NoobApplication myApp = (NoobApplication) getApplication();
+
+        //Titel der Activity verändern
         setTitle("Suche nach '" + myApp.getSearch() + "' in " + myApp.getCity());
 
-        //ListView Objekt mit Testdaten füllen
+        //ListView Objekt mit Daten füllen
         ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, myApp.getLocationSearchResults());
         final ListView lv = (ListView)findViewById(R.id.listView2);
         lv.setAdapter(adapter);

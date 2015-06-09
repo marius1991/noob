@@ -22,7 +22,7 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 /**
  * Created by marius on 02.06.15.
  * @author marius
- * Die Activity zeigt eine Location und deren Details
+ * Diese Activity zeigt eine Location und deren Details
  */
 public class LocationShowActivity extends ActionBarActivity {
 
@@ -35,28 +35,35 @@ public class LocationShowActivity extends ActionBarActivity {
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
 
+        //Adresse ersetzten
         TextView textViewAddress = (TextView)findViewById(R.id.textView14);
         textViewAddress.setText(myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity());
 
+        //Beschreibung ersetzen
         TextView textViewDescription = (TextView)findViewById(R.id.textView15);
         textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Inhaber: " + myApp.getLocation().getOwner().getName());
 
+        //Rating ersetzen
         TextView textViewRating = (TextView)findViewById(R.id.textView12);
         textViewRating.append(" " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
 
+        //RatingBar füllen, falls vorher bereits bewertet wurde
         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                //Rating asynchron zum Server senden
                 new sendRatingToServer().execute(Math.round(rating));
             }
         });
 //        for(int i=0; i<myApp.getLocation().getRatings().size(); i++) {
 //            if(myApp.getLocation().getRatings().get(i).getOwner().getId() == 1) {
 //                ratingBar.setRating(myApp.getLocation().getRatings().get(i).getValue());
+//      TODO hier muss noch geprüft werden ob bereits bewertet wurde
 //            }
 //        }
 
-        List <CommentTO> comments = new ArrayList<>();
+        //Kommentarliste füllen
+        List <CommentTO> comments;
         List <String> valueList = new ArrayList<>();
         comments = myApp.getLocation().getComments();
         if (comments != null) {
@@ -91,12 +98,27 @@ public class LocationShowActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void clickFunc2(View view){
+    /**
+     * Diese Funktion wird aufgerufen, wenn auf den Button "Kommentieren" gedrückt wird
+     * Sie startet eine neue Activity
+     * @param view
+     */
+    public void clickFuncComment(View view){
         Intent i = new Intent(LocationShowActivity.this, LocationCommentActivity.class);
         startActivity(i);
     }
 
+    /**
+     * @author marius
+     * Dieser AsyncTask schickt das Rating zum Server
+     */
     public class sendRatingToServer extends AsyncTask<Integer, String, ReturnCodeResponse> {
+
+        /**
+         * Es wird ein neuer Thread gestartet, in dem das Rating zum Server geschickt wird
+         * @param params
+         * @return
+         */
         @Override
         protected ReturnCodeResponse doInBackground(Integer... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
@@ -106,6 +128,10 @@ public class LocationShowActivity extends ActionBarActivity {
             return response;
         }
 
+        /**
+         * Gibt bei Erfolg eine Meldung
+         * @param response
+         */
         @Override
         protected  void onPostExecute(ReturnCodeResponse response) {
             Toast.makeText(getApplicationContext(), "Rating erfolgreich" , Toast.LENGTH_LONG).show();

@@ -21,7 +21,7 @@ import de.fh_muenster.noob.LocationTO;
 /**
  * Created by marius on 02.06.15.
  * @author marius
- * Die Activity zeigt die Locations der ausgewählten Kategorie einer Stadt
+ * Diese Activity zeigt die Locations einer zuvor ausgewählten Kategorie in eine zuvor ausgewählten Stadt
  */
 public class LocationListActivity extends ActionBarActivity {
 
@@ -36,18 +36,14 @@ public class LocationListActivity extends ActionBarActivity {
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getCity() + ": " + myApp.getCategory());
 
-
-
         //Activities asynchron abrufen
         new getLocationsFromServer().execute();
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_category_list, menu);
+        getMenuInflater().inflate(R.menu.menu_location_list, menu);
         return true;
     }
 
@@ -66,14 +62,27 @@ public class LocationListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Bei Klick auf Filter Button wird die Filter Activity aufgerufen
-    public void clickFunc(View view){
+    /**
+     * Diese Methode wird beim Drücken auf den "Filter" Button aufgerufen.
+     * Sie startet eine neue Activity in der die Filter gesetzt werden können
+     * @param view
+     */
+    public void clickFuncFilter(View view){
         Intent i = new Intent(LocationListActivity.this, LocationSortActivity.class);
         startActivity(i);
     }
 
+    /**
+     * @author marius
+     * In diesem AsycTask werden die Locations einer Stadt und Kategorie vom Server abgerufen
+     */
     class getLocationsFromServer extends AsyncTask<String, String, LocationListResponse> {
 
+        /**
+         * Startet den Thread zum Abrufen der Locationliste vom Server
+         * @param params
+         * @return
+         */
         @Override
         protected LocationListResponse doInBackground(String... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
@@ -82,16 +91,19 @@ public class LocationListActivity extends ActionBarActivity {
             return response;
         }
 
+        /**
+         * Nimmt die Locationliste entgegen und füllt damit die Liste
+         * @param response
+         */
         @Override
         protected void onPostExecute (LocationListResponse response) {
-            Integer returnCode = response.getReturnCode();
             final List<LocationTO> valueListLocation;
             valueListLocation = response.getLocations();
             final List<String> valueList = new ArrayList<>();
-            //Toast.makeText(LocationListActivity.this, returnCode.toString(), Toast.LENGTH_LONG).show();
             for(int i=0; i<valueListLocation.size(); i++) {
                 valueList.add(valueListLocation.get(i).getName());
             }
+            //Den eingestellten Filter anwenden
             NoobApplication myApp = (NoobApplication) getApplication();
             if (myApp.getSortBy() != null) {
                 if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName1))) {
@@ -101,7 +113,7 @@ public class LocationListActivity extends ActionBarActivity {
                     Collections.sort(valueList, Collections.reverseOrder());
                 }
             }
-            //ListView Objekt mit Testdaten füllen
+            //ListView Objekt mit Daten füllen
             ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
             final ListView lv = (ListView)findViewById(R.id.listView);
             lv.setAdapter(adapter);
@@ -110,7 +122,6 @@ public class LocationListActivity extends ActionBarActivity {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                     selectedFromList = (String) (lv.getItemAtPosition(myItemInt));
-                    //Toast.makeText(getApplicationContext(), selectedFromList + " ausgewählt", Toast.LENGTH_SHORT).show();
                     NoobApplication myApp = (NoobApplication) getApplication();
                     LocationTO selected = null;
                     for(int i=0; i<valueListLocation.size(); i++) {

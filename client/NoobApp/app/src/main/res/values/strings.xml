@@ -43,4 +43,10 @@
     <string name="activity_location_sort_anwenden">Anwenden</string>
     <string name="title_activity_location_search">LocationSearchActivity</string>
     <string name="title_activity_location_comment">LocationCommentActivity</string>
+
+    <!-- Strings für die Menüs -->
+    <string name="menu_neueLoc">Neue Location</string>
+    <string name="menu_kontoverw">Konto verwalten</string>
+    <string name="menu_ausloggen">Ausloggen</string>
+    <string name="menu_locBearb">Location bearbeiten</string>
 </resources>

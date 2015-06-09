@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import de.fh_muenster.noobApp.R;
 
+/**
+ * @author marius
+ * In dieser Activity können die angezeigten Locations einer Stadt und einer Kategorie sortiert und gefiltert werden
+ */
 public class LocationSortActivity extends ActionBarActivity {
 
     private RadioGroup radioGroup;
@@ -24,16 +28,16 @@ public class LocationSortActivity extends ActionBarActivity {
         setContentView(R.layout.activity_location_sort);
     }
 
-    //?!?!?
-    public void clickFunc(View view){
+    /**
+     * Diese Funktion wird aufgerufen sobald auf den Butto gedrückt wird, welcher die Sortierung aktiviert
+     * @param view
+     */
+    public void clickFuncSort(View view){
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-
-        // get selected radio button from radioGroup
         int selectedId = radioGroup.getCheckedRadioButtonId();
-
-        // find the radiobutton by returned id
         radioButton = (RadioButton) findViewById(selectedId);
 
+        //Zeigen wie sortiert wurde
         Toast.makeText(LocationSortActivity.this,
                 radioButton.getText(), Toast.LENGTH_SHORT).show();
 
