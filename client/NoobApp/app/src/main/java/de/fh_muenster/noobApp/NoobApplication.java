@@ -2,7 +2,10 @@ package de.fh_muenster.noobApp;
 
 import android.app.Application;
 
+import java.util.List;
+
 import de.fh_muenster.noob.CategoryListResponse;
+import de.fh_muenster.noob.LocationTO;
 
 /**
  * Created by marius on 02.06.15.
@@ -10,9 +13,37 @@ import de.fh_muenster.noob.CategoryListResponse;
  * Subklasse von Application --> Austausch von Daten unter den Activities
  */
 public class NoobApplication extends Application {
+    private int sessionId;
     private String city;
     private String category;
-    private String location;
+    private LocationTO location;
+    private String sortBy;
+    private List<LocationTO> locationSearchResults;
+    private String search;
+
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public List<LocationTO> getLocationSearchResults() {
+        return locationSearchResults;
+    }
+
+    public void setLocationSearchResults(List<LocationTO> locationSearchResults) {
+        this.locationSearchResults = locationSearchResults;
+    }
 
     public void setCity(String city) {
         this.city = city;
@@ -30,12 +61,19 @@ public class NoobApplication extends Application {
         return this.category;
     }
 
-    public String getLocation() {
+    public LocationTO getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(LocationTO location) {
         this.location = location;
     }
 
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
 }

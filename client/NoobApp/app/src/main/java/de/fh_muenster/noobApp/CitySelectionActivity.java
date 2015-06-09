@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +23,12 @@ import de.fh_muenster.noob.CityListResponse;
 /**
  * Created by marius on 02.06.15.
  * @author marius
- * Activity zum Auswählen der Stadt
+ * In dieser Activity wird die Stadt ausgewählt
  */
 public class CitySelectionActivity extends Activity {
 
     private String selected;
+    private static final String TAG = CitySelectionActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +61,31 @@ public class CitySelectionActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Bei Klick auf Login Button wird die nächste Activity aufgerufen und die ausgewählte Stadt zentral gespeichert
-    public void clickFunc(View view){
+    /**
+     * Diese Methode wird ausgeführt wenn aus den Button "Übernehmen" geklickt wird.
+     * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity
+     * @param view
+     */
+    public void clickFuncCitySelection(View view){
+        Log.d(TAG, selected + " wurde ausgewählt und die nächste Activity wird gestartet");
         NoobApplication myApp = (NoobApplication) getApplication();
         myApp.setCity(selected);
         Intent i = new Intent(CitySelectionActivity.this, CategorySelectionActivity.class);
         startActivity(i);
     }
 
+
+    /**
+     * @author marius
+     * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen
+     */
     class getCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
 
+        /**
+         * Startet einen neuen Thread, der die Städteliste abholen soll
+         * @param params
+         * @return
+         */
         @Override
         protected CityListResponse doInBackground(String... params) {
             NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
@@ -76,11 +93,13 @@ public class CitySelectionActivity extends Activity {
             return response;
         }
 
+        /**
+         * Nimmt die Städtliste entgegen und füllt das Spinner Objekt
+         * @param response
+         */
         @Override
         protected void onPostExecute (CityListResponse response) {
-            Integer returnCode = response.getReturnCode();
             List<String> valueList;
-            //Toast.makeText(CitySelectionActivity.this, returnCode.toString(), Toast.LENGTH_LONG).show();
             valueList = response.getCities();
             ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
             Spinner sp = (Spinner)findViewById(R.id.spinner);
