@@ -124,7 +124,29 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public UserLoginResponse login(String email, String password) {
-        return null;
+        String METHOD_NAME ="login";
+        UserLoginResponse userLoginResponse = new UserLoginResponse();
+
+        SoapObject response = null;
+        try{
+            response = executeSoapAction(METHOD_NAME, email, password);
+
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+
+                userLoginResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
+                userLoginResponse.setMessage(response.getProperty("message").toString());
+                userLoginResponse.setSessionId(Integer.parseInt(response.getPrimitivePropertySafelyAsString("sessionId")));
+                Log.d(TAG,"id: "+ response.getPrimitivePropertySafelyAsString("sessionId"));
+
+            }
+        }
+        catch (SoapFault e) {
+
+        }
+        return userLoginResponse;
     }
 
     @Override
@@ -169,7 +191,38 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public CityListResponse listCities() {
-        return null;
+        String METHOD_NAME = "listCities";
+        CityListResponse cityListResponse = new CityListResponse();
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+                List<String> cities = new ArrayList<>();
+                for (int i=0; i<response.getPropertyCount(); i++) {
+                    PropertyInfo info = new PropertyInfo();
+                    response.getPropertyInfo(i, info);
+                    Object obj =info.getValue();
+                    if(obj!= null && info.name.equals("cities")) {
+                        Log.d(TAG, response.getProperty(i).toString());
+                        cities.add(response.getProperty(i).toString());
+                    }
+                }
+                cityListResponse.setMessage(response.getPropertyAsString("message"));
+                cityListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+                cityListResponse.setCities(cities);
+            }
+            else {
+                //throw new BadConnectionException("Keine Verbindung zum Server");
+            }
+        }
+        catch (SoapFault e) {
+        }
+        return cityListResponse;
+
     }
 
     @Override
