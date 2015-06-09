@@ -11,6 +11,7 @@ import de.fh_muenster.noob.CommentTO;
 import de.fh_muenster.noob.LocationListResponse;
 import de.fh_muenster.noob.LocationTO;
 import de.fh_muenster.noob.NoobOnlineService;
+import de.fh_muenster.noob.RatingTO;
 import de.fh_muenster.noob.ReturnCodeResponse;
 import de.fh_muenster.noob.UserLoginResponse;
 import de.fh_muenster.noob.UserTO;
@@ -92,6 +93,8 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
             lo.setCategory("Bar");
             owner.setName("Peter Lustig");
             lo.setOwner(owner);
+            lo.setAverageRating(4.5);
+            lo.setId(1);
             locationTOList.add(lo);
             locationTOList.add(lo1);
             locationTOList.add(lo2);
@@ -116,7 +119,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
             lo.setName("Gorilla Bar");
             lo1.setName("Atellier Bar");
             lo2.setName("Hafenbar");
-            lo.setDescription("Tolle Bar in der Altstadt von MS!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa sssssssssssssssssssssssssssss sdddddddddddd ff ggg");
+            lo.setDescription("Tolle Bar in der Altstadt von MS!");
             lo1.setDescription("Noch ein tolle Bar in der Altstadt von MS!");
             lo2.setDescription("und noch eine tolle Bar in der Altstadt von MS!");
             lo.setCity("Münster");
@@ -126,6 +129,14 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
             lo.setCategory("Bar");
             owner.setName("Peter Lustig");
             lo.setOwner(owner);
+            lo.setAverageRating(4.5);
+            lo.setId(1);
+            CommentTO comment = new CommentTO(1, "test", null, lo, owner);
+            List <CommentTO> list = new ArrayList<>();
+            list.add(comment);
+            lo.setComments(list);
+
+
             locationTOList.add(lo);
             locationTOList.add(lo1);
             locationTOList.add(lo2);

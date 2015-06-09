@@ -13,12 +13,21 @@ import de.fh_muenster.noob.LocationTO;
  * Subklasse von Application --> Austausch von Daten unter den Activities
  */
 public class NoobApplication extends Application {
+    private int sessionId;
     private String city;
     private String category;
     private LocationTO location;
     private String sortBy;
     private List<LocationTO> locationSearchResults;
     private String search;
+
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(int sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public String getSearch() {
         return search;

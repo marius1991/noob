@@ -8,32 +8,33 @@
     <string name="action_aktualisieren">Aktualisieren</string>
     <string name="title_activity_maintenance">Maintenance</string>
 
-    <!-- String für die CitySelectionActivity -->
+    <!-- Strings für die CitySelectionActivity -->
     <string name="title_activity_city_selection">Städteauswahl</string>
     <string name="activity_city_selection_staedteauswahl">Wählen Sie Ihre Stadt aus!</string>
     <string name="activity_city_selection_uebernehmenbutton">Übernehmen</string>
 
-    <!-- String für die CategorySelectionActivity -->
+    <!-- Strings für die CategorySelectionActivity -->
     <string name="title_activity_category_selection">Kategorieauswahl</string>
     <string name="activity_category_selection_kategorieauswahlen">Bitte wählen Sie Ihre Kategorie</string>
     <string name="activity_category_selection_auswahlen">Auswählen</string>
     <string name="activity_category_selection_oder">oder</string>
-    <string name="activity_category_selection_nachLocSuchen">Nach Lacation suchen</string>
+    <string name="activity_category_selection_nachLocSuchen">Nach Location suchen</string>
     <string name="activity_category_selection_LocName">Locationname</string>
     <string name="activity_category_selection_Suchen">Suchen</string>
 
-    <!-- String für die LocationListActivity -->
+    <!-- Strings für die LocationListActivity -->
     <string name="title_activity_category_list">CategoryListActivity</string>
     <string name="activity_location_list_filter">Filter</string>
 
-    <!-- String für die ShowLocationActivity -->
+    <!-- Strings für die ShowLocationActivity -->
     <string name="title_activity_location_show">LocationShowActivity</string>
     <string name="title_activity_location_adresse">Adresse</string>
     <string name="title_activity_location_beschreibung">Beschreibung</string>
     <string name="title_activity_location_bewertung">Bewertung</string>
     <string name="title_activity_location_kommentare">Kommentare</string>
+    <string name="title_activity_location_kommentieren">Kommentieren</string>
 
-    <!-- String für die LocationSortActivity -->
+    <!-- Strings für die LocationSortActivity -->
     <string name="title_activity_location_sort">Filtern und Sortieren</string>
     <string name="activity_location_sort_sortieren">Sortieren</string>
     <string name="activity_location_sort_filtern">Filtern</string>
@@ -41,4 +42,5 @@
     <string name="activity_location_sort_nachName2">nach Name (abwärts)</string>
     <string name="activity_location_sort_anwenden">Anwenden</string>
     <string name="title_activity_location_search">LocationSearchActivity</string>
+    <string name="title_activity_location_comment">LocationCommentActivity</string>
 </resources>

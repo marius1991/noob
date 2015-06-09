@@ -55,6 +55,10 @@
             android:name=".LocationSearchActivity"
             android:label="@string/title_activity_location_search" >
         </activity>
+        <activity
+            android:name=".LocationCommentActivity"
+            android:label="@string/title_activity_location_comment" >
+        </activity>
     </application>
 
 </manifest>
