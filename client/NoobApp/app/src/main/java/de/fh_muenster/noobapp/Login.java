@@ -59,24 +59,7 @@ public class Login extends ActionBarActivity {
         });
 
 
-        registerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN: {
-                        v.getBackground().setColorFilter(Color.parseColor("#2F4F4F"), PorterDuff.Mode.SRC_ATOP);
-                        v.invalidate();
-                        break;
-                    }
-                    case MotionEvent.ACTION_UP: {
-                        v.getBackground().clearColorFilter();
-                        v.invalidate();
-                        break;
-                    }
-                }
-                return false;
-            }
-        });
+
     }
 
 
@@ -84,29 +67,29 @@ public class Login extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_actions, menu);
+        inflater.inflate(R.menu.menu_login, menu);
 
         return super.onCreateOptionsMenu(menu);
 
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    //@Override
+   // public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
+       // switch (item.getItemId()) {
 
-            case R.id.register:
+//            case R.id.register:
 
-                register();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    private void register() {
-        Intent i = new Intent(Login.this, Register.class);
-        startActivity(i);
-    }
+//              register();
+  //  return true;
+    //        default:
+      //          return super.onOptionsItemSelected(item);
+        //}
+    //}
+    //private void register() {
+      //  Intent i = new Intent(Login.this, Register.class);
+        //startActivity(i);
+    //}
 }
 

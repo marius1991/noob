@@ -6,18 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class NewLocation extends ActionBarActivity {
+public class UserManagementAcitivtiy extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_location);
+        setContentView(R.layout.activity_user_management_acitivtiy);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_location, menu);
+        getMenuInflater().inflate(R.menu.menu_user_management_acitivtiy, menu);
         return true;
     }
 

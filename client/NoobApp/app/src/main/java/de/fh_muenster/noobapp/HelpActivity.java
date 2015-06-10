@@ -1,23 +1,28 @@
 package de.fh_muenster.noobapp;
 
+import android.app.ActionBar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class Maintenance extends ActionBarActivity {
+public class HelpActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maintenance);
+        setContentView(R.layout.activity_help);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // If your minSdkVersion is 11 or higher, instead use:
+        // getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_maintenance, menu);
+        getMenuInflater().inflate(R.menu.menu_help, menu);
         return true;
     }
 
@@ -32,6 +37,7 @@ public class Maintenance extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
