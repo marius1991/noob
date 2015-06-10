@@ -25,7 +25,7 @@ public class NewLocationActivity extends ActionBarActivity {
         startActivityForResult(i,0);
     }
 
-    //Empfängt das Bild und prüft ihm resultcode ob ein bild gemacht worden ist
+    //EmpfÃ¤ngt das Bild und prÃ¼ft ihm resultcode ob ein bild gemacht worden ist
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
