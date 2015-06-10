@@ -27,7 +27,7 @@ public class LoginActivity extends ActionBarActivity {
         return super.onCreateOptionsMenu(menu);
 
     }
-    //Über das Fragezeichen wird die Help Activity gestartet
+    //Ãœber das Fragezeichen wird die Help Activity gestartet
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -44,7 +44,7 @@ public class LoginActivity extends ActionBarActivity {
         startActivity(i);
     }
     /*
-    Methode um GoogleMaps mit Münster zu öffnen
+    Methode um GoogleMaps mit MÃ¼nster zu Ã¶ffnen
     public void openGoogleMaps(View view) {
         String geoUriString = getResources().getString(R.string.map_location);
         Uri geoUri = Uri.parse(geoUriString);
