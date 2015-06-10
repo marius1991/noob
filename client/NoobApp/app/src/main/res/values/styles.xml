@@ -3,9 +3,22 @@
     <color name="white_opaque">#FFFFFFFF</color>
 
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppThemeAll" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="android:background">@color/white_opaque</item>
+    </style>
+    <style name="ThemeFullScreen" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
+    <style name="MyActionBar" parent="Widget.AppCompat.ActionBar.Solid">
+        <item name="background">@color/hint_foreground_material_light</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
     </style>
     <style name="Textcolor">
         <item name="android:textColor">@android:color/holo_blue_light</item>

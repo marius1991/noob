@@ -6,7 +6,11 @@
     -->
     <!-- Stroke sorgt für den Rand  -->
     <stroke
-        android:width="4px"
-        android:color="#ADD8E6" />
-
+        android:width="3px"
+        android:color="#808080" />
+    <padding
+        android:bottom="5dp"
+        android:left="5dp"
+        android:right="5dp"
+        android:top="5dp" />
 </shape>
