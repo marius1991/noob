@@ -1,16 +1,23 @@
 package de.fh_muenster.noobApp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import de.fh_muenster.noob.UserLoginResponse;
 
 
 public class LoginActivity extends ActionBarActivity {
-
+    private EditText email;
+    private EditText password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +50,22 @@ public class LoginActivity extends ActionBarActivity {
         Intent i =new Intent(LoginActivity.this,HelpActivity.class);
         startActivity(i);
     }
+
+    public void login(View view){
+        LoginTask loginTask= new LoginTask(view.getContext());
+        email=(EditText) findViewById(R.id.editText3);
+        password=(EditText) findViewById(R.id.editText4);
+        String emailString = email.getText().toString();
+        String passwordString = password.getText().toString();
+        if(!emailString.equals("")&&!passwordString.equals("")){
+            loginTask.doInBackground(emailString,passwordString);
+        }
+        else{
+            Toast.makeText(view.getContext(), "Username und Password duerfen nicht leer sein!",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
     /*
     Methode um GoogleMaps mit Münster zu öffnen
     public void openGoogleMaps(View view) {
@@ -60,6 +83,45 @@ public class LoginActivity extends ActionBarActivity {
     public void openNewLocation(View view){
         Intent z= new Intent(LoginActivity.this,NewLocationActivity.class);
         startActivity(z);
+    }
+
+    public class LoginTask extends AsyncTask<String,String,Integer>{
+        private Context context;
+        private String message;
+        private int returnCode;
+
+        public LoginTask(Context context){
+            this.context=context;
+        }
+        protected Integer doInBackground(String... params){
+            String email=params[0];
+            String password=params[1];
+            UserLoginResponse userLogin;
+            NoobOnlineServiceImpl onlineService=new NoobOnlineServiceImpl();
+            try{
+                userLogin = onlineService.login(email, password);
+                Integer sessionId=userLogin.getSessionId();
+                message=userLogin.getMessage();
+                returnCode=userLogin.getReturnCode();
+                return sessionId;
+            }
+            catch(Exception e){
+
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Integer sessionId){
+            Toast.makeText(context,message,
+                    Toast.LENGTH_SHORT).show();
+
+            if(returnCode==0){
+                NoobApplication myApp=(NoobApplication)getApplication();
+                myApp.setSessionId(sessionId);
+                Intent i= new Intent(context,CitySelectionActivity.class);
+                startActivity(i);
+            }
+        }
     }
 
 }

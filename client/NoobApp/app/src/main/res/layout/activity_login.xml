@@ -51,7 +51,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="5dp"
-        android:onClick="openNewLocation"/>
+        android:onClick="login"/>
 
     <Button
         android:layout_width="match_parent"
