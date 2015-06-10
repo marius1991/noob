@@ -1,18 +1,12 @@
-package de.fh_muenster.noobapp;
+package de.fh_muenster.noobApp;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-
-import java.util.Locale;
 
 
 public class LoginActivity extends ActionBarActivity {

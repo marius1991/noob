@@ -3,17 +3,16 @@
     package="de.fh_muenster.noobApp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <!--android:name=".NoobApplication"-->
     <application
-        android:name=".NoobApplication"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:theme="@style/ThemeFullScreen" >
-        <activity
-            android:name=".LoginActivity"
-            android:label="Willkommen Nooby" >
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:theme="@style/ThemeFullScreen">
+    <activity
+        android:name="de.fh_muenster.noobApp.LoginActivity"
+        android:label="Willkommen Nooby" >
 
-            <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
+        <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,38 +20,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".Register"
-            android:label="@string/title_activity_register" >
-        </activity>
-        <activity
-            android:name=".RegisterActivity"
+            android:name="de.fh_muenster.noobApp.RegisterActivity"
             android:label="Registrierung"
-            android:parentActivityName=".LoginActivity" >
+            android:parentActivityName="de.fh_muenster.noobApp.LoginActivity" >
         </activity>
         <activity
-            android:name=".HelpActivity"
+            android:name="de.fh_muenster.noobApp.HelpActivity"
             android:label="Help Center"
-            android:parentActivityName=".LoginActivity" >
+            android:parentActivityName="de.fh_muenster.noobApp.LoginActivity" >
         </activity>
         <activity
-            android:name=".NewLocationActivity"
+            android:name="de.fh_muenster.noobApp.NewLocationActivity"
             android:label="Neue Location anlegen" >
         </activity>
         <activity
-            android:name=".UserManagementAcitivtiy"
+            android:name="de.fh_muenster.noobApp.UserManagementAcitivtiy"
             android:label="Kontoverwaltung" >
         </activity>
+
         <activity
-            android:name=".Maintenance"
-            android:label="@string/title_activity_maintenance" >
-        </activity>
-        <activity
-            android:name=".CitySelectionActivity"
+            android:name="de.fh_muenster.noobApp.CitySelectionActivity"
             android:label="@string/title_activity_city_selection" >
         </activity>
         <activity
-            android:name=".CategorySelectionActivity"
+            android:name="de.fh_muenster.noobApp.CategorySelectionActivity"
             android:label="@string/title_activity_category_selection" >
         </activity>
         <activity
@@ -72,7 +65,7 @@
             android:label="@string/title_activity_location_search" >
         </activity>
         <activity
-            android:name=".LocationCommentActivity"
+            android:name="de.fh_muenster.noobApp.LocationCommentActivity"
             android:label="@string/title_activity_location_comment" >
         </activity>
     </application>

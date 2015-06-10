@@ -10,7 +10,6 @@
     <string name="action_aktualisieren">Aktualisieren</string>
     <string name="title_activity_maintenance">Maintenance</string>
 
-<<<<<<< HEAD
     <string name="title_activity_login">LoginActivity</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -21,9 +20,9 @@
 
 
     <!-- String für die CitySelectionActivity -->
-=======
+
     <!-- Strings für die CitySelectionActivity -->
->>>>>>> 84929a2b8ccb54e0be8efad8dc47643421fb6532
+
     <string name="title_activity_city_selection">Städteauswahl</string>
     <string name="activity_city_selection_staedteauswahl">Wählen Sie Ihre Stadt aus!</string>
     <string name="activity_city_selection_uebernehmenbutton">Übernehmen</string>
@@ -49,9 +48,7 @@
     <string name="title_activity_location_kommentare">Kommentare</string>
     <string name="title_activity_location_kommentieren">Kommentieren</string>
 
-<<<<<<< HEAD
 
-=======
     <!-- Strings für die LocationSortActivity -->
     <string name="title_activity_location_sort">Filtern und Sortieren</string>
     <string name="activity_location_sort_sortieren">Sortieren</string>
@@ -67,5 +64,5 @@
     <string name="menu_kontoverw">Konto verwalten</string>
     <string name="menu_ausloggen">Ausloggen</string>
     <string name="menu_locBearb">Location bearbeiten</string>
->>>>>>> 84929a2b8ccb54e0be8efad8dc47643421fb6532
+
 </resources>

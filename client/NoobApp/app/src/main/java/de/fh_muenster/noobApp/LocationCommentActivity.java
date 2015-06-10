@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import de.fh_muenster.noobApp.R;
-
 /**
  * @author marius
  * In dieser Activity kann ein Kommentar zu einer Location geschrieben werden

@@ -12,12 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.CityListResponse;
 
 /**
