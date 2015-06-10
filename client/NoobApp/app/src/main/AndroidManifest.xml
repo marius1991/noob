@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.fh_muenster.noobapp" >
+    package="de.fh_muenster.noobApp" >
 
     <application
+        android:name="de.fh_muenster.noobApp.NoobApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/ThemeFullScreen" >
         <activity
+
             android:name=".LoginActivity"
             android:label="Willkommen Nooby" >
 
             <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Register"
+            android:name="de.fh_muenster.noobApp.Register"
             android:label="@string/title_activity_register" >
         </activity>
         <activity
@@ -38,6 +41,22 @@
         <activity
             android:name=".UserManagementAcitivtiy"
             android:label="Kontoverwaltung" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.CitySelectionActivity"
+            android:label="@string/title_activity_city_selection" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.CategorySelectionActivity"
+            android:label="@string/title_activity_category_selection" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.CategoryListActivity"
+            android:label="@string/title_activity_category_list" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.LocationShowActivity"
+            android:label="@string/title_activity_location_show" >
         </activity>
     </application>
 

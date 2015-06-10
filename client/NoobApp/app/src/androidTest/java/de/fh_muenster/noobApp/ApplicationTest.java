@@ -1,4 +1,4 @@
-package de.fh_muenster.noobapp;
+package de.fh_muenster.noobApp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

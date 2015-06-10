@@ -9,6 +9,7 @@
     <string name="title_activity_new_location">NewLocation</string>
     <string name="action_aktualisieren">Aktualisieren</string>
     <string name="title_activity_maintenance">Maintenance</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -16,4 +17,24 @@
     <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf dem "Register Button und geben Sie Ihre Daten im Formular ein.</string>
     <string name="helpquestion2">Wir versichern, dass wir Ihre Daten nicht an Dritte Personen weitergeben und ihr Passwort verschlüsselt auf unseren Server speichern</string>
     <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
+
+
+    <!-- String für die CitySelectionActivity -->
+    <string name="title_activity_city_selection">Städteauswahl</string>
+    <string name="activity_city_selection_staedteauswahl">Wählen Sie Ihre Stadt aus!</string>
+    <string name="activity_city_selection_uebernehmenbutton">Übernehmen</string>
+
+    <!-- String für die CategorySelectionActivity -->
+    <string name="title_activity_category_selection">Kategorieauswahl</string>
+    <string name="activity_category_selection_kategorieauswahlen">Bitte wählen Sie Ihre Kategorie</string>
+    <string name="activity_category_selection_auswahlen">Auswählen</string>
+
+    <!-- String für die CategoryListActivity -->
+    <string name="title_activity_category_list">CategoryListActivity</string>
+    <string name="activity_category_list_filter">Filter</string>
+
+    <!-- String für die ShowLocationActivity -->
+    <string name="title_activity_location_show">LocationShowActivity</string>
+
+
 </resources>

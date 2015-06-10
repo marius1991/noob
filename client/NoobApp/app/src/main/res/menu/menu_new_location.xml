@@ -6,4 +6,5 @@
         android:title="ÖffneGoogleMaps"
         android:icon="@drawable/google"
         app:showAsAction="always|withText" />
+
 </menu>
