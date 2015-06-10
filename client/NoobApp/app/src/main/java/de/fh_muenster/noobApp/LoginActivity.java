@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,12 +19,31 @@ import de.fh_muenster.noob.UserLoginResponse;
 public class LoginActivity extends ActionBarActivity {
     private EditText email;
     private EditText password;
+    private Button loginButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-    }
+        loginButton=(Button) findViewById(R.id.button2);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginTask loginTask = new LoginTask(view.getContext());
+                email = (EditText) findViewById(R.id.editText3);
+                password = (EditText) findViewById(R.id.editText4);
+                String emailString = email.getText().toString();
+                String passwordString = password.getText().toString();
+                if (!emailString.equals("") && !passwordString.equals("")) {
+                    loginTask.execute(emailString, passwordString);
+                } else {
+                    Toast.makeText(view.getContext(), "Username und Password duerfen nicht leer sein!",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
+        }
 
 
     @Override
@@ -51,21 +71,6 @@ public class LoginActivity extends ActionBarActivity {
         startActivity(i);
     }
 
-    public void login(View view){
-        LoginTask loginTask= new LoginTask(view.getContext());
-        email=(EditText) findViewById(R.id.editText3);
-        password=(EditText) findViewById(R.id.editText4);
-        String emailString = email.getText().toString();
-        String passwordString = password.getText().toString();
-        if(!emailString.equals("")&&!passwordString.equals("")){
-            loginTask.doInBackground(emailString,passwordString);
-        }
-        else{
-            Toast.makeText(view.getContext(), "Username und Password duerfen nicht leer sein!",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-    }
     /*
     Methode um GoogleMaps mit Münster zu öffnen
     public void openGoogleMaps(View view) {
@@ -112,9 +117,10 @@ public class LoginActivity extends ActionBarActivity {
         }
 
         protected void onPostExecute(Integer sessionId){
-            Toast.makeText(context,message,
-                    Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(context,message,
+              //      Toast.LENGTH_SHORT).show();
+            email.setError(message);
+            email.requestFocus();
             if(returnCode==0){
                 NoobApplication myApp=(NoobApplication)getApplication();
                 myApp.setSessionId(sessionId);

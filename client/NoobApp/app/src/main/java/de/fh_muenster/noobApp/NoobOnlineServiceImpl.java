@@ -128,20 +128,20 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         UserLoginResponse userLoginResponse = new UserLoginResponse();
 
         SoapObject response = null;
-        try{
+        try {
             response = executeSoapAction(METHOD_NAME, email, password);
 
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
 
-            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+            //if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0){
 
-                userLoginResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
-                userLoginResponse.setMessage(response.getProperty("message").toString());
-                userLoginResponse.setSessionId(Integer.parseInt(response.getPrimitivePropertySafelyAsString("sessionId")));
-                Log.d(TAG,"id: "+ response.getPrimitivePropertySafelyAsString("sessionId"));
+            userLoginResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
+            userLoginResponse.setMessage(response.getProperty("message").toString());
+            userLoginResponse.setSessionId(Integer.parseInt(response.getPrimitivePropertySafelyAsString("sessionId")));
+            Log.d(TAG, "id: " + response.getPrimitivePropertySafelyAsString("sessionId"));
 
-            }
+        //}
         }
         catch (SoapFault e) {
 
