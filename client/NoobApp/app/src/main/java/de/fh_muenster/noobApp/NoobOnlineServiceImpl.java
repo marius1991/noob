@@ -5,118 +5,35 @@ import android.util.Log;
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.fh_muenster.exceptions.BadConnectionException;
+import de.fh_muenster.exceptions.InvalidRegisterException;
 import de.fh_muenster.noob.*;
 
 /**
- * Created by philipp on 02.06.15.
+ * @author marius,philipp
  */
 public class NoobOnlineServiceImpl implements NoobOnlineService {
     private static final String NAMESPACE = "http://noobservice.noob.de/";
 
-    private static final String URL = "http://10.0.2.2:8080/noob/NoobOnlineServiceBean";
+    //private static final String URL = "http://10.0.2.2:8080/noob/NoobOnlineServiceBean";
+    private static final String URL = "http://10.70.16.58:8080/noob/NoobOnlineServiceBean";
 
     private static final String TAG = NoobOnlineServiceImpl.class.getName();
 
     private int sessionId;
 
 
-    @Override
-    public void register(String username, String email, String password, String passwordConfirmation) {
-        String METHOD_NAME = "register";
 
-        SoapObject response = null;
-        try {
-            response = executeSoapAction(METHOD_NAME, username, email, password, passwordConfirmation);
-            Log.d(TAG, response.getProperty("message").toString());
-            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) != 0) {
-                //TODO InvalidRegisterException werfen!!!
-            }
 
-        } catch (SoapFault e) {
 
-        }
-    }
-
-    @Override
-    public UserLoginResponse login(String email, String password) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse logout() {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse createLocation(String name, String category, String description, String street, String number, String plz, String city, String coordinates, UserTO owner) {
-        return null;
-    }
-
-    @Override
-    public CategoryListResponse listCategories() {
-        return null;
-    }
-
-    @Override
-    public LocationListResponse listLocationWithCategory(String category, String city) {
-        return null;
-    }
-
-    @Override
-    public LocationListResponse listAllLocations(String city) {
-        return null;
-    }
-
-    @Override
-    public LocationListResponse listLocationsWithName(String name, String city) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse commentOnLocation(UserTO user, LocationTO location, String text) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse commentOnComment(UserTO user, CommentTO comment, String text) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse giveRating(UserTO user, LocationTO location, int value) {
-        return null;
-    }
-
-    @Override
-    public LocationTO getLocationDetails(LocationTO location) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse setLocationDetails(LocationTO location) {
-        return null;
-    }
-
-    @Override
-    public UserTO getUserDetails(UserTO user) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse setUserDetails(UserTO user) {
-        return null;
-    }
-
-    @Override
-    public ReturncodeResponse deleteUser(UserTO user) {
-        return null;
-    }
 
     /**
      * Diese Methode delegiert einen Methodenaufruf an den hinterlegten WebService.
@@ -178,5 +95,188 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         }
 
         return (SoapObject) result;
+    }
+
+
+    @Override
+    public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) throws InvalidRegisterException{
+        String METHOD_NAME = "register";
+        SoapObject response = null;
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        try {
+            response = executeSoapAction(METHOD_NAME, username, email, password, passwordConfirmation);
+            Log.d(TAG, response.getProperty("message").toString());
+            if (Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+                returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+                returnCodeResponse.setMessage(response.getProperty("message").toString());
+            }
+            else {
+                throw new InvalidRegisterException("Registrierung fehlgeschlagen");
+            }
+
+
+        } catch (SoapFault e) {
+
+        }
+        return returnCodeResponse;
+    }
+
+
+    @Override
+    public UserLoginResponse login(String email, String password) {
+        String METHOD_NAME ="login";
+        UserLoginResponse userLoginResponse = new UserLoginResponse();
+
+        SoapObject response = null;
+        try{
+            response = executeSoapAction(METHOD_NAME, email, password);
+
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+
+                userLoginResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
+                userLoginResponse.setMessage(response.getProperty("message").toString());
+                userLoginResponse.setSessionId(Integer.parseInt(response.getPrimitivePropertySafelyAsString("sessionId")));
+                Log.d(TAG,"id: "+ response.getPrimitivePropertySafelyAsString("sessionId"));
+
+            }
+        }
+        catch (SoapFault e) {
+
+        }
+        return userLoginResponse;
+    }
+
+    @Override
+    public ReturnCodeResponse logout(int sessionId) {
+        return null;
+    }
+
+    @Override
+    public CategoryListResponse listCategories() throws BadConnectionException {
+        String METHOD_NAME = "listCategories";
+        CategoryListResponse categoryListResponse = new CategoryListResponse();
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+                List<String> categories = new ArrayList<>();
+                for (int i=0; i<response.getPropertyCount(); i++) {
+                    PropertyInfo info = new PropertyInfo();
+                    response.getPropertyInfo(i, info);
+                    Object obj =info.getValue();
+                    if(obj!= null && info.name.equals("categories")) {
+                        Log.d(TAG, response.getProperty(i).toString());
+                        categories.add(response.getProperty(i).toString());
+                    }
+                }
+                categoryListResponse.setMessage(response.getPropertyAsString("message"));
+                categoryListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+                categoryListResponse.setCategories(categories);
+            }
+            else {
+                throw new BadConnectionException("Keine Verbindung zum Server");
+            }
+        }
+        catch (SoapFault e) {
+        }
+        return categoryListResponse;
+    }
+
+    @Override
+    public CityListResponse listCities() {
+        String METHOD_NAME = "listCities";
+        CityListResponse cityListResponse = new CityListResponse();
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
+                List<String> cities = new ArrayList<>();
+                for (int i=0; i<response.getPropertyCount(); i++) {
+                    PropertyInfo info = new PropertyInfo();
+                    response.getPropertyInfo(i, info);
+                    Object obj =info.getValue();
+                    if(obj!= null && info.name.equals("cities")) {
+                        Log.d(TAG, response.getProperty(i).toString());
+                        cities.add(response.getProperty(i).toString());
+                    }
+                }
+                cityListResponse.setMessage(response.getPropertyAsString("message"));
+                cityListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+                cityListResponse.setCities(cities);
+            }
+            else {
+                //throw new BadConnectionException("Keine Verbindung zum Server");
+            }
+        }
+        catch (SoapFault e) {
+        }
+        return cityListResponse;
+
+    }
+
+    @Override
+    public LocationListResponse listLocationsWithCategory(String category, String city) {
+        return null;
+    }
+
+    @Override
+    public LocationListResponse listLocationsWithName(String name, String city) {
+        return null;
+    }
+
+    @Override
+    public LocationListResponse listAllLocations(String city) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse commentOnLocation(int sessionId, int locationId, String text) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser) {
+        return null;
+    }
+
+    @Override
+    public UserTO getUserDetails(int sessionId) {
+        return null;
+    }
+
+    @Override
+    public ReturnCodeResponse deleteUser(int sessionId) {
+        return null;
     }
 }

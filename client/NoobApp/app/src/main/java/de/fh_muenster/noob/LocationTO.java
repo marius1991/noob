@@ -1,15 +1,15 @@
 package de.fh_muenster.noob;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author philipp
  *
  */
-public class LocationTO extends ReturncodeResponse {
+public class LocationTO extends ReturnCodeResponse {
 
-    private static final long serialVersionUID = 4930641329075859136L;
+    private static final long serialVersionUID = -5498069855610055362L;
 
     private int id;
 
@@ -27,20 +27,18 @@ public class LocationTO extends ReturncodeResponse {
 
     private String city;
 
-    private String coordinates;
+    private double averageRating;
 
-    private int averageRating;
+    private List<RatingTO> ratings;
 
-    private ArrayList<RatingTO> ratings;
-
-    private ArrayList<CommentTO> comments;
+    private List<CommentTO> comments;
 
     private UserTO owner;
 
     public LocationTO(int id, String name, String category, String description,
                       String street, String number, int plz, String city,
-                      String coordinates, int averageRating, ArrayList<RatingTO> ratings,
-                      ArrayList<CommentTO> comments, UserTO owner) {
+                      double averageRating, List<RatingTO> ratings,
+                      List<CommentTO> comments, UserTO owner) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -49,7 +47,6 @@ public class LocationTO extends ReturncodeResponse {
         this.number = number;
         this.plz = plz;
         this.city = city;
-        this.coordinates = coordinates;
         this.averageRating = averageRating;
         this.ratings = ratings;
         this.comments = comments;
@@ -123,35 +120,27 @@ public class LocationTO extends ReturncodeResponse {
         this.city = city;
     }
 
-    public String getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(String coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public int getAverageRating() {
+    public double getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(int averageRating) {
+    public void setAverageRating(double averageRating) {
         this.averageRating = averageRating;
     }
 
-    public ArrayList<RatingTO> getRatings() {
+    public List<RatingTO> getRatings() {
         return ratings;
     }
 
-    public void setRatings(ArrayList<RatingTO> ratings) {
+    public void setRatings(List<RatingTO> ratings) {
         this.ratings = ratings;
     }
 
-    public ArrayList<CommentTO> getComments() {
+    public List<CommentTO> getComments() {
         return comments;
     }
 
-    public void setComments(ArrayList<CommentTO> comments) {
+    public void setComments(List<CommentTO> comments) {
         this.comments = comments;
     }
 
@@ -163,6 +152,9 @@ public class LocationTO extends ReturncodeResponse {
         this.owner = owner;
     }
 
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
 }

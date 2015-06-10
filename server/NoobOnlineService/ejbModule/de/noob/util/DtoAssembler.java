@@ -51,12 +51,11 @@ public class DtoAssembler {
 				location.getStreet(), 
 				location.getNumber(), 
 				location.getPlz(), 
-				location.getCity(), 
-				location.getCoordinates(), 
+				location.getCity(),  
 				location.getAverageRating(), 
-				location.getRatings(), 
-				location.getComments(), 
-				location.getOwner());
+				makeRatingsDTO(location.getRatings()), 
+				makeCommentsDTO(location.getComments()), 
+				makeDTO(location.getOwner()));
 		return dto;
 	}
 
@@ -127,7 +126,7 @@ public class DtoAssembler {
 	 * @param comments
 	 * @return
 	 */
-	private List<CommentTO> makeCommentsDTO(ArrayList<Comment> comments) {
+	private List<CommentTO> makeCommentsDTO(List<Comment> comments) {
 		List<CommentTO> toList = new ArrayList<CommentTO>();
 		for(Comment comment: comments) {
 			toList.add(makeDTO(comment));

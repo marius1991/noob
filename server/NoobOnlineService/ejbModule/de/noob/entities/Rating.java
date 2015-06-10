@@ -1,20 +1,40 @@
 package de.noob.entities;
 
+import java.io.Serializable;
+
+import javax.persistence.*;
 
 
+/**
+ * 
+ * @author Tim
+ *
+ */
+@Entity
+public class Rating implements Serializable {
 
-public class Rating {
-	
+	private static final long serialVersionUID = 8544212870790206964L;
+
+	@Id
+	@GeneratedValue
 	private int id;
 	
 	private int value;
 	
+	@ManyToOne
 	private Location location;
 	
+	@ManyToOne
 	private User owner;
 	
+	public Rating() {
+	}
 	
-	
+
+	public Rating(User user, int value) {
+		this.setOwner(user);
+		this.setValue(value);
+	}
 
 	public int getId() {
 		return id;

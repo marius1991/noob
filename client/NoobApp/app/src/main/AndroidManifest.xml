@@ -2,13 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.fh_muenster.noobApp" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name="de.fh_muenster.noobApp.NoobApplication"
+        android:name=".NoobApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/ThemeFullScreen" >
         <activity
-
             android:name=".LoginActivity"
             android:label="Willkommen Nooby" >
 
@@ -21,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.Register"
+            android:name=".Register"
             android:label="@string/title_activity_register" >
         </activity>
         <activity
@@ -43,20 +44,36 @@
             android:label="Kontoverwaltung" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.CitySelectionActivity"
+            android:name=".Maintenance"
+            android:label="@string/title_activity_maintenance" >
+        </activity>
+        <activity
+            android:name=".CitySelectionActivity"
             android:label="@string/title_activity_city_selection" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.CategorySelectionActivity"
+            android:name=".CategorySelectionActivity"
             android:label="@string/title_activity_category_selection" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.CategoryListActivity"
+            android:name=".LocationListActivity"
             android:label="@string/title_activity_category_list" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.LocationShowActivity"
+            android:name=".LocationShowActivity"
             android:label="@string/title_activity_location_show" >
+        </activity>
+        <activity
+            android:name=".LocationSortActivity"
+            android:label="@string/title_activity_location_sort" >
+        </activity>
+        <activity
+            android:name=".LocationSearchActivity"
+            android:label="@string/title_activity_location_search" >
+        </activity>
+        <activity
+            android:name=".LocationCommentActivity"
+            android:label="@string/title_activity_location_comment" >
         </activity>
     </application>
 

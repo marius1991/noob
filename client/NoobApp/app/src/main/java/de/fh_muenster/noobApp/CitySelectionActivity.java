@@ -2,7 +2,9 @@ package de.fh_muenster.noobApp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,42 +12,32 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fh_muenster.noob.CategoryListResponse;
+import de.fh_muenster.noob.CityListResponse;
+
 /**
  * Created by marius on 02.06.15.
  * @author marius
- * Activity zum Auswählen der Stadt
+ * In dieser Activity wird die Stadt ausgewählt
  */
-public class CitySelectionActivity extends Activity implements OnItemSelectedListener {
+public class CitySelectionActivity extends Activity {
 
-    private String selected = null;
+    private String selected;
+    private static final String TAG = CitySelectionActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_selection);
 
-        //Liste mit Testdaten füllen
-        List valueList = new ArrayList<String>();
-        valueList.add("Münster");
-        valueList.add("Dortmund");
-        valueList.add("Essen");
-        valueList.add("Osnabrück");
-        valueList.add("Hamburg");
-        valueList.add("Bremen");
-
-        //Spinner Objekt mit Liste füllen
-        ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
-        Spinner sp = (Spinner)findViewById(R.id.spinner);
-        sp.setAdapter(adapter);
-        sp.setOnItemSelectedListener(this);
+        //Cities asynchron abrufen
+        new getCitiesFromServer().execute();
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,24 +61,61 @@ public class CitySelectionActivity extends Activity implements OnItemSelectedLis
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selected = parent.getItemAtPosition(position).toString();
-        //Toast.makeText(parent.getContext(), selected, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    //Bei Klick auf Login Button wird die nächste Activity aufgerufen und die ausgewählte Stadt zentral gespeichert
-    public void clickFunc(View view){
+    /**
+     * Diese Methode wird ausgeführt wenn aus den Button "Übernehmen" geklickt wird.
+     * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity
+     * @param view
+     */
+    public void clickFuncCitySelection(View view){
+        Log.d(TAG, selected + " wurde ausgewählt und die nächste Activity wird gestartet");
         NoobApplication myApp = (NoobApplication) getApplication();
         myApp.setCity(selected);
-        //Toast.makeText(CitySelectionActivity.this, selected, Toast.LENGTH_SHORT).show();
         Intent i = new Intent(CitySelectionActivity.this, CategorySelectionActivity.class);
         startActivity(i);
+    }
+
+
+    /**
+     * @author marius
+     * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen
+     */
+    class getCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
+
+        /**
+         * Startet einen neuen Thread, der die Städteliste abholen soll
+         * @param params
+         * @return
+         */
+        @Override
+        protected CityListResponse doInBackground(String... params) {
+            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            CityListResponse response = onlineService.listCities();
+            return response;
+        }
+
+        /**
+         * Nimmt die Städtliste entgegen und füllt das Spinner Objekt
+         * @param response
+         */
+        @Override
+        protected void onPostExecute (CityListResponse response) {
+            List<String> valueList;
+            valueList = response.getCities();
+            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
+            Spinner sp = (Spinner)findViewById(R.id.spinner);
+            sp.setAdapter(adapter);
+            sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    selected = parentView.getItemAtPosition(position).toString();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // Nichts machen
+                }
+
+            });
+        }
     }
 }
