@@ -98,6 +98,7 @@ public class LoginActivity extends ActionBarActivity {
         public LoginTask(Context context){
             this.context=context;
         }
+        @Override
         protected Integer doInBackground(String... params){
             String email=params[0];
             String password=params[1];
@@ -122,8 +123,8 @@ public class LoginActivity extends ActionBarActivity {
             email.setError(message);
             email.requestFocus();
             if(returnCode==0){
-                NoobApplication myApp=(NoobApplication)getApplication();
-                myApp.setSessionId(sessionId);
+                //NoobApplication myApp=(NoobApplication)getApplication();
+                //myApp.setSessionId(sessionId);
                 Intent i= new Intent(context,CitySelectionActivity.class);
                 startActivity(i);
             }

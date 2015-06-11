@@ -115,6 +115,7 @@ public class Register extends ActionBarActivity {
         @Override
         protected void onPostExecute(ReturnCodeResponse response) {
             Toast.makeText(Register.this, response.getMessage(), Toast.LENGTH_LONG).show();
+
         }
     }
 }
