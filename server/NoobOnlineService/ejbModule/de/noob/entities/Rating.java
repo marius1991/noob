@@ -31,9 +31,10 @@ public class Rating implements Serializable {
 	}
 	
 
-	public Rating(User user, int value) {
+	public Rating(User user, int value, Location location) {
 		this.setOwner(user);
 		this.setValue(value);
+		this.setLocation(location);
 	}
 
 	public int getId() {
