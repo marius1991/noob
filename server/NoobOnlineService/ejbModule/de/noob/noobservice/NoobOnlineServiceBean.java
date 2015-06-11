@@ -81,6 +81,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	 */
 	@Override
 	public UserLoginResponse login(String email, String password) {
+		logger.info("login() aufgerufen!");
 		UserLoginResponse re = new UserLoginResponse();
 		NoobSession session;
 		
@@ -99,11 +100,13 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 			else {
 				re.setReturnCode(1);
 				re.setMessage("Email oder Passwort falsch.");
+				logger.info("Email oder Passwort falsch.");
 			}	
 		}
 		else {
 			re.setReturnCode(2);
 			re.setMessage("User nicht vorhanden.");
+			logger.info("User nicht vorhanden.");
 		}
 		return re;
 	}
@@ -132,7 +135,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public CategoryListResponse listCategories() {
-		logger.info("Erfolgreich aufgerufen!!");
+		logger.info("listCategories() aufgerufen.");
 		CategoryListResponse re = new CategoryListResponse();
 		ArrayList<String> categories = new ArrayList<String>();
 		
@@ -160,17 +163,38 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	@Override
 	public CityListResponse listCities() {
 		CityListResponse re = new CityListResponse();
-		re.setCities(dao.listCities());
+		List<String> cities = dao.listCities();
+		if(cities != null) {
+			re.setCities(dao.listCities());
+			re.setReturnCode(0);
+			re.setMessage("Städte erfolgreich abgerufen.");
+			logger.info("Städte erfolgreich abgerufen.");
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Keine Städte vorhanden.");
+			logger.info("Keine Städte vorhanden");
+		}
+
 		return re;
 	}
 
 	@Override
 	public LocationListResponse listLocationsWithCategory(String category, String city) {
+		logger.info("listLocationsWithCategory() aufgerufen.");
 		LocationListResponse re = new LocationListResponse();
 		List<Location> locations = dao.findLocationsByCategory(category, city);
-		re.setLocations(dtoAssembler.makeLocationsDTO(locations));
-		re.setReturnCode(0);
-		re.setMessage(locations.size() + " Location(s) gefunden.");
+		if(locations != null) {
+			re.setLocations(dtoAssembler.makeLocationsDTO(locations));
+			re.setReturnCode(0);
+			re.setMessage(locations.size() + " Location(s) gefunden.");
+			logger.info(locations.size() + " Location(s) gefunden.");
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Keine Locations für Kategorie: " + category + " gefunden.");
+			logger.info("Keine Locations für Kategorie: " + category + " gefunden.");	
+		}
 		return re;
 	}
 

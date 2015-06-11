@@ -76,7 +76,14 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public User findUserByEmail(String email) {
 		logger.info("DB-Query: em.find(User.class, email);");
-		return em.find(User.class, email);
+		User user;
+		try {
+			user = em.find(User.class, email);
+			return user;
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 
 	
@@ -204,8 +211,13 @@ public class NoobDAO implements NoobDAOLocal {
 
 	@Override
 	public List<String> listCities() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return em.createQuery("SELECT l.city FROM Location l", String.class).getResultList();
+		}
+		catch(Exception e){
+			logger.info(e.getMessage());
+			return null;
+		}
 	}
 	
 	
