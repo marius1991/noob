@@ -133,9 +133,9 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByCategory(String category, String city) {
-		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category");
+		logger.info("DB-Query: " + "SELECT l FROM Location l WHERE l.city = " + city + " AND l.category = " + category);
 		try {
-			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category", Location.class).setParameter("stadt",city).setParameter("category",category).getResultList();
+			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND l.category = :category", Location.class).setParameter("stadt",city).setParameter("category",category).getResultList();
 		}
 		catch (Exception e) {
 			logger.info(e.getMessage());
@@ -212,7 +212,8 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public List<String> listCities() {
 		try {
-			return em.createQuery("SELECT l.city FROM Location l", String.class).getResultList();
+			logger.info("DB-Query: SELECT DISTINCT l.city FROM Location l ORDER BY l.city ASC");
+			return em.createQuery("SELECT DISTINCT l.city FROM Location l ORDER BY l.city ASC", String.class).getResultList();			
 		}
 		catch(Exception e){
 			logger.info(e.getMessage());

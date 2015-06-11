@@ -44,6 +44,8 @@ public class Location implements Serializable {
 	@ManyToOne
 	private User owner;
 	
+	private byte[] image;
+	
 	public Location() {
 	}
 	
@@ -154,12 +156,20 @@ public class Location implements Serializable {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
+	
+	public byte[] getImage() {
+		return image;
+	}
+	
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 
 	public void addRating(User user, int value) {
 		
 		//Prüfen ob die Liste ratings leer ist, wenn ja Rating hinzufügen
 		if (this.ratings.isEmpty()) {
-			this.ratings.add(new Rating(user,value));
+			this.ratings.add(new Rating(user,value,this));
 		}
 		
 		//falls die Liste nicht leer ist
@@ -170,14 +180,14 @@ public class Location implements Serializable {
 			//Wenn der User bereits ein Rating abgegeben hat, wird der alte Wert überschrieben.
 			boolean newRating = true;
 			for(int i=0;i<this.ratings.size();i++) {
-				if (this.ratings.get(i).getId() == user.getId() ) {
+				if (this.ratings.get(i).getOwner().getEmail().equals(user.getEmail())) {
 					this.ratings.get(i).setValue(value);
 					newRating=false;
 				}
 			}
 			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
 			if (newRating == true) {
-				this.ratings.add(new Rating(user,value));
+				this.ratings.add(new Rating(user,value,this));
 			}
 			
 		}
