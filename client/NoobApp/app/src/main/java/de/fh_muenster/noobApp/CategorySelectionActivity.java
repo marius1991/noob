@@ -83,6 +83,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         myApp.setCategory(selected);
         Intent i = new Intent(CategorySelectionActivity.this, LocationListActivity.class);
         startActivity(i);
+        Log.d(TAG, "SessionId: " + myApp.getSessionId());
     }
 
     /**
