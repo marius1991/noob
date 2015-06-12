@@ -207,6 +207,12 @@ public class NoobDAO implements NoobDAOLocal {
 		logger.info("DB-Query: em.remove(o);");
 		em.remove(o);
 	}
+	
+	@Override
+	public void merge(Object o) {
+		logger.info("DB-Query: em.merge(o)");
+		em.merge(o);
+	}
 
 
 	@Override
