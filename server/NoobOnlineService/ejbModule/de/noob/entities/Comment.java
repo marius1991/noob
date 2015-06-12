@@ -19,7 +19,7 @@ public class Comment implements Serializable {
 	
 	private String text;
 	
-	@OneToMany (mappedBy = "superComment", cascade = CascadeType.REMOVE)
+	@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL)
 	private List<Comment> comments;
 	
 	@ManyToOne
@@ -36,9 +36,11 @@ public class Comment implements Serializable {
 	public Comment() {
 	}
 	
-	public Comment( User user, String text){
+	public Comment( User user, String text, Location location, Comment comment){
 		this.setOwner(user);
 		this.setText(text);
+		this.setLocation(location);
+		this.setSuperComment(comment);
 	}
 	
 
@@ -82,8 +84,16 @@ public class Comment implements Serializable {
 		this.owner = owner;
 	}
 
+	public Comment getSuperComment() {
+		return superComment;
+	}
+
+	public void setSuperComment(Comment superComment) {
+		this.superComment = superComment;
+	}
+
 	public void addComment(User user, String text) {
-		this.comments.add(new Comment(user,text));
+		this.comments.add(new Comment(user, text, null, this));
 		
 	}
 	
