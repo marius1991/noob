@@ -143,7 +143,7 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
             ReturnCodeResponse setUserDetails = null;
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             try {
-                setUserDetails = onlineService.setUserDetails(UserTO);
+                //setUserDetails = onlineService.setUserDetails(UserTO);
                 returnCode = setUserDetails.getReturnCode();
                 return setUserDetails;
             } catch (Exception e) {
