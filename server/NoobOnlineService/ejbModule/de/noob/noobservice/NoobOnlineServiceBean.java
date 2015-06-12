@@ -387,15 +387,15 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	}
 
 	@Override
-	public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser) {
+	public ReturnCodeResponse setUserDetails(int sessionId, int id, String name, String email, String password) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
-			if (user.getId() == newUser.getId()) {
-				user.setName(newUser.getName());
-				user.setEmail(newUser.getEmail());
-				user.setPassword(newUser.getPassword());
+			if (user.getId() == id) {
+				user.setName(name);
+				user.setEmail(email);
+				user.setPassword(password);
 			}
 			else {
 				re.setReturnCode(2);
