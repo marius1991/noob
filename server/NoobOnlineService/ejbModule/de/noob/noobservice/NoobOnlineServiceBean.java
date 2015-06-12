@@ -242,6 +242,8 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	@Override
 	public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
 		logger.info("giveRating() aufgerufen.");
+		logger.info("SessionId: " + sessionId);
+		logger.info("User: " + user.getEmail());
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
 		NoobSession session = dao.findSessionById(sessionId);
