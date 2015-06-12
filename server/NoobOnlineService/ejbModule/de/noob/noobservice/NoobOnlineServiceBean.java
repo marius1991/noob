@@ -246,6 +246,8 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
+			logger.info("SessionId: " + sessionId);
+			logger.info("User: " + user.getEmail());
 			if(location != null) {
 				location.addRating(user, value);
 				dao.persist(location);	
