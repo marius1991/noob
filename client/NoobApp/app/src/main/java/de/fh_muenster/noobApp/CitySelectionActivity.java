@@ -1,9 +1,11 @@
 package de.fh_muenster.noobApp;
 
-import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +14,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CityListResponse;
@@ -22,7 +26,7 @@ import de.fh_muenster.noob.CityListResponse;
  * @author marius
  * In dieser Activity wird die Stadt ausgewählt
  */
-public class CitySelectionActivity extends Activity {
+public class CitySelectionActivity extends ActionBarActivity {
 
     private String selected;
     private static final String TAG = CitySelectionActivity.class.getName();
@@ -31,9 +35,13 @@ public class CitySelectionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_selection);
+    }
 
+    protected void onResume(){
+        super.onResume();
         //Cities asynchron abrufen
-        new getCitiesFromServer().execute();
+        GetCitiesFromServer getCitiesFromServer = new GetCitiesFromServer();
+        getCitiesFromServer.execute();
     }
 
     @Override
@@ -71,12 +79,28 @@ public class CitySelectionActivity extends Activity {
         startActivity(i);
     }
 
+    public void clickFuncNewLocation(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
+        Intent i = new Intent(CitySelectionActivity.this, NewLocationActivity.class);
+        startActivity(i);
+    }
 
     /**
      * @author marius
      * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen
      */
-    class getCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
+    class GetCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
+        private ProgressDialog Dialog = new ProgressDialog(CitySelectionActivity.this);
+
+        /**
+         * Während des Abrufs der Liste wird ein Dialog angezeigt.
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Städte abrufen...");
+            Dialog.show();
+        }
 
         /**
          * Startet einen neuen Thread, der die Städteliste abholen soll
@@ -85,7 +109,7 @@ public class CitySelectionActivity extends Activity {
          */
         @Override
         protected CityListResponse doInBackground(String... params) {
-            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             CityListResponse response = onlineService.listCities();
             return response;
         }
@@ -96,23 +120,35 @@ public class CitySelectionActivity extends Activity {
          */
         @Override
         protected void onPostExecute (CityListResponse response) {
-            List<String> valueList;
-            valueList = response.getCities();
-            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
-            Spinner sp = (Spinner)findViewById(R.id.spinner);
-            sp.setAdapter(adapter);
-            sp.setOnItemSelectedListener(new OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    selected = parentView.getItemAtPosition(position).toString();
+            Dialog.dismiss();
+            if (response != null) {
+                List<String> valueList = new ArrayList<>();
+                if (response.getCities() != null) {
+                    valueList = response.getCities();
+                } else {
+                    Log.d(TAG, "keine Stadt vorhanden");
+                    Toast.makeText(getApplicationContext(), "keine Stadt vorhanden", Toast.LENGTH_SHORT).show();
                 }
+                ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
+                Spinner sp = (Spinner) findViewById(R.id.spinner);
+                sp.setAdapter(adapter);
+                sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        selected = parentView.getItemAtPosition(position).toString();
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parentView) {
-                    // Nichts machen
-                }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        // Nichts machen
+                    }
 
-            });
+                });
+            }
+            else {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

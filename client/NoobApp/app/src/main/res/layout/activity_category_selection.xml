@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText3"
-            android:text="@string/activity_category_selection_LocName"
+            android:hint="@string/activity_category_selection_LocName"
             android:layout_below="@+id/textView9"
             android:layout_marginTop="33dp"
             android:layout_alignLeft="@+id/textView9"
