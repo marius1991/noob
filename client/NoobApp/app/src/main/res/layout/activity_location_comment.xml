@@ -7,5 +7,25 @@
     tools:context="de.fh_muenster.noobApp.LocationCommentActivity">
 
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText16"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/edittextstyle"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/activity_location_comment_kommentieren"
+        android:id="@+id/button12"
+        android:layout_below="@+id/editText16"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:onClick="clickFuncCommentOnLocation" />
 
 </RelativeLayout>

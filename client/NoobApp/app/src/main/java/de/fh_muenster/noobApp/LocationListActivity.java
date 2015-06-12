@@ -41,7 +41,7 @@ public class LocationListActivity extends ActionBarActivity {
         setTitle(myApp.getCity() + ": " + myApp.getCategory());
 
         //Activities asynchron abrufen
-        new getLocationsFromServer().execute();
+        new GetLocationsFromServer().execute();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class LocationListActivity extends ActionBarActivity {
      * @author marius
      * In diesem AsycTask werden die Locations einer Stadt und Kategorie vom Server abgerufen
      */
-    class getLocationsFromServer extends AsyncTask<String, String, LocationListResponse> {
+    class GetLocationsFromServer extends AsyncTask<String, String, LocationListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(LocationListActivity.this);
 
         /**

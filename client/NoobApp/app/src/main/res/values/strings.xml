@@ -19,7 +19,6 @@
     <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
 
     <!-- Strings für die CitySelectionActivity -->
-
     <string name="title_activity_city_selection">Städteauswahl</string>
     <string name="activity_city_selection_staedteauswahl">Wählen Sie Ihre Stadt aus!</string>
     <string name="activity_city_selection_uebernehmenbutton">Übernehmen</string>
@@ -53,8 +52,13 @@
     <string name="activity_location_sort_nachName1">nach Name (aufwärts)</string>
     <string name="activity_location_sort_nachName2">nach Name (abwärts)</string>
     <string name="activity_location_sort_anwenden">Anwenden</string>
+
+    <!-- Strings für die LocationSearchActivity -->
     <string name="title_activity_location_search">LocationSearchActivity</string>
+
+    <!-- Strings für die LocationCommentActivity -->
     <string name="title_activity_location_comment">LocationCommentActivity</string>
+    <string name="activity_location_comment_kommentieren">Kommentieren</string>
 
     <!-- Strings für die Menüs -->
     <string name="menu_neueLoc">Neue Location</string>

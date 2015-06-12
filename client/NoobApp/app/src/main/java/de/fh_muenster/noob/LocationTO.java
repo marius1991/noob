@@ -150,6 +150,10 @@ public class LocationTO extends ReturnCodeResponse {
 
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
-	}	
+	}
+
+	public String toString() {
+		return this.name;
+	}
 
 }

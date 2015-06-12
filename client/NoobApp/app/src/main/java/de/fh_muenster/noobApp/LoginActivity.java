@@ -42,6 +42,8 @@ public class LoginActivity extends ActionBarActivity {
                 String passwordString = password.getText().toString();
                 if (!emailString.equals("") && !passwordString.equals("")) {
                     loginTask.execute(emailString, passwordString);
+                    NoobApplication myApp = (NoobApplication) getApplication();
+                    myApp.setUserId(emailString);
                 } else {
                     Toast.makeText(view.getContext(), "Username und Password duerfen nicht leer sein!",
                             Toast.LENGTH_SHORT).show();

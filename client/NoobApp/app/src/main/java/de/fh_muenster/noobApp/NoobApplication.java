@@ -14,12 +14,21 @@ import de.fh_muenster.noob.LocationTO;
  */
 public class NoobApplication extends Application {
     private int sessionId;
+    private String userId;
     private String city;
     private String category;
     private LocationTO location;
     private String sortBy;
     private List<LocationTO> locationSearchResults;
     private String search;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public int getSessionId() {
         return this.sessionId;
