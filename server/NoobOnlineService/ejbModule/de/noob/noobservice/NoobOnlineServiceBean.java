@@ -193,6 +193,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				re.setReturnCode(0);
 				re.setMessage(locations.size() + " Location(s) gefunden.");
 				logger.info(locations.size() + " Location(s) gefunden.");
+				
 						if( locations.get(0).getRatings() != null ){
 							if(!locations.get(0).getRatings().isEmpty()) {
 							logger.info(locations.get(0).getRatings().get(0).getValue());

@@ -36,4 +36,6 @@ public interface NoobDAOLocal {
 	
 	public void remove(Object o);
 	
+	public void merge(Object o);
+	
 }
