@@ -1,5 +1,8 @@
 package de.fh_muenster.noobApp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +14,10 @@ import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import de.fh_muenster.exceptions.InvalidRegisterException;
+import de.fh_muenster.noob.ReturnCodeResponse;
+
 
 
 public class RegisterActivity extends ActionBarActivity {
@@ -67,10 +74,8 @@ public class RegisterActivity extends ActionBarActivity {
                  }  else if (!validPasswordWdh(passwordString, passwordStringWdh)) {
                     passwordwdh.setError("Passwort stimmt nicht ueberein");
                     passwordwdh.requestFocus();
-                 }  else {
-                    Toast.makeText(view.getContext(), "Account wurde erfolgreich erstellt",
-                            Toast.LENGTH_SHORT).show();
                  }
+                new RegisterTask(view.getContext()).execute(emailString,benutzernameString,passwordString,passwordStringWdh);
 
             }
 
@@ -123,5 +128,42 @@ public class RegisterActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    //Uervorhanden responseCode 2
+    public class RegisterTask extends AsyncTask<String,String, ReturnCodeResponse> {
+        private Context context;
+        private String message;
+        private int returnCode;
+
+        public RegisterTask(Context context){
+            this.context=context;
+        }
+        @Override
+        protected ReturnCodeResponse doInBackground(String... params) {
+            ReturnCodeResponse userRegister = null;
+            NoobOnlineServiceImpl onlineService=new NoobOnlineServiceImpl();
+            String email=params[0];
+            String benutzername=params[1];
+            String passwort=params[2];
+            String passwortwdh=params[3];
+            try{
+                userRegister = onlineService.register(benutzername,email,passwort,passwortwdh);
+                message=userRegister.getMessage();
+                returnCode=userRegister.getReturnCode();
+            }catch (InvalidRegisterException e) {
+                e.printStackTrace();
+            }
+            return userRegister;
+        }
+
+        @Override
+        protected void onPostExecute(ReturnCodeResponse response) {
+            Toast.makeText(RegisterActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+            if(returnCode==0){
+                Intent i= new Intent(context,LoginActivity.class);
+                startActivity(i);
+            }
+        }
+
     }
 }

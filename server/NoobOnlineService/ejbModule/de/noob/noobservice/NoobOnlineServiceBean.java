@@ -85,6 +85,8 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	@Override
 	public UserLoginResponse login(String email, String password) {
 		logger.info("login() aufgerufen!");
+		logger.info("Email: " + email);
+		logger.info("Passwort: " + password);
 		UserLoginResponse re = new UserLoginResponse();
 		NoobSession session;
 		
@@ -99,6 +101,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				re.setSessionId(session.getId());
 				
 				logger.info(user.getName() +" erfolgreich eingeloggt.");
+				logger.info(re.getSessionId());
 			}
 			else {
 				re.setReturnCode(1);
@@ -242,11 +245,13 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	@Override
 	public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
 		logger.info("giveRating() aufgerufen.");
+		logger.info("SessionId: " + sessionId);
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
+			logger.info("User: " + user.getEmail());
 			if(location != null) {
 				location.addRating(user, value);
 				dao.persist(location);	

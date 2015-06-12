@@ -5,93 +5,93 @@ import java.util.List;
 
 public class UserTO extends ReturnCodeResponse {
 
-    private static final long serialVersionUID = 6907767619451988547L;
+	private static final long serialVersionUID = 6907767619451988547L;
+	
+	private int id;	
 
-    private int id;
+	private String name;
+	
+	private String password;
+	
+	private String email;
+	
+	private List<LocationTO> locations;
+	
+	private List<RatingTO> ratings;
+	
+	private List<CommentTO> comments;
+	
+	public UserTO(int id, String name, String password, String email,
+			List<LocationTO> locations, List<RatingTO> ratings,
+			List<CommentTO> comments) {
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.email = email;
+		this.locations = locations;
+		this.ratings = ratings;
+		this.comments = comments;
+	}
+	
+	public UserTO() {
+	}
 
-    private String name;
+	public int getId() {
+		return id;
+	}
 
-    private String password;
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    private String email;
+	public String getName() {
+		return name;
+	}
 
-    private List<LocationTO> locations;
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    private List<RatingTO> ratings;
+	public String getPassword() {
+		return password;
+	}
 
-    private List<CommentTO> comments;
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public UserTO(int id, String name, String password, String email,
-                  List<LocationTO> locations, List<RatingTO> ratings,
-                  List<CommentTO> comments) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.locations = locations;
-        this.ratings = ratings;
-        this.comments = comments;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public UserTO() {
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public List<LocationTO> getLocations() {
+		return locations;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setLocations(List<LocationTO> locations) {
+		this.locations = locations;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public List<RatingTO> getRatings() {
+		return ratings;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setRatings(List<RatingTO> ratings) {
+		this.ratings = ratings;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public List<CommentTO> getComments() {
+		return comments;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<LocationTO> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(List<LocationTO> locations) {
-        this.locations = locations;
-    }
-
-    public List<RatingTO> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<RatingTO> ratings) {
-        this.ratings = ratings;
-    }
-
-    public List<CommentTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentTO> comments) {
-        this.comments = comments;
-    }
-
-
-
+	public void setComments(List<CommentTO> comments) {
+		this.comments = comments;
+	}
+	
+	
+	
 }
