@@ -243,12 +243,12 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
 		logger.info("giveRating() aufgerufen.");
 		logger.info("SessionId: " + sessionId);
-		logger.info("User: " + user.getEmail());
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
+			logger.info("User: " + user.getEmail());
 			if(location != null) {
 				location.addRating(user, value);
 				dao.persist(location);	
