@@ -18,9 +18,6 @@
     <string name="helpquestion2">Wir versichern, dass wir Ihre Daten nicht an Dritte Personen weitergeben und ihr Passwort verschlüsselt auf unseren Server speichern</string>
     <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
 
-
-    <!-- String für die CitySelectionActivity -->
-
     <!-- Strings für die CitySelectionActivity -->
 
     <string name="title_activity_city_selection">Städteauswahl</string>

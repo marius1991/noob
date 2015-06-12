@@ -1,5 +1,6 @@
 package de.fh_muenster.noobApp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import de.fh_muenster.noob.UserLoginResponse;
 
@@ -90,7 +95,10 @@ public class LoginActivity extends ActionBarActivity {
         startActivity(z);
     }
 
+
     public class LoginTask extends AsyncTask<String,String,Integer>{
+        private ProgressDialog Dialog = new ProgressDialog(LoginActivity.this);
+
         private Context context;
         private String message;
         private int returnCode;
@@ -98,6 +106,17 @@ public class LoginActivity extends ActionBarActivity {
         public LoginTask(Context context){
             this.context=context;
         }
+
+        /**
+         * Während des Loginvorgangs wird ein Dialog angezeigt
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Anmelden...");
+            Dialog.show();
+        }
+
         @Override
         protected Integer doInBackground(String... params){
             String email=params[0];
@@ -118,15 +137,22 @@ public class LoginActivity extends ActionBarActivity {
         }
 
         protected void onPostExecute(Integer sessionId){
-            //Toast.makeText(context,message,
-              //      Toast.LENGTH_SHORT).show();
-            email.setError(message);
-            email.requestFocus();
-            if(returnCode==0){
-                //NoobApplication myApp=(NoobApplication)getApplication();
-                //myApp.setSessionId(sessionId);
-                Intent i= new Intent(context,CitySelectionActivity.class);
-                startActivity(i);
+            Dialog.dismiss();
+            if (sessionId != null) {
+                //Toast.makeText(context,message,
+                //      Toast.LENGTH_SHORT).show();
+                email.setError(message);
+                email.requestFocus();
+                if (returnCode == 0) {
+                    NoobApplication myApp = (NoobApplication) getApplication();
+
+                    myApp.setSessionId(sessionId);
+                    Intent i = new Intent(context, CitySelectionActivity.class);
+                    startActivity(i);
+                }
+            }
+            else {
+                Toast.makeText(context, "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
         }
     }

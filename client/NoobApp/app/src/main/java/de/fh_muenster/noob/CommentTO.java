@@ -1,69 +1,69 @@
 package de.fh_muenster.noob;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class CommentTO implements Serializable {
+	
+	private static final long serialVersionUID = -6300158809866948939L;
 
-    private static final long serialVersionUID = -6300158809866948939L;
+	private int id;
+	
+	private String text;
+	
+	private List<CommentTO> comments;
+	
+	private LocationTO location;
+	
+	private String ownerId;
 
-    private int id;
+	public CommentTO(int id, String text, List<CommentTO> comments,
+			LocationTO location, String ownerId) {
+		this.id = id;
+		this.text = text;
+		this.comments = comments;
+		this.location = location;
+		this.ownerId = ownerId;
+	}
 
-    private String text;
+	public int getId() {
+		return id;
+	}
 
-    private List<CommentTO> comments;
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    private LocationTO location;
+	public String getText() {
+		return text;
+	}
 
-    private UserTO owner;
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public CommentTO(int id, String text, List<CommentTO> comments,
-                     LocationTO location, UserTO owner) {
-        this.id = id;
-        this.text = text;
-        this.comments = comments;
-        this.location = location;
-        this.owner = owner;
-    }
+	public List<CommentTO> getComments() {
+		return comments;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setComments(List<CommentTO> comments) {
+		this.comments = comments;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public LocationTO getLocation() {
+		return location;
+	}
 
-    public String getText() {
-        return text;
-    }
+	public void setLocation(LocationTO location) {
+		this.location = location;
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
+	public String getOwnerId() {
+		return ownerId;
+	}
 
-    public List<CommentTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentTO> comments) {
-        this.comments = comments;
-    }
-
-    public LocationTO getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationTO location) {
-        this.location = location;
-    }
-
-    public UserTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserTO owner) {
-        this.owner = owner;
-    }
-
-
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+	
 }
