@@ -1,15 +1,18 @@
 package de.fh_muenster.noobApp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,7 @@ import de.fh_muenster.noob.LocationTO;
 public class LocationListActivity extends ActionBarActivity {
 
     private String selectedFromList = null;
+    private static final String TAG = LocationListActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,17 @@ public class LocationListActivity extends ActionBarActivity {
      * In diesem AsycTask werden die Locations einer Stadt und Kategorie vom Server abgerufen
      */
     class getLocationsFromServer extends AsyncTask<String, String, LocationListResponse> {
+        private ProgressDialog Dialog = new ProgressDialog(LocationListActivity.this);
+
+        /**
+         * Während des Abrufs der Liste wird ein Dialog angezeigt.
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Locations abrufen...");
+            Dialog.show();
+        }
 
         /**
          * Startet den Thread zum Abrufen der Locationliste vom Server
@@ -86,7 +101,7 @@ public class LocationListActivity extends ActionBarActivity {
         @Override
         protected LocationListResponse doInBackground(String... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
-            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             LocationListResponse response = onlineService.listLocationsWithCategory(myApp.getCategory(), myApp.getCity());
             return response;
         }
@@ -97,43 +112,54 @@ public class LocationListActivity extends ActionBarActivity {
          */
         @Override
         protected void onPostExecute (LocationListResponse response) {
+            Dialog.dismiss();
             final List<LocationTO> valueListLocation;
-            valueListLocation = response.getLocations();
-            final List<String> valueList = new ArrayList<>();
-            for(int i=0; i<valueListLocation.size(); i++) {
-                valueList.add(valueListLocation.get(i).getName());
-            }
-            //Den eingestellten Filter anwenden
-            NoobApplication myApp = (NoobApplication) getApplication();
-            if (myApp.getSortBy() != null) {
-                if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName1))) {
-                    Collections.sort(valueList);
+            if(response != null) {
+                valueListLocation = response.getLocations();
+                final List<String> valueList = new ArrayList<>();
+                for (int i = 0; i < valueListLocation.size(); i++) {
+                    valueList.add(valueListLocation.get(i).getName());
                 }
-                if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName2))) {
-                    Collections.sort(valueList, Collections.reverseOrder());
-                }
-            }
-            //ListView Objekt mit Daten füllen
-            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
-            final ListView lv = (ListView)findViewById(R.id.listView);
-            lv.setAdapter(adapter);
-
-            //Beim Selektieren eines Eintrags der Liste wird die LocationShowActivity der ausgewählten Location aufgerufen
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
-                    selectedFromList = (String) (lv.getItemAtPosition(myItemInt));
-                    NoobApplication myApp = (NoobApplication) getApplication();
-                    LocationTO selected = null;
-                    for(int i=0; i<valueListLocation.size(); i++) {
-                        if(valueListLocation.get(i).getName().equals(selectedFromList)) {
-                            selected = valueListLocation.get(i);
-                        }
+                //Den eingestellten Filter anwenden
+                NoobApplication myApp = (NoobApplication) getApplication();
+                if (myApp.getSortBy() != null) {
+                    if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName1))) {
+                        Collections.sort(valueList);
                     }
-                    myApp.setLocation(selected);
-                    Intent i = new Intent(LocationListActivity.this, LocationShowActivity.class);
-                    startActivity(i);
+                    if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName2))) {
+                        Collections.sort(valueList, Collections.reverseOrder());
+                    }
                 }
-            });
+
+
+                //ListView Objekt mit Daten füllen
+                ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
+                final ListView lv = (ListView) findViewById(R.id.listView);
+                lv.setAdapter(adapter);
+
+
+                //Beim Selektieren eines Eintrags der Liste wird die LocationShowActivity der ausgewählten Location aufgerufen
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                        selectedFromList = (String) (lv.getItemAtPosition(myItemInt));
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        LocationTO selected = null;
+                        for (int i = 0; i < valueListLocation.size(); i++) {
+                            if (valueListLocation.get(i).getName().equals(selectedFromList)) {
+                                selected = valueListLocation.get(i);
+                            }
+                        }
+                        myApp.setLocation(selected);
+                        Intent i = new Intent(LocationListActivity.this, LocationShowActivity.class);
+                        startActivity(i);
+                    }
+
+                });
+            }
+            else {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

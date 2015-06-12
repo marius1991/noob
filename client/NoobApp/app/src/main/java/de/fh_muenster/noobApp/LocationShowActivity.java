@@ -1,9 +1,11 @@
 package de.fh_muenster.noobApp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,8 @@ import de.fh_muenster.noob.ReturnCodeResponse;
  */
 public class LocationShowActivity extends ActionBarActivity {
 
+    private static final String TAG = LocationShowActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +45,7 @@ public class LocationShowActivity extends ActionBarActivity {
 
         //Beschreibung ersetzen
         TextView textViewDescription = (TextView)findViewById(R.id.textView15);
-        textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Inhaber: " + myApp.getLocation().getOwner().getName());
+        //textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Inhaber: " + myApp.getLocation().getOwner().getName());
 
         //Rating ersetzen
         TextView textViewRating = (TextView)findViewById(R.id.textView12);
@@ -55,12 +59,19 @@ public class LocationShowActivity extends ActionBarActivity {
                 new sendRatingToServer().execute(Math.round(rating));
             }
         });
-//        for(int i=0; i<myApp.getLocation().getRatings().size(); i++) {
-//            if(myApp.getLocation().getRatings().get(i).getOwner().getId() == 1) {
-//                ratingBar.setRating(myApp.getLocation().getRatings().get(i).getValue());
-//      TODO hier muss noch geprüft werden ob bereits bewertet wurde
-//            }
-//        }
+        if(myApp.getLocation().getRatings() != null) {
+            for (int i = 0; i < myApp.getLocation().getRatings().size(); i++) {
+                if (myApp.getLocation().getRatings().get(i).getOwnerId().equals("test@test.de")) {
+                    ratingBar.setRating(myApp.getLocation().getRatings().get(i).getValue());
+                    //ratingBar.setRating(2.5f);
+                    //TODO hier muss noch geprüft werden ob bereits bewertet wurde
+                }
+            }
+        }
+        else {
+            Log.d(TAG, "Die Location wurde noch nicht bewertet");
+            //ratingBar.setRating(2.5f);
+        }
 
         //Kommentarliste füllen
         List <CommentTO> comments;
@@ -113,6 +124,17 @@ public class LocationShowActivity extends ActionBarActivity {
      * Dieser AsyncTask schickt das Rating zum Server
      */
     public class sendRatingToServer extends AsyncTask<Integer, String, ReturnCodeResponse> {
+        private ProgressDialog Dialog = new ProgressDialog(LocationShowActivity.this);
+
+        /**
+         * Während des Abrufs der Location wird ein Dialog angezeigt.
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Locationinformationen abrufen...");
+            Dialog.show();
+        }
 
         /**
          * Es wird ein neuer Thread gestartet, in dem das Rating zum Server geschickt wird
@@ -122,8 +144,8 @@ public class LocationShowActivity extends ActionBarActivity {
         @Override
         protected ReturnCodeResponse doInBackground(Integer... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
-            myApp.setSessionId(1);
-            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            Log.d(TAG, "ÜBERGABE: " + String.valueOf(myApp.getSessionId()));
             ReturnCodeResponse response = onlineService.giveRating(myApp.getSessionId(), myApp.getLocation().getId(), params[0]);
             return response;
         }
@@ -134,7 +156,14 @@ public class LocationShowActivity extends ActionBarActivity {
          */
         @Override
         protected  void onPostExecute(ReturnCodeResponse response) {
-            Toast.makeText(getApplicationContext(), "Rating erfolgreich" , Toast.LENGTH_LONG).show();
+            Dialog.dismiss();
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_LONG).show();
+            }
+            else {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

@@ -22,7 +22,7 @@ public class NoobApplication extends Application {
     private String search;
 
     public int getSessionId() {
-        return sessionId;
+        return this.sessionId;
     }
 
     public void setSessionId(int sessionId) {

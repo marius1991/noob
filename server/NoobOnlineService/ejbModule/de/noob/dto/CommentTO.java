@@ -15,15 +15,15 @@ public class CommentTO implements Serializable {
 	
 	private LocationTO location;
 	
-	private UserTO owner;
+	private String ownerId;
 
 	public CommentTO(int id, String text, List<CommentTO> comments,
-			LocationTO location, UserTO owner) {
+			LocationTO location, String ownerId) {
 		this.id = id;
 		this.text = text;
 		this.comments = comments;
 		this.location = location;
-		this.owner = owner;
+		this.ownerId = ownerId;
 	}
 
 	public int getId() {
@@ -58,13 +58,12 @@ public class CommentTO implements Serializable {
 		this.location = location;
 	}
 
-	public UserTO getOwner() {
-		return owner;
+	public String getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(UserTO owner) {
-		this.owner = owner;
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
 	}
-	
 	
 }

@@ -3,56 +3,56 @@ package de.fh_muenster.noob;
 import java.io.Serializable;
 
 public class RatingTO implements Serializable {
+	
+	private static final long serialVersionUID = 795414601015492292L;
 
-    private static final long serialVersionUID = 795414601015492292L;
+	private int id;
+	
+	private int value;
+	
+	private int locationId;
+	
+	private String ownerId;
 
-    private int id;
+	public RatingTO() {}
 
-    private int value;
+	public RatingTO(int id, int value, int locationId, String ownerId) {
+		this.id = id;
+		this.value = value;
+		this.locationId = locationId;
+		this.ownerId = ownerId;
+	}
 
-    private LocationTO location;
+	public int getId() {
+		return id;
+	}
 
-    private UserTO owner;
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public RatingTO(int id, int value, LocationTO location, UserTO owner) {
-        this.id = id;
-        this.value = value;
-        this.location = location;
-        this.owner = owner;
-    }
+	public int getValue() {
+		return value;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setValue(int value) {
+		this.value = value;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public int getLocationId() {
+		return locationId;
+	}
 
-    public int getValue() {
-        return value;
-    }
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
+	}
 
-    public void setValue(int value) {
-        this.value = value;
-    }
+	public String getOwnerId() {
+		return ownerId;
+	}
 
-    public LocationTO getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationTO location) {
-        this.location = location;
-    }
-
-    public UserTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserTO owner) {
-        this.owner = owner;
-    }
-
-
-
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+	
 }

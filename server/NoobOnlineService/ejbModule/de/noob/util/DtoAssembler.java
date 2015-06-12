@@ -55,7 +55,7 @@ public class DtoAssembler {
 				location.getAverageRating(), 
 				makeRatingsDTO(location.getRatings()), 
 				makeCommentsDTO(location.getComments()), 
-				makeDTO(location.getOwner()));
+				location.getOwner().getEmail());
 		return dto;
 	}
 
@@ -67,8 +67,8 @@ public class DtoAssembler {
 	public RatingTO makeDTO(Rating rating) {
 		RatingTO dto = new RatingTO(rating.getId(),
 				rating.getValue(),
-				this.makeDTO(rating.getLocation()),
-				this.makeDTO(rating.getOwner()));
+				rating.getLocation().getId(),
+				rating.getOwner().getEmail());
 		return dto;
 	}
 	
@@ -82,7 +82,7 @@ public class DtoAssembler {
 				comment.getText(), 
 				this.makeCommentsDTO(comment.getComments()),
 				this.makeDTO(comment.getLocation()), 
-				this.makeDTO(comment.getOwner()));
+				comment.getOwner().getEmail());
 		return dto;
 	}
 

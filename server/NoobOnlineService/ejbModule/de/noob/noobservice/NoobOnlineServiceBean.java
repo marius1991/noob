@@ -49,7 +49,6 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
-		
 		logger.info("register() aufgerufen.");
 		
 		ReturnCodeResponse re = new ReturnCodeResponse();
@@ -58,18 +57,22 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				User user = new User(username, email, password);
 				dao.persist(user);
 				re.setReturnCode(0);
-				re.setMessage("Registrierung erfolgreich.");
+				re.setMessage(username + " erfolgreich registriert.");
 				
-				logger.info(username+" erfolgreich registriert.");
+				logger.info(username + " erfolgreich registriert.");
 			}
 			else {
 				re.setReturnCode(1);
 				re.setMessage("Passwörter stimmen nicht überein!");
+				
+				logger.info("Passwörter stimmen nicht überein!");
 			}
 		}
 		else {
 			re.setReturnCode(2);
 			re.setMessage("Name oder Email schon vergeben!");
+			
+			logger.info("Name oder Email schon vergeben!");
 		}
 		return re;
 	}
@@ -81,6 +84,9 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	 */
 	@Override
 	public UserLoginResponse login(String email, String password) {
+		logger.info("login() aufgerufen!");
+		logger.info("Email: " + email);
+		logger.info("Passwort: " + password);
 		UserLoginResponse re = new UserLoginResponse();
 		NoobSession session;
 		
@@ -95,15 +101,18 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				re.setSessionId(session.getId());
 				
 				logger.info(user.getName() +" erfolgreich eingeloggt.");
+				logger.info(re.getSessionId());
 			}
 			else {
 				re.setReturnCode(1);
 				re.setMessage("Email oder Passwort falsch.");
+				logger.info("Email oder Passwort falsch.");
 			}	
 		}
 		else {
 			re.setReturnCode(2);
 			re.setMessage("User nicht vorhanden.");
+			logger.info("User nicht vorhanden.");
 		}
 		return re;
 	}
@@ -132,9 +141,9 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public CategoryListResponse listCategories() {
-		logger.info("Erfolgreich aufgerufen!!");
+		logger.info("listCategories() aufgerufen.");
 		CategoryListResponse re = new CategoryListResponse();
-		ArrayList<String> categories = new ArrayList<String>();
+		List<String> categories = new ArrayList<String>();
 		
 		categories.add("Bar");
 		categories.add("Kneipe");
@@ -160,17 +169,56 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	@Override
 	public CityListResponse listCities() {
 		CityListResponse re = new CityListResponse();
-		re.setCities(dao.listCities());
+		List<String> cities = dao.listCities();
+		if(!cities.isEmpty()) {
+			re.setCities(cities);
+			re.setReturnCode(0);
+			re.setMessage(cities.size() + " Städte erfolgreich abgerufen.");
+			logger.info(cities.size() + " Städte erfolgreich abgerufen.");
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Keine Städte vorhanden.");
+			logger.info("Keine Städte vorhanden");
+		}
+
 		return re;
 	}
 
 	@Override
 	public LocationListResponse listLocationsWithCategory(String category, String city) {
+		logger.info("listLocationsWithCategory() aufgerufen.");
 		LocationListResponse re = new LocationListResponse();
 		List<Location> locations = dao.findLocationsByCategory(category, city);
-		re.setLocations(dtoAssembler.makeLocationsDTO(locations));
-		re.setReturnCode(0);
-		re.setMessage(locations.size() + " Location(s) gefunden.");
+		if(locations != null) {
+			if(!locations.isEmpty()) {
+				re.setLocations(dtoAssembler.makeLocationsDTO(locations));
+				re.setReturnCode(0);
+				re.setMessage(locations.size() + " Location(s) gefunden.");
+				logger.info(locations.size() + " Location(s) gefunden.");
+				
+						if( locations.get(0).getRatings() != null ){
+							if(!locations.get(0).getRatings().isEmpty()) {
+							logger.info(locations.get(0).getRatings().get(0).getValue());
+							}
+							else {
+								logger.info("Ratings sind leer!!!!!!");
+							}
+						}
+					
+				
+			}
+			else {
+				re.setReturnCode(1);
+				re.setMessage("Keine Locations für Kategorie: '" + category + "' gefunden.");
+				logger.info("Keine Locations für Kategorie: '" + category + "' gefunden.");	
+			}
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Keine Locations für Kategorie: '" + category + "' gefunden.");
+			logger.info("Keine Locations für Kategorie: '" + category + "' gefunden.");	
+		}
 		return re;
 	}
 
@@ -196,14 +244,18 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
+		logger.info("giveRating() aufgerufen.");
+		logger.info("SessionId: " + sessionId);
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
+			logger.info("User: " + user.getEmail());
 			if(location != null) {
 				location.addRating(user, value);
-				dao.persist(location);				
+				dao.persist(location);	
+				logger.info("Rating mit Wert "+Integer.toString(value)+" gespeichert.");
 				re.setReturnCode(0);
 				re.setMessage("Bewertung wurde gespeichert.");
 			}
@@ -269,10 +321,13 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		return re;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city) {
+		logger.info("createLocation() aufgerufen.");
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
+		logger.info(session.getUser().getName() + "s Session gefunden.");
 		if(session != null) {
 			User user = session.getUser();
 			Location location = new Location(name,
@@ -283,7 +338,12 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 					plz,
 					city,
 					user);
+			try {
 			dao.persist(location);
+			}
+			catch(Exception e) {
+				logger.error(e.getMessage());
+			}
 			re.setReturnCode(0);
 			re.setMessage("Location gespeichert");
 		}
@@ -332,15 +392,15 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	}
 
 	@Override
-	public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser) {
+	public ReturnCodeResponse setUserDetails(int sessionId, int id, String name, String email, String password) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
-			if (user.getId() == newUser.getId()) {
-				user.setName(newUser.getName());
-				user.setEmail(newUser.getEmail());
-				user.setPassword(newUser.getPassword());
+			if (user.getId() == id) {
+				user.setName(name);
+				user.setEmail(email);
+				user.setPassword(password);
 			}
 			else {
 				re.setReturnCode(2);

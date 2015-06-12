@@ -13,7 +13,7 @@
             neu angelegt werden. Sobald sich an Ihrer Entity Beans nichts mehr
             ändert, kann hier auch "update" gewählt werden, damit bleiben einmal
             angelegte Daten erhalten.  -->
-        <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+        <property name="hibernate.hbm2ddl.auto" value="create"/>
     </properties>
 </persistence-unit>
 </persistence>

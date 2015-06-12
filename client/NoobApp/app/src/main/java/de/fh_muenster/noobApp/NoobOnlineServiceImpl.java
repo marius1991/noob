@@ -102,6 +102,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) throws InvalidRegisterException{
         String METHOD_NAME = "register";
         SoapObject response = null;
+        Log.d(TAG, "register:");
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         try {
             response = executeSoapAction(METHOD_NAME, username, email, password, passwordConfirmation);
@@ -126,6 +127,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     public UserLoginResponse login(String email, String password) {
         String METHOD_NAME ="login";
         UserLoginResponse userLoginResponse = new UserLoginResponse();
+        Log.d(TAG, "login:");
 
         SoapObject response = null;
         try {
@@ -134,14 +136,13 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
 
-            //if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0){
+
 
             userLoginResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
             userLoginResponse.setMessage(response.getProperty("message").toString());
             userLoginResponse.setSessionId(Integer.parseInt(response.getPrimitivePropertySafelyAsString("sessionId")));
             Log.d(TAG, "id: " + response.getPrimitivePropertySafelyAsString("sessionId"));
 
-        //}
         }
         catch (SoapFault e) {
 
@@ -158,31 +159,28 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     public CategoryListResponse listCategories() throws BadConnectionException {
         String METHOD_NAME = "listCategories";
         CategoryListResponse categoryListResponse = new CategoryListResponse();
+        Log.d(TAG, "List Locations:");
 
-        SoapObject response = null;
+        SoapObject response;
         try {
             response = executeSoapAction(METHOD_NAME);
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
 
-            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
-                List<String> categories = new ArrayList<>();
-                for (int i=0; i<response.getPropertyCount(); i++) {
-                    PropertyInfo info = new PropertyInfo();
-                    response.getPropertyInfo(i, info);
-                    Object obj =info.getValue();
-                    if(obj!= null && info.name.equals("categories")) {
-                        Log.d(TAG, response.getProperty(i).toString());
-                        categories.add(response.getProperty(i).toString());
-                    }
+            List<String> categories = new ArrayList<>();
+            for (int i=0; i<response.getPropertyCount(); i++) {
+                PropertyInfo info = new PropertyInfo();
+                response.getPropertyInfo(i, info);
+                Object obj =info.getValue();
+                if(obj!= null && info.name.equals("categories")) {
+                    Log.d(TAG, response.getProperty(i).toString());
+                    categories.add(response.getProperty(i).toString());
                 }
-                categoryListResponse.setMessage(response.getPropertyAsString("message"));
-                categoryListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
-                categoryListResponse.setCategories(categories);
             }
-            else {
-                throw new BadConnectionException("Keine Verbindung zum Server");
-            }
+            categoryListResponse.setMessage(response.getPropertyAsString("message"));
+            categoryListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+            categoryListResponse.setCategories(categories);
+
         }
         catch (SoapFault e) {
         }
@@ -193,6 +191,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     public CityListResponse listCities() {
         String METHOD_NAME = "listCities";
         CityListResponse cityListResponse = new CityListResponse();
+        Log.d(TAG, "List Cities");
 
         SoapObject response = null;
         try {
@@ -200,24 +199,21 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
 
-            if(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")) == 0) {
-                List<String> cities = new ArrayList<>();
-                for (int i=0; i<response.getPropertyCount(); i++) {
-                    PropertyInfo info = new PropertyInfo();
-                    response.getPropertyInfo(i, info);
-                    Object obj =info.getValue();
-                    if(obj!= null && info.name.equals("cities")) {
-                        Log.d(TAG, response.getProperty(i).toString());
-                        cities.add(response.getProperty(i).toString());
-                    }
+
+            List<String> cities = new ArrayList<>();
+            for (int i=0; i<response.getPropertyCount(); i++) {
+                PropertyInfo info = new PropertyInfo();
+                response.getPropertyInfo(i, info);
+                Object obj = info.getValue();
+                if(obj != null && info.name.equals("cities")) {
+                    Log.d(TAG, response.getProperty(i).toString());
+                    cities.add(response.getProperty(i).toString());
                 }
-                cityListResponse.setMessage(response.getPropertyAsString("message"));
-                cityListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
-                cityListResponse.setCities(cities);
             }
-            else {
-                //throw new BadConnectionException("Keine Verbindung zum Server");
-            }
+            cityListResponse.setMessage(response.getPropertyAsString("message"));
+            cityListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+            cityListResponse.setCities(cities);
+
         }
         catch (SoapFault e) {
         }
@@ -226,13 +222,123 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     }
 
     @Override
-    public LocationListResponse listLocationsWithCategory(String category, String city) {
-        return null;
+    public LocationListResponse listLocationsWithCategory(String categoryparam, String city) {
+        String METHOD_NAME = "listLocationsWithCategory";
+        LocationListResponse locationListResponse = new LocationListResponse();
+        Log.d(TAG, "List Location with Category:");
+
+        SoapObject response;
+        try {
+            response = executeSoapAction(METHOD_NAME, categoryparam, city);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+
+            List<LocationTO> locations = new ArrayList<>();
+            for(int i=0; i<response.getPropertyCount(); i++) {
+                PropertyInfo info = new PropertyInfo();
+                response.getPropertyInfo(i, info);
+                Object obj = info.getValue();
+                if(obj != null && info.name.equals("locations")) {
+
+                    SoapObject soapObject = (SoapObject) obj;
+                    LocationTO locationTO = new LocationTO();
+                    Log.d(TAG, "LOCATION: " + soapObject.toString());
+                    locationTO.setName(soapObject.getProperty("name").toString());
+                    locationTO.setAverageRating(Double.parseDouble(soapObject.getProperty("averageRating").toString()));
+                    locationTO.setCategory(soapObject.getProperty("category").toString());
+                    locationTO.setDescription(soapObject.getProperty("description").toString());
+                    locationTO.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+                    locationTO.setNumber(soapObject.getProperty("number").toString());
+                    locationTO.setStreet(soapObject.getProperty("street").toString());
+                    locationTO.setPlz(Integer.parseInt(soapObject.getProperty("plz").toString()));
+                    locationTO.setCity(soapObject.getProperty("city").toString());
+                    if (soapObject.hasProperty("city")) {
+                        Log.d(TAG, "Has Cities");
+                    }
+                    List<RatingTO> ratings = new ArrayList<>();
+                    if (soapObject.hasProperty("ratings")) {
+                        Log.d(TAG, "Has Ratings");
+                        int propertyCount = soapObject.getPropertyCount();
+                        for (int j=0; j<propertyCount; j++) {
+                            PropertyInfo info1 = new PropertyInfo();
+                            soapObject.getPropertyInfo(j, info1);
+                            Object obj1 = info1.getValue();
+                            if(obj1 != null && info1.name.equals("ratings")) {
+                                SoapObject ratingsObject = (SoapObject) obj1;
+                                Log.d(TAG, "RATINGS: " + ratingsObject.toString());
+                                RatingTO ratingTO = new RatingTO();
+                                ratingTO.setId(Integer.parseInt(ratingsObject.getProperty("id").toString()));
+                                ratingTO.setLocationId(Integer.parseInt(ratingsObject.getProperty("locationId").toString()));
+                                ratingTO.setOwnerId(ratingsObject.getProperty("ownerId").toString());
+                                ratingTO.setValue(Integer.parseInt(ratingsObject.getProperty("value").toString()));
+                                ratings.add(ratingTO);
+                            }
+                        }
+
+                    }
+                    locationTO.setRatings(ratings);
+                    Log.d(TAG, "NACHHER: " + ratings.get(0).getOwnerId());
+                    Log.d(TAG, "NACHHER: " + ratings.get(1).getOwnerId());
+                    locations.add(locationTO);
+                }
+                locationListResponse.setLocations(locations);
+                locationListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+                locationListResponse.setMessage(response.getProperty("message").toString());
+            }
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+
+        return locationListResponse;
     }
 
     @Override
     public LocationListResponse listLocationsWithName(String name, String city) {
-        return null;
+        String METHOD_NAME = "listLocationsWithName";
+        LocationListResponse locationListResponse = new LocationListResponse();
+        Log.d(TAG, "List Location with Name:");
+
+        SoapObject response = new SoapObject();
+        try {
+            response = executeSoapAction(METHOD_NAME, name, city);
+
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            List<LocationTO> locations = new ArrayList<>();
+            for(int i=0; i<response.getPropertyCount(); i++) {
+                PropertyInfo info = new PropertyInfo();
+                response.getPropertyInfo(i, info);
+                Object obj = info.getValue();
+                if (obj != null && info.name.equals("locations")) {
+                    Log.d(TAG, response.getProperty(i).toString());
+                    Log.d(TAG, obj.toString());
+                    SoapObject soapObject = (SoapObject) obj;
+                    LocationTO locationTO = new LocationTO();
+                    Log.d(TAG, soapObject.getProperty("name").toString());
+                    locationTO.setName(soapObject.getProperty("name").toString());
+                    locationTO.setAverageRating(Double.parseDouble(soapObject.getProperty("averageRating").toString()));
+                    locationTO.setCategory(soapObject.getProperty("category").toString());
+                    locationTO.setDescription(soapObject.getProperty("description").toString());
+                    locationTO.setId(Integer.parseInt(soapObject.getProperty("id").toString()));
+                    locationTO.setNumber(soapObject.getProperty("number").toString());
+                    locationTO.setStreet(soapObject.getProperty("street").toString());
+                    locationTO.setPlz(Integer.parseInt(soapObject.getProperty("plz").toString()));
+                    locationTO.setCity(soapObject.getProperty("city").toString());
+
+                    locations.add(locationTO);
+                    Log.d(TAG, "NACHHER: " + locations.get(0).getName());
+                }
+                locationListResponse.setLocations(locations);
+                locationListResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+                locationListResponse.setMessage(response.getProperty("message").toString());
+            }
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        return locationListResponse;
+
     }
 
     @Override
@@ -242,7 +348,20 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
-        return null;
+        String METHOD_NAME = "giveRating";
+        SoapObject response = null;
+        Log.d(TAG, "Give Rating:");
+
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        try {
+            response = executeSoapAction(METHOD_NAME, sessionId, locationId, value);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        Log.d(TAG, response.getProperty("message").toString());
+        returnCodeResponse.setMessage(response.getProperty("message").toString());
+        returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
+        return  returnCodeResponse;
     }
 
     @Override
@@ -257,7 +376,21 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city) {
-        return null;
+        String METHOD_NAME = "createLocation";
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        Log.d(TAG, "List Location with Name:");
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME, sessionId, name, category, description, street, number, plz, city);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+        returnCodeResponse.setMessage(response.getProperty("message").toString());
+        return returnCodeResponse;
     }
 
     @Override
@@ -272,6 +405,18 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public UserTO getUserDetails(int sessionId) {
+        String METHOD_NAME = "getUserDetails";
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        Log.d(TAG, "Get Userdetails:");
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME, sessionId);
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        Log.d(TAG, response.getProperty("message").toString());
+        Log.d(TAG, response.getProperty("returnCode").toString());
         return null;
     }
 
