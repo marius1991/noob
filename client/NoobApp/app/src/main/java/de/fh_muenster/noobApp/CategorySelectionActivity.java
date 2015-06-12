@@ -48,7 +48,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         setTitle(myApp.getCity());
 
         //Kategorien der Stadt asynchron abrufen
-        new getCategoriesFromServer().execute();
+        new GetCategoriesFromServer().execute();
     }
 
     @Override
@@ -95,16 +95,15 @@ public class CategorySelectionActivity extends ActionBarActivity {
         NoobApplication myApp = (NoobApplication) getApplication();
         myApp.setSearch(editText.getText().toString());
         //Die Suche erfolgt asynchron
-        new searchLocationOnServer().execute(editText.getText().toString());
-        Intent i = new Intent(CategorySelectionActivity.this, LocationSearchActivity.class);
-        startActivity(i);
+        new SearchLocationOnServer().execute(editText.getText().toString());
+
     }
 
     /**
      * @author marius
      * In diesem AsycTask werden die Kategorien einer Stadt vom Server abgerufen
      */
-    class getCategoriesFromServer extends AsyncTask<String, String, CategoryListResponse> {
+    class GetCategoriesFromServer extends AsyncTask<String, String, CategoryListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
 
         /**
@@ -173,7 +172,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
      * @author marius
      * In diesem Asynchronen Task wird nach einer Location gesucht
      */
-    class searchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
+    class SearchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
 
         /**
@@ -182,7 +181,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute()
         {
-            Dialog.setMessage("Kategorien abrufen...");
+            Dialog.setMessage("Locations durchsuchen...");
             Dialog.show();
         }
 
@@ -208,12 +207,21 @@ public class CategorySelectionActivity extends ActionBarActivity {
         protected void onPostExecute (LocationListResponse response){
             Dialog.dismiss();
             if(response != null) {
-                NoobApplication myApp = (NoobApplication) getApplication();
-                List<LocationTO> locationNames = new ArrayList<>();
-                for (int i = 0; i < response.getLocations().size(); i++) {
-                    locationNames.add(response.getLocations().get(i));
+                if(!response.getLocations().isEmpty()) {
+                    NoobApplication myApp = (NoobApplication) getApplication();
+                    List<LocationTO> locationNames = new ArrayList<>();
+                    for (int i = 0; i < response.getLocations().size(); i++) {
+                        locationNames.add(response.getLocations().get(i));
+                    }
+                    myApp.setLocationSearchResults(locationNames);
+                    Intent i = new Intent(CategorySelectionActivity.this, LocationSearchActivity.class);
+                    startActivity(i);
                 }
-                myApp.setLocationSearchResults(locationNames);
+                else {
+                    Log.d(TAG, "keine Suchergebnisse!");
+                    Toast.makeText(getApplicationContext(), "keine Suchergebnisse!", Toast.LENGTH_SHORT).show();
+                }
+
             }
             else {
                 Log.d(TAG, "keine Verbindung zum Server");

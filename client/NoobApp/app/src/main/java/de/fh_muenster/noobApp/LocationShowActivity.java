@@ -56,12 +56,12 @@ public class LocationShowActivity extends ActionBarActivity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 //Rating asynchron zum Server senden
-                new sendRatingToServer().execute(Math.round(rating));
+                new SendRatingToServer().execute(Math.round(rating));
             }
         });
         if(myApp.getLocation().getRatings() != null) {
             for (int i = 0; i < myApp.getLocation().getRatings().size(); i++) {
-                if (myApp.getLocation().getRatings().get(i).getOwnerId().equals("test@test.de")) {
+                if (myApp.getLocation().getRatings().get(i).getOwnerId().equals(myApp.getUserId())) {
                     ratingBar.setRating(myApp.getLocation().getRatings().get(i).getValue());
                     //ratingBar.setRating(2.5f);
                     //TODO hier muss noch geprüft werden ob bereits bewertet wurde
@@ -123,7 +123,7 @@ public class LocationShowActivity extends ActionBarActivity {
      * @author marius
      * Dieser AsyncTask schickt das Rating zum Server
      */
-    public class sendRatingToServer extends AsyncTask<Integer, String, ReturnCodeResponse> {
+    public class SendRatingToServer extends AsyncTask<Integer, String, ReturnCodeResponse> {
         private ProgressDialog Dialog = new ProgressDialog(LocationShowActivity.this);
 
         /**
