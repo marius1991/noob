@@ -144,8 +144,8 @@ public class LocationShowActivity extends ActionBarActivity {
         @Override
         protected ReturnCodeResponse doInBackground(Integer... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
-            myApp.setSessionId(1);
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            Log.d(TAG, "ÜBERGABE: " + String.valueOf(myApp.getSessionId()));
             ReturnCodeResponse response = onlineService.giveRating(myApp.getSessionId(), myApp.getLocation().getId(), params[0]);
             return response;
         }
