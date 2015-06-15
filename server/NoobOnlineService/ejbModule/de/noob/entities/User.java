@@ -25,13 +25,13 @@ public class User implements Serializable {
 	@Id
 	private String email;
 	
-	@OneToMany (mappedBy ="owner")
+	@OneToMany (mappedBy ="owner", fetch=FetchType.LAZY)
 	private List<Location> locations;
 	
-	@OneToMany (mappedBy ="owner", cascade = CascadeType.REMOVE)
+	@OneToMany (mappedBy ="owner", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="owner", cascade = CascadeType.REMOVE)
+	@OneToMany (mappedBy ="owner", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Comment> comments;
 	
 	public User() {

@@ -3,158 +3,157 @@ package de.fh_muenster.noob;
 import java.util.List;
 
 /**
- *
+ * 
  * @author philipp
  *
  */
 public class LocationTO extends ReturnCodeResponse {
 
-    private static final long serialVersionUID = -5498069855610055362L;
+	private static final long serialVersionUID = -5498069855610055362L;
+	
+	private int id;
+	
+	private String name;
+	
+	private String category;
+	
+	private String description;
+	
+	private String street;
+	
+	private String number;
+	
+	private int plz;
+	
+	private String city;
+	
+	private double averageRating;
+	
+	private String ownerId;
+	
+	private List<RatingTO> ratings;
+	
+	private List<CommentTO> comments;
+	
+	public LocationTO(int id, String name, String category, String description,
+			String street, String number, int plz, String city,
+			double averageRating, List<RatingTO> ratings,
+			List<CommentTO> comments, String ownerId) {
+		this.id = id;
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.street = street;
+		this.number = number;
+		this.plz = plz;
+		this.city = city;
+		this.averageRating = averageRating;
+		this.ratings = ratings;
+		this.comments = comments;
+		this.ownerId = ownerId;
+	}
 
-    private int id;
+	public LocationTO() {
+	}
 
-    private String name;
+	public int getId() {
+		return id;
+	}
 
-    private String category;
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    private String description;
+	public String getName() {
+		return name;
+	}
 
-    private String street;
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    private String number;
+	public String getCategory() {
+		return category;
+	}
 
-    private int plz;
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
-    private String city;
+	public String getDescription() {
+		return description;
+	}
 
-    private double averageRating;
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    private List<RatingTO> ratings;
+	public String getStreet() {
+		return street;
+	}
 
-    private List<CommentTO> comments;
+	public void setStreet(String street) {
+		this.street = street;
+	}
 
-    private UserTO owner;
+	public String getNumber() {
+		return number;
+	}
 
-    public LocationTO(int id, String name, String category, String description,
-                      String street, String number, int plz, String city,
-                      double averageRating, List<RatingTO> ratings,
-                      List<CommentTO> comments, UserTO owner) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.description = description;
-        this.street = street;
-        this.number = number;
-        this.plz = plz;
-        this.city = city;
-        this.averageRating = averageRating;
-        this.ratings = ratings;
-        this.comments = comments;
-        this.owner = owner;
-    }
+	public void setNumber(String number) {
+		this.number = number;
+	}
 
-    public LocationTO() {
-    }
+	public int getPlz() {
+		return plz;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public void setPlz(int plz) {
+		this.plz = plz;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public double getAverageRating() {
+		return averageRating;
+	}
 
-    public String getCategory() {
-        return category;
-    }
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
+	}
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+	public List<RatingTO> getRatings() {
+		return ratings;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setRatings(List<RatingTO> ratings) {
+		this.ratings = ratings;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public List<CommentTO> getComments() {
+		return comments;
+	}
 
-    public String getStreet() {
-        return street;
-    }
+	public void setComments(List<CommentTO> comments) {
+		this.comments = comments;
+	}
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
+	public String getOwnerId() {
+		return ownerId;
+	}
 
-    public String getNumber() {
-        return number;
-    }
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public int getPlz() {
-        return plz;
-    }
-
-    public void setPlz(int plz) {
-        this.plz = plz;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public double getAverageRating() {
-        return averageRating;
-    }
-
-    public void setAverageRating(double averageRating) {
-        this.averageRating = averageRating;
-    }
-
-    public List<RatingTO> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<RatingTO> ratings) {
-        this.ratings = ratings;
-    }
-
-    public List<CommentTO> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentTO> comments) {
-        this.comments = comments;
-    }
-
-    public UserTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserTO owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
+	public String toString() {
+		return this.name;
+	}
 
 }

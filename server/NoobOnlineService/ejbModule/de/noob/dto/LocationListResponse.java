@@ -6,7 +6,7 @@ public class LocationListResponse extends ReturnCodeResponse {
 	
 	private static final long serialVersionUID = 7195725464159927947L;
 	
-	private List<LocationTO> locations;
+	private List<LocationTO> locations = null;
 	
 	
 	public List<LocationTO> getLocations() {

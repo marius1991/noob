@@ -1,9 +1,11 @@
 package de.fh_muenster.noobApp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +48,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         setTitle(myApp.getCity());
 
         //Kategorien der Stadt asynchron abrufen
-        new getCategoriesFromServer().execute();
+        new GetCategoriesFromServer().execute();
     }
 
     @Override
@@ -81,6 +83,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         myApp.setCategory(selected);
         Intent i = new Intent(CategorySelectionActivity.this, LocationListActivity.class);
         startActivity(i);
+        Log.d(TAG, "SessionId: " + myApp.getSessionId());
     }
 
     /**
@@ -92,16 +95,26 @@ public class CategorySelectionActivity extends ActionBarActivity {
         NoobApplication myApp = (NoobApplication) getApplication();
         myApp.setSearch(editText.getText().toString());
         //Die Suche erfolgt asynchron
-        new searchLocationOnServer().execute(editText.getText().toString());
-        Intent i = new Intent(CategorySelectionActivity.this, LocationSearchActivity.class);
-        startActivity(i);
+        new SearchLocationOnServer().execute(editText.getText().toString());
+
     }
 
     /**
      * @author marius
      * In diesem AsycTask werden die Kategorien einer Stadt vom Server abgerufen
      */
-    class getCategoriesFromServer extends AsyncTask<String, String, CategoryListResponse> {
+    class GetCategoriesFromServer extends AsyncTask<String, String, CategoryListResponse> {
+        private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
+
+        /**
+         * Während des Abrufs der Liste wird ein Dialog angezeigt.
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Kategorien abrufen...");
+            Dialog.show();
+        }
 
         /**
          * Startet einen neuen Thread, der die Kategorienliste abholen soll
@@ -110,7 +123,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected CategoryListResponse doInBackground(String... params) {
-            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             CategoryListResponse response = null;
             try {
                 response = onlineService.listCategories();
@@ -126,25 +139,32 @@ public class CategorySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected void onPostExecute (CategoryListResponse response) {
-            Integer returnCode = response.getReturnCode();
-            List<String> valueList;
-            //Toast.makeText(CategorySelectionActivity.this, returnCode.toString(), Toast.LENGTH_LONG ).show();
-            valueList = response.getCategories();
-            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
-            Spinner sp = (Spinner)findViewById(R.id.spinner);
-            sp.setAdapter(adapter);
-            sp.setOnItemSelectedListener(new OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                    selected = parentView.getItemAtPosition(position).toString();
-                }
+            Dialog.dismiss();
+            if(response != null) {
+                Integer returnCode = response.getReturnCode();
+                List<String> valueList;
+                //Toast.makeText(CategorySelectionActivity.this, returnCode.toString(), Toast.LENGTH_LONG ).show();
+                valueList = response.getCategories();
+                ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
+                Spinner sp = (Spinner) findViewById(R.id.spinner);
+                sp.setAdapter(adapter);
+                sp.setOnItemSelectedListener(new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        selected = parentView.getItemAtPosition(position).toString();
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parentView) {
-                    // Nichts machen
-                }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parentView) {
+                        // Nichts machen
+                    }
 
-            });
+                });
+            }
+            else {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -152,7 +172,18 @@ public class CategorySelectionActivity extends ActionBarActivity {
      * @author marius
      * In diesem Asynchronen Task wird nach einer Location gesucht
      */
-    class searchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
+    class SearchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
+        private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
+
+        /**
+         * Während des Abrufs der Liste wird ein Dialog angezeigt.
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Locations durchsuchen...");
+            Dialog.show();
+        }
 
         /**
          * Startet einen neuen Thread für die Abfrage der Locationliste vom Server
@@ -161,7 +192,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected LocationListResponse doInBackground(String... params) {
-            NoobOnlineServiceMock onlineService = new NoobOnlineServiceMock();
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             LocationListResponse response;
             NoobApplication myApp = (NoobApplication) getApplication();
             response = onlineService.listLocationsWithName(params[0], myApp.getCity());
@@ -174,12 +205,28 @@ public class CategorySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected void onPostExecute (LocationListResponse response){
-            NoobApplication myApp = (NoobApplication) getApplication();
-            List<LocationTO> locationNames = new ArrayList<>();
-            for(int i=0; i<response.getLocations().size(); i++) {
-                locationNames.add(response.getLocations().get(i));
+            Dialog.dismiss();
+            if(response != null) {
+                if(!response.getLocations().isEmpty()) {
+                    NoobApplication myApp = (NoobApplication) getApplication();
+                    List<LocationTO> locationNames = new ArrayList<>();
+                    for (int i = 0; i < response.getLocations().size(); i++) {
+                        locationNames.add(response.getLocations().get(i));
+                    }
+                    myApp.setLocationSearchResults(locationNames);
+                    Intent i = new Intent(CategorySelectionActivity.this, LocationSearchActivity.class);
+                    startActivity(i);
+                }
+                else {
+                    Log.d(TAG, "keine Suchergebnisse!");
+                    Toast.makeText(getApplicationContext(), "keine Suchergebnisse!", Toast.LENGTH_SHORT).show();
+                }
+
             }
-            myApp.setLocationSearchResults(locationNames);
+            else {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

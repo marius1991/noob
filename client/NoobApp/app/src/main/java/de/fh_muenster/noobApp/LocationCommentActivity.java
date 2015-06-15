@@ -1,15 +1,22 @@
 package de.fh_muenster.noobApp;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
  * @author marius
  * In dieser Activity kann ein Kommentar zu einer Location geschrieben werden
  */
 public class LocationCommentActivity extends ActionBarActivity {
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +26,8 @@ public class LocationCommentActivity extends ActionBarActivity {
         //Titel der Activity ersetzen
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getLocation().getName() + " kommentieren");
+
+        editText = (EditText)findViewById(R.id.editText16);
     }
 
     @Override
@@ -42,4 +51,26 @@ public class LocationCommentActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void clickFuncCommentOnLocation(View view) {
+        new CommentOnLocation().execute(editText.getText().toString());
+    }
+
+    class CommentOnLocation extends AsyncTask<String, String, ReturnCodeResponse> {
+
+        @Override
+        protected ReturnCodeResponse doInBackground(String... params) {
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            ReturnCodeResponse returnCodeResponse;
+            returnCodeResponse = onlineService.commentOnLocation(myApp.getSessionId(), myApp.getLocation().getId(), params[0]);
+            return returnCodeResponse;
+        }
+
+        @Override
+        protected void onPostExecute (ReturnCodeResponse response) {
+            Toast.makeText(LocationCommentActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

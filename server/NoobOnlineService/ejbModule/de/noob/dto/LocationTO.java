@@ -29,16 +29,16 @@ public class LocationTO extends ReturnCodeResponse {
 	
 	private double averageRating;
 	
+	private String ownerId;
+	
 	private List<RatingTO> ratings;
 	
 	private List<CommentTO> comments;
 	
-	private UserTO owner;
-	
 	public LocationTO(int id, String name, String category, String description,
 			String street, String number, int plz, String city,
 			double averageRating, List<RatingTO> ratings,
-			List<CommentTO> comments, UserTO owner) {
+			List<CommentTO> comments, String ownerId) {
 		this.id = id;
 		this.name = name;
 		this.category = category;
@@ -50,7 +50,7 @@ public class LocationTO extends ReturnCodeResponse {
 		this.averageRating = averageRating;
 		this.ratings = ratings;
 		this.comments = comments;
-		this.owner = owner;
+		this.ownerId = ownerId;
 	}
 
 	public LocationTO() {
@@ -144,14 +144,12 @@ public class LocationTO extends ReturnCodeResponse {
 		this.comments = comments;
 	}
 
-	public UserTO getOwner() {
-		return owner;
+	public String getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(UserTO owner) {
-		this.owner = owner;
-	}
-	
-	
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}	
 
 }

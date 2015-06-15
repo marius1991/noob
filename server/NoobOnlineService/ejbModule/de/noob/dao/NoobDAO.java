@@ -76,7 +76,14 @@ public class NoobDAO implements NoobDAOLocal {
 	@Override
 	public User findUserByEmail(String email) {
 		logger.info("DB-Query: em.find(User.class, email);");
-		return em.find(User.class, email);
+		User user;
+		try {
+			user = em.find(User.class, email);
+			return user;
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 
 	
@@ -126,9 +133,9 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByCategory(String category, String city) {
-		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category");
+		logger.info("DB-Query: " + "SELECT l FROM Location l WHERE l.city = " + city + " AND l.category = " + category);
 		try {
-			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.category= :category", Location.class).setParameter("stadt",city).setParameter("category",category).getResultList();
+			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND l.category = :category", Location.class).setParameter("stadt",city).setParameter("category",category).getResultList();
 		}
 		catch (Exception e) {
 			logger.info(e.getMessage());
@@ -200,12 +207,24 @@ public class NoobDAO implements NoobDAOLocal {
 		logger.info("DB-Query: em.remove(o);");
 		em.remove(o);
 	}
+	
+	@Override
+	public void merge(Object o) {
+		logger.info("DB-Query: em.merge(o)");
+		em.merge(o);
+	}
 
 
 	@Override
 	public List<String> listCities() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			logger.info("DB-Query: SELECT DISTINCT l.city FROM Location l ORDER BY l.city ASC");
+			return em.createQuery("SELECT DISTINCT l.city FROM Location l ORDER BY l.city ASC", String.class).getResultList();			
+		}
+		catch(Exception e){
+			logger.info(e.getMessage());
+			return null;
+		}
 	}
 	
 	
