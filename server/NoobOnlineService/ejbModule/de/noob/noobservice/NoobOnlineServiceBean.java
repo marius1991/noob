@@ -11,7 +11,6 @@ import de.noob.dto.LocationTO;
 import de.noob.dto.UserLoginResponse;
 import de.noob.dto.ReturnCodeResponse;
 import de.noob.dto.UserTO;
-import de.noob.entities.Comment;
 import de.noob.entities.Location;
 import de.noob.entities.NoobSession;
 import de.noob.entities.User;
@@ -305,8 +304,9 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				dao.persist(location);				
 				re.setReturnCode(0);
 				re.setMessage("Kommentar wurde gespeichert.");
-				logger.info("Kommentar wurde gespeichert.");
 				logger.info("Kommentartext: " + text);
+				logger.info("Kommentar wurde gespeichert.");
+				
 			}
 			else {
 				re.setReturnCode(2);
@@ -322,30 +322,30 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		return re;
 	}
 
-	@Override
-	public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
-		ReturnCodeResponse re = new ReturnCodeResponse();
-		Comment comment = dao.findCommentById(commentId);
-		NoobSession session = dao.findSessionById(sessionId);
-		if(session != null) {
-			User user = session.getUser();
-			if(comment != null) {
-				comment.addComment(user, text);
-				dao.persist(comment);				
-				re.setReturnCode(0);
-				re.setMessage("Kommentar wurde gespeichert.");
-			}
-			else {
-				re.setReturnCode(2);
-				re.setMessage("Kommentar existiert nicht.");
-			}
-		}
-		else {
-			re.setReturnCode(1);
-			re.setMessage("Kein Benutzer angemeldet.");
-		}
-		return re;
-	}
+//	@Override
+//	public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
+//		ReturnCodeResponse re = new ReturnCodeResponse();
+//		Comment comment = dao.findCommentById(commentId);
+//		NoobSession session = dao.findSessionById(sessionId);
+//		if(session != null) {
+//			User user = session.getUser();
+//			if(comment != null) {
+//				comment.addComment(user, text);
+//				dao.persist(comment);				
+//				re.setReturnCode(0);
+//				re.setMessage("Kommentar wurde gespeichert.");
+//			}
+//			else {
+//				re.setReturnCode(2);
+//				re.setMessage("Kommentar existiert nicht.");
+//			}
+//		}
+//		else {
+//			re.setReturnCode(1);
+//			re.setMessage("Kein Benutzer angemeldet.");
+//		}
+//		return re;
+//	}
 
 	@SuppressWarnings("unused")
 	@Override

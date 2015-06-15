@@ -80,8 +80,8 @@ public class DtoAssembler {
 	public CommentTO makeDTO(Comment comment) {
 		CommentTO dto = new CommentTO(comment.getId(), 
 				comment.getText(), 
-				this.makeCommentsDTO(comment.getComments()),
-				this.makeDTO(comment.getLocation()), 
+				//makeCommentsDTO(comment.getComments()),
+				comment.getLocation().getId(), 
 				comment.getOwner().getEmail());
 		return dto;
 	}

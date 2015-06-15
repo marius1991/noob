@@ -1,7 +1,7 @@
 package de.noob.dto;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 public class CommentTO implements Serializable {
 	
@@ -11,19 +11,27 @@ public class CommentTO implements Serializable {
 	
 	private String text;
 	
-	private List<CommentTO> comments;
+	//private List<CommentTO> comments;
 	
 	private int locationId;
 	
 	private String ownerId;
+	
+	//private int superCommentId;
 
-	public CommentTO(int id, String text, List<CommentTO> comments,
-			LocationTO location, String ownerId) {
+	public CommentTO(int id,
+			String text,
+			//List<CommentTO> comments,
+			int locationId,
+			String ownerId
+			//int superCommentId
+			) {
 		this.id = id;
 		this.text = text;
-		this.comments = comments;
-		this.locationId = location.getId();
+		//this.comments = comments;
+		this.locationId = locationId;
 		this.ownerId = ownerId;
+		//this.superCommentId = superCommentId;
 	}
 
 	public int getId() {
@@ -42,13 +50,13 @@ public class CommentTO implements Serializable {
 		this.text = text;
 	}
 
-	public List<CommentTO> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<CommentTO> comments) {
-		this.comments = comments;
-	}
+//	public List<CommentTO> getComments() {
+//		return comments;
+//	}
+//
+//	public void setComments(List<CommentTO> comments) {
+//		this.comments = comments;
+//	}
 
 	public int getLocationId() {
 		return locationId;
@@ -65,5 +73,12 @@ public class CommentTO implements Serializable {
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
 	}
-	
+
+//	public int getSuperCommentId() {
+//		return superCommentId;
+//	}
+//
+//	public void setSuperCommentId(int superCommentId) {
+//		this.superCommentId = superCommentId;
+//	}
 }
