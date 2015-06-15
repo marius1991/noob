@@ -382,7 +382,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	
 	@SuppressWarnings("unused")
 	@Override
-	public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+	public ReturnCodeResponse createLocationWithImage(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
 		logger.info("createLocation() aufgerufen.");
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
