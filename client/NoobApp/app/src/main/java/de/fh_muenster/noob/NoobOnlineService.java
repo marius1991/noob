@@ -115,6 +115,13 @@ public interface NoobOnlineService {
                                                  LocationTO newLocationDetails);
 
     /**
+     *
+     * @param locationId
+     * @return
+     */
+    public LocationTO getLocationDetails(int locationId);
+
+    /**
      * @param sessionId
      * @param newUser
      * @return

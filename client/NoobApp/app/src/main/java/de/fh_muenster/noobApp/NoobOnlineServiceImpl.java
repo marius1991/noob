@@ -146,14 +146,30 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public ReturnCodeResponse logout(int sessionId) {
-        return null;
+        String METHOD_NAME = "logout";
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        Log.d(TAG, "Logout:");
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME, sessionId);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        returnCodeResponse.setMessage(response.getProperty("message").toString());
+        returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertySafelyAsString("returnCode")));
+        return  returnCodeResponse;
     }
+
+
 
     @Override
     public CategoryListResponse listCategories() throws BadConnectionException {
         String METHOD_NAME = "listCategories";
         CategoryListResponse categoryListResponse = new CategoryListResponse();
-        Log.d(TAG, "List Locations:");
+        Log.d(TAG, "List Categories:");
 
         SoapObject response;
         try {
@@ -177,6 +193,9 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
         }
         catch (SoapFault e) {
+        }
+        catch (NullPointerException e) {
+            categoryListResponse.setReturnCode(10);
         }
         return categoryListResponse;
     }
@@ -210,6 +229,9 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
         }
         catch (SoapFault e) {
+        }
+        catch (NullPointerException e) {
+            cityListResponse.setReturnCode(10);
         }
         return cityListResponse;
 
@@ -269,12 +291,30 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                                 ratings.add(ratingTO);
                             }
                         }
-
                     }
+                    List<CommentTO> comments = new ArrayList<>();
                     if(soapObject.hasProperty("comments")) {
                         Log.d(TAG, "Has Comments");
+                        int propertyCount = soapObject.getPropertyCount();
+                        for (int j=0; j<propertyCount; j++) {
+                            PropertyInfo info1 = new PropertyInfo();
+                            soapObject.getPropertyInfo(j, info1);
+                            Object obj1 = info1.getValue();
+                            if(obj1 != null && info1.name.equals("comments")) {
+                                SoapObject commentsObject = (SoapObject) obj1;
+                                Log.d(TAG, "COMMENTS: " + commentsObject.toString());
+                                CommentTO commentTO = new CommentTO();
+                                commentTO.setId(Integer.parseInt(commentsObject.getProperty("id").toString()));
+                                commentTO.setOwnerId(commentsObject.getProperty("ownerId").toString());
+                                commentTO.setLocationId(Integer.parseInt(commentsObject.getProperty("locationId").toString()));
+                                commentTO.setText(commentsObject.getProperty("text").toString());
+                                commentTO.setDate(commentsObject.getProperty("date").toString());
+                                comments.add(commentTO);
+                            }
+                        }
                     }
                     locationTO.setRatings(ratings);
+                    locationTO.setComments(comments);
 //                    Log.d(TAG, "NACHHER: " + ratings.get(0).getOwnerId());
 //                    Log.d(TAG, "NACHHER: " + ratings.get(1).getOwnerId());
                     locations.add(locationTO);
@@ -285,6 +325,9 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             }
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
+        }
+        catch (NullPointerException e) {
+            locationListResponse.setReturnCode(10);
         }
 
         return locationListResponse;
@@ -344,8 +387,29 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                                 ratings.add(ratingTO);
                             }
                         }
-
                     }
+                    List<CommentTO> comments = new ArrayList<>();
+                    if(soapObject.hasProperty("comments")) {
+                        Log.d(TAG, "Has Comments");
+                        int propertyCount = soapObject.getPropertyCount();
+                        for (int j=0; j<propertyCount; j++) {
+                            PropertyInfo info1 = new PropertyInfo();
+                            soapObject.getPropertyInfo(j, info1);
+                            Object obj1 = info1.getValue();
+                            if(obj1 != null && info1.name.equals("comments")) {
+                                SoapObject commentsObject = (SoapObject) obj1;
+                                Log.d(TAG, "COMMENTS: " + commentsObject.toString());
+                                CommentTO commentTO = new CommentTO();
+                                commentTO.setId(Integer.parseInt(commentsObject.getProperty("id").toString()));
+                                commentTO.setOwnerId(commentsObject.getProperty("ownerId").toString());
+                                commentTO.setLocationId(Integer.parseInt(commentsObject.getProperty("locationId").toString()));
+                                commentTO.setText(commentsObject.getProperty("text").toString());
+                                commentTO.setDate(commentsObject.getProperty("date").toString());
+                                comments.add(commentTO);
+                            }
+                        }
+                    }
+                    locationTO.setComments(comments);
                     locationTO.setRatings(ratings);
 //                    Log.d(TAG, "NACHHER: " + ratings.get(0).getOwnerId());
 //                    Log.d(TAG, "NACHHER: " + ratings.get(1).getOwnerId());
@@ -357,6 +421,9 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             }
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
+        }
+        catch (NullPointerException e) {
+            locationListResponse.setReturnCode(10);
         }
 
         return locationListResponse;
@@ -378,6 +445,9 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             response = executeSoapAction(METHOD_NAME, sessionId, locationId, value);
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
+        }
+        catch (NullPointerException e) {
+            returnCodeResponse.setReturnCode(10);
         }
         Log.d(TAG, response.getProperty("message").toString());
         returnCodeResponse.setMessage(response.getProperty("message").toString());
@@ -401,6 +471,9 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
+        catch (NullPointerException e) {
+            returnCodeResponse.setReturnCode(10);
+        }
         return returnCodeResponse;
     }
 
@@ -423,9 +496,91 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
+        catch (NullPointerException e) {
+            returnCodeResponse.setReturnCode(10);
+        }
         returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
         returnCodeResponse.setMessage(response.getProperty("message").toString());
         return returnCodeResponse;
+    }
+
+    @Override
+    public LocationTO getLocationDetails(int locationId) {
+        String METHOD_NAME = "getLocationDetails";
+        LocationTO locationTO = new LocationTO();
+        Log.d(TAG, "Get Locationdetails:");
+
+        SoapObject response = null;
+        try {
+            response = executeSoapAction(METHOD_NAME, locationId);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+
+            Log.d(TAG, "LOCATION: " + response.toString());
+            locationTO.setName(response.getProperty("name").toString());
+            locationTO.setAverageRating(Double.parseDouble(response.getProperty("averageRating").toString()));
+            locationTO.setCategory(response.getProperty("category").toString());
+            locationTO.setDescription(response.getProperty("description").toString());
+            locationTO.setId(Integer.parseInt(response.getProperty("id").toString()));
+            locationTO.setNumber(response.getProperty("number").toString());
+            locationTO.setStreet(response.getProperty("street").toString());
+            locationTO.setPlz(Integer.parseInt(response.getProperty("plz").toString()));
+            locationTO.setCity(response.getProperty("city").toString());
+
+            List<RatingTO> ratings = new ArrayList<>();
+            if (response.hasProperty("ratings")) {
+                Log.d(TAG, "Has Ratings");
+                int propertyCount = response.getPropertyCount();
+                for (int j=0; j<propertyCount; j++) {
+                    PropertyInfo info1 = new PropertyInfo();
+                    response.getPropertyInfo(j, info1);
+                    Object obj1 = info1.getValue();
+                    if(obj1 != null && info1.name.equals("ratings")) {
+                        SoapObject ratingsObject = (SoapObject) obj1;
+                        Log.d(TAG, "RATINGS: " + ratingsObject.toString());
+                        RatingTO ratingTO = new RatingTO();
+                        ratingTO.setId(Integer.parseInt(ratingsObject.getProperty("id").toString()));
+                        ratingTO.setLocationId(Integer.parseInt(ratingsObject.getProperty("locationId").toString()));
+                        ratingTO.setOwnerId(ratingsObject.getProperty("ownerId").toString());
+                        ratingTO.setValue(Integer.parseInt(ratingsObject.getProperty("value").toString()));
+                        ratings.add(ratingTO);
+                    }
+                }
+            }
+
+            List<CommentTO> comments = new ArrayList<>();
+            if(response.hasProperty("comments")) {
+                Log.d(TAG, "Has Comments");
+                int propertyCount = response.getPropertyCount();
+                for (int j=0; j<propertyCount; j++) {
+                    PropertyInfo info1 = new PropertyInfo();
+                    response.getPropertyInfo(j, info1);
+                    Object obj1 = info1.getValue();
+                    if(obj1 != null && info1.name.equals("comments")) {
+                        SoapObject commentsObject = (SoapObject) obj1;
+                        Log.d(TAG, "COMMENTS: " + commentsObject.toString());
+                        CommentTO commentTO = new CommentTO();
+                        commentTO.setId(Integer.parseInt(commentsObject.getProperty("id").toString()));
+                        commentTO.setOwnerId(commentsObject.getProperty("ownerId").toString());
+                        commentTO.setLocationId(Integer.parseInt(commentsObject.getProperty("locationId").toString()));
+                        commentTO.setText(commentsObject.getProperty("text").toString());
+                        commentTO.setDate(commentsObject.getProperty("date").toString());
+                        comments.add(commentTO);
+                    }
+                }
+            }
+            locationTO.setComments(comments);
+            locationTO.setRatings(ratings);
+
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        catch (NullPointerException e) {
+            locationTO.setReturnCode(10);
+        }
+        locationTO.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+        locationTO.setMessage(response.getProperty("message").toString());
+        return locationTO;
     }
 
     @Override

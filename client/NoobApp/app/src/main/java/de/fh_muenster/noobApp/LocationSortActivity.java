@@ -1,8 +1,11 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,7 @@ public class LocationSortActivity extends ActionBarActivity {
 
     private RadioGroup radioGroup;
     private RadioButton radioButton;
+    private static final String TAG = LocationSortActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,5 +71,23 @@ public class LocationSortActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 }

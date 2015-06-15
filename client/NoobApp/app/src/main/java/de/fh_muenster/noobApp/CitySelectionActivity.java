@@ -1,7 +1,9 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,6 +68,22 @@ public class CitySelectionActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        CitySelectionActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
+    }
+
     /**
      * Diese Methode wird ausgeführt wenn aus den Button "Übernehmen" geklickt wird.
      * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity
@@ -83,6 +101,24 @@ public class CitySelectionActivity extends ActionBarActivity {
         Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
         Intent i = new Intent(CitySelectionActivity.this, NewLocationActivity.class);
         startActivity(i);
+    }
+
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 
     /**

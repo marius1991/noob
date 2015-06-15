@@ -1,5 +1,7 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -73,5 +75,23 @@ public class LocationSearchActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 }

@@ -1,6 +1,8 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -83,7 +85,6 @@ public class CategorySelectionActivity extends ActionBarActivity {
         myApp.setCategory(selected);
         Intent i = new Intent(CategorySelectionActivity.this, LocationListActivity.class);
         startActivity(i);
-        Log.d(TAG, "SessionId: " + myApp.getSessionId());
     }
 
     /**
@@ -96,7 +97,24 @@ public class CategorySelectionActivity extends ActionBarActivity {
         myApp.setSearch(editText.getText().toString());
         //Die Suche erfolgt asynchron
         new SearchLocationOnServer().execute(editText.getText().toString());
+    }
 
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 
     /**
@@ -140,7 +158,11 @@ public class CategorySelectionActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute (CategoryListResponse response) {
             Dialog.dismiss();
-            if(response != null) {
+            if(response.getReturnCode() == 10) {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 Integer returnCode = response.getReturnCode();
                 List<String> valueList;
                 //Toast.makeText(CategorySelectionActivity.this, returnCode.toString(), Toast.LENGTH_LONG ).show();
@@ -158,12 +180,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
                     public void onNothingSelected(AdapterView<?> parentView) {
                         // Nichts machen
                     }
-
                 });
-            }
-            else {
-                Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -206,7 +223,11 @@ public class CategorySelectionActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute (LocationListResponse response){
             Dialog.dismiss();
-            if(response != null) {
+            if(response.getReturnCode() == 10) {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 if(!response.getLocations().isEmpty()) {
                     NoobApplication myApp = (NoobApplication) getApplication();
                     List<LocationTO> locationNames = new ArrayList<>();
@@ -221,11 +242,6 @@ public class CategorySelectionActivity extends ActionBarActivity {
                     Log.d(TAG, "keine Suchergebnisse!");
                     Toast.makeText(getApplicationContext(), "keine Suchergebnisse!", Toast.LENGTH_SHORT).show();
                 }
-
-            }
-            else {
-                Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
         }
     }
