@@ -379,6 +379,40 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		}
 		return re;
 	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+		logger.info("createLocation() aufgerufen.");
+		ReturnCodeResponse re = new ReturnCodeResponse();
+		NoobSession session = dao.findSessionById(sessionId);
+		logger.info(session.getUser().getName() + "s Session gefunden.");
+		if(session != null) {
+			User user = session.getUser();
+			Location location = new Location(name,
+					category,
+					description,
+					street,
+					number,
+					plz,
+					city,
+					user,
+					image);
+			try {
+			dao.persist(location);
+			}
+			catch(Exception e) {
+				logger.error(e.getMessage());
+			}
+			re.setReturnCode(0);
+			re.setMessage("Location gespeichert");
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Kein Benutzer angemeldet.");
+		}
+		return re;
+	}
 
 	@Override
 	public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
@@ -416,6 +450,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		}		
 		return re;
 	}
+	
 
 	@Override
 	public ReturnCodeResponse setUserDetails(int sessionId, int id, String name, String email, String password) {

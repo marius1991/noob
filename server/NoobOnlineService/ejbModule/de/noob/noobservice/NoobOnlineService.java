@@ -137,4 +137,8 @@ public interface NoobOnlineService {
 	 */
 	public ReturnCodeResponse deleteUser(int sessionId);
 
+	public ReturnCodeResponse createLocation(int sessionId, String name,
+			String category, String description, String street, String number,
+			int plz, String city, byte[] image);
+
 }
