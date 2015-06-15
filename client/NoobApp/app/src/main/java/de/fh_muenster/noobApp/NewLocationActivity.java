@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,8 +18,12 @@ import android.widget.Toast;
 import de.fh_muenster.noob.LocationListResponse;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
+import java.io.IOException;
+
 
 public class NewLocationActivity extends ActionBarActivity {
+    private int PICK_IMAGE_REQUEST = 1;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +33,42 @@ public class NewLocationActivity extends ActionBarActivity {
 
     public void startKamera(View view){
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i,0);
+        startActivityForResult(i, 0);
     }
 
     //Empfängt das Bild und prüft ihm resultcode ob ein bild gemacht worden ist
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            //Intentdata ist das Photo
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            ((ImageView) findViewById(R.id.imageView5)).setImageBitmap(photo);
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
+                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
+                if(bitmap!=null)
+                {
+                    bitmap.recycle();
+                    bitmap=null;
+                }
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
+
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+    }
+
+    public void pickPhoto(View view) {
+        Intent intent = new Intent();
+// Show only images, no videos or anything else
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+// Always show the chooser (if there are multiple options available)
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
     @Override

@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.jboss.logging.Logger;
+
+
 /**
  * 
  * @author Tim
@@ -14,7 +17,7 @@ import javax.persistence.*;
 public class Location implements Serializable {
 
 	private static final long serialVersionUID = 2566351654426224522L;
-
+	private static final Logger logger = Logger.getLogger(Location.class);
 	@Id
 	@GeneratedValue
 	private int id;
@@ -35,14 +38,16 @@ public class Location implements Serializable {
 	
 	private double averageRating;
 	
-	@OneToMany (mappedBy="location", cascade = CascadeType.REMOVE)
+	@OneToMany (mappedBy="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="location", cascade = CascadeType.REMOVE)
+	@OneToMany (mappedBy ="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Comment> comments;
 	
 	@ManyToOne
 	private User owner;
+	
+	private byte[] image;
 	
 	public Location() {
 	}
@@ -154,30 +159,39 @@ public class Location implements Serializable {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
+	
+	public byte[] getImage() {
+		return image;
+	}
+	
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 
 	public void addRating(User user, int value) {
 		
+		
 		//Prüfen ob die Liste ratings leer ist, wenn ja Rating hinzufügen
 		if (this.ratings.isEmpty()) {
-			this.ratings.add(new Rating(user,value));
+			this.ratings.add(new Rating(user,value,this));
 		}
 		
 		//falls die Liste nicht leer ist
 		else {
-			
 			//Prüfen ob der User bereits ein Rating abgegeben hat. Dafür jedes Element 
 			//innerhalb der Liste die ID abfragen und mit dem aktuellen User vergleichen.
 			//Wenn der User bereits ein Rating abgegeben hat, wird der alte Wert überschrieben.
 			boolean newRating = true;
 			for(int i=0;i<this.ratings.size();i++) {
-				if (this.ratings.get(i).getId() == user.getId() ) {
+				if (this.ratings.get(i).getOwner().getEmail().equals(user.getEmail())) {
 					this.ratings.get(i).setValue(value);
 					newRating=false;
 				}
 			}
 			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
 			if (newRating == true) {
-				this.ratings.add(new Rating(user,value));
+				logger.info("User hat noch kein Rating abgegebeb");
+				this.ratings.add(new Rating(user,value,this));
 			}
 			
 		}

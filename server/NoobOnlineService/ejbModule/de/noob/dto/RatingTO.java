@@ -10,15 +10,15 @@ public class RatingTO implements Serializable {
 	
 	private int value;
 	
-	private LocationTO location;
+	private int locationId;
 	
-	private UserTO owner;
+	private String ownerId;
 
-	public RatingTO(int id, int value, LocationTO location, UserTO owner) {
+	public RatingTO(int id, int value, int locationId, String ownerId) {
 		this.id = id;
 		this.value = value;
-		this.location = location;
-		this.owner = owner;
+		this.locationId = locationId;
+		this.ownerId = ownerId;
 	}
 
 	public int getId() {
@@ -37,22 +37,20 @@ public class RatingTO implements Serializable {
 		this.value = value;
 	}
 
-	public LocationTO getLocation() {
-		return location;
+	public int getLocationId() {
+		return locationId;
 	}
 
-	public void setLocation(LocationTO location) {
-		this.location = location;
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
 	}
 
-	public UserTO getOwner() {
-		return owner;
+	public String getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwner(UserTO owner) {
-		this.owner = owner;
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
 	}
-	
-	
 	
 }

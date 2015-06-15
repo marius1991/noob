@@ -17,10 +17,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText9"
-        android:layout_marginTop="81dp"
-        android:layout_alignParentTop="true"
         android:hint="Location-Name"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -32,59 +32,115 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="31dp"
-        android:lines="8"
-        android:minLines="6"
+        android:lines="5"
+        android:minLines="5"
         android:maxLines="10"
         android:gravity="top|left"
         android:scrollbars="vertical"
         android:background="@drawable/bordershape"/>
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText11"
-        android:hint="Adresse"
-        android:layout_below="@+id/editText10"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp" />
+        android:hint="Straße"
+        android:layout_below="@+id/editText17"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Kamera"
+        android:text="Bild von Kamera"
         android:id="@+id/button7"
+        android:onClick="startKamera"
         android:layout_below="@+id/editText11"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="29dp"
-        android:onClick="startKamera"/>
+        android:layout_alignRight="@+id/imageView4"
+        android:layout_alignEnd="@+id/imageView4" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hochladen"
+        android:text="Bild hochladen"
         android:id="@+id/button8"
-        android:layout_alignBottom="@+id/button7"
-        android:layout_alignRight="@+id/editText11"
-        android:layout_alignEnd="@+id/editText11" />
+        android:layout_alignBottom="@+id/imageView4"
+        android:layout_alignRight="@+id/button13"
+        android:layout_alignEnd="@+id/button13" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/button9" />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner2"
+            android:layout_below="@+id/editText10"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Location Anlegen"
-            android:id="@+id/button9"
-            android:layout_below="@+id/button8"
-            android:layout_alignLeft="@+id/imageView5"
-            android:layout_alignStart="@+id/imageView5"
-            android:layout_marginTop="26dp"
-            android:onClick="newLocation"/>
+            android:text="Kategorie waehlen"
+            android:id="@+id/button12"
+            android:layout_below="@+id/spinner2"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText17"
+            android:hint="Ort"
+            android:layout_below="@+id/button12"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/button8"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BILD VOM FILE"
+            android:onClick="pickPhoto"
+            android:id="@+id/button13"
+            android:layout_above="@+id/imageView4"
+            android:layout_toRightOf="@+id/button12"
+            android:layout_toEndOf="@+id/button12" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/imageView4"
+            android:background="@drawable/pictureshape"
+            android:layout_below="@+id/button7"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText16"
+            android:layout_below="@+id/editText11"
+            android:layout_alignLeft="@+id/button12"
+            android:layout_alignStart="@+id/button12"
+            android:layout_toLeftOf="@+id/button13"
+            android:layout_toStartOf="@+id/button13"
+            android:hint="Hausnummer" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText18"
+            android:layout_below="@+id/editText16"
+            android:layout_toRightOf="@+id/button7"
+            android:layout_toLeftOf="@+id/button13"
+            android:layout_toStartOf="@+id/button13"
+            android:hint="Stadt" />
+
 
 
     </RelativeLayout>
