@@ -82,7 +82,8 @@ public class DtoAssembler {
 				comment.getText(), 
 				//makeCommentsDTO(comment.getComments()),
 				comment.getLocation().getId(), 
-				comment.getOwner().getEmail());
+				comment.getOwner().getEmail(),
+				comment.getDate());
 		return dto;
 	}
 
@@ -126,7 +127,7 @@ public class DtoAssembler {
 	 * @param comments
 	 * @return
 	 */
-	private List<CommentTO> makeCommentsDTO(List<Comment> comments) {
+	public List<CommentTO> makeCommentsDTO(List<Comment> comments) {
 		List<CommentTO> toList = new ArrayList<CommentTO>();
 		for(Comment comment: comments) {
 			toList.add(makeDTO(comment));

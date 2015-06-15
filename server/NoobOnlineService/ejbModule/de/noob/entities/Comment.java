@@ -1,6 +1,9 @@
 package de.noob.entities;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -16,6 +19,7 @@ public class Comment implements Serializable {
 	@GeneratedValue
 	private int id;
 	
+	@Column(length  = 1000)
 	private String text;
 	
 	//@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -26,6 +30,8 @@ public class Comment implements Serializable {
 	
 	@ManyToOne
 	private User owner;
+	
+	private String date;
 	
 	//@ManyToOne
 	//private Comment superComment;
@@ -39,6 +45,8 @@ public class Comment implements Serializable {
 		this.setOwner(user);
 		this.setText(text);
 		this.setLocation(location);
+		Format format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		this.date = format.format(new Date());
 		//this.setSuperComment(comment);
 	}
 	
@@ -82,6 +90,15 @@ public class Comment implements Serializable {
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
 
 //	public Comment getSuperComment() {
 //		return superComment;

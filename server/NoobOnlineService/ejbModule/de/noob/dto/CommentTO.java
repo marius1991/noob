@@ -17,20 +17,23 @@ public class CommentTO implements Serializable {
 	
 	private String ownerId;
 	
+	private String date;
+	
 	//private int superCommentId;
 
 	public CommentTO(int id,
 			String text,
 			//List<CommentTO> comments,
 			int locationId,
-			String ownerId
-			//int superCommentId
-			) {
+			String ownerId,
+			String date) {
+			//int superCommentId			
 		this.id = id;
 		this.text = text;
 		//this.comments = comments;
 		this.locationId = locationId;
 		this.ownerId = ownerId;
+		this.date = date;
 		//this.superCommentId = superCommentId;
 	}
 
@@ -72,6 +75,14 @@ public class CommentTO implements Serializable {
 
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 //	public int getSuperCommentId() {
