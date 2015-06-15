@@ -213,7 +213,7 @@ public class Location implements Serializable {
 	}
 
 	public void addComment(User user, String text) {
-		this.comments.add(new Comment(user,text));
+		this.comments.add(new Comment(user, text, this, null));
 	}
 	
 	private void calcAverageRating() {

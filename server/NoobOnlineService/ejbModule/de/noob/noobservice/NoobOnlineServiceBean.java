@@ -198,15 +198,20 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				logger.info(locations.size() + " Location(s) gefunden.");
 				
 						if( locations.get(0).getRatings() != null ){
-							if(!locations.get(0).getRatings().isEmpty()) {
-							logger.info(locations.get(0).getRatings().get(0).getValue());
-							}
+							if(!locations.get(0).getRatings().isEmpty()) {}
 							else {
 								logger.info("Ratings sind leer!!!!!!");
 							}
 						}
-					
-				
+
+						if(locations.get(0).getComments() != null) {
+							if(locations.get(0).getComments().isEmpty()) {
+								logger.info("Comments sind leer!!!!!!");
+							}
+							else {
+								logger.info("Comments vorhanden.");
+							}
+						}						
 			}
 			else {
 				re.setReturnCode(1);
@@ -224,11 +229,27 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public LocationListResponse listLocationsWithName(String name, String city) {
+		logger.info("listLocationsWithName aufgerufen.");
 		LocationListResponse re = new LocationListResponse();
 		List<Location> locations = dao.findLocationsByName(name, city);
-		re.setLocations(dtoAssembler.makeLocationsDTO(locations));
-		re.setReturnCode(0);
-		re.setMessage(locations.size() + " Location(s) gefunden.");
+		if(locations != null) {
+			if(!locations.isEmpty()) {
+				re.setLocations(dtoAssembler.makeLocationsDTO(locations));
+				re.setReturnCode(0);
+				re.setMessage(locations.size() + " Location(s) gefunden.");
+				logger.info(locations.size() + " Location(s) gefunden.");
+			}
+			else {
+				re.setReturnCode(1);
+				re.setMessage(locations.size() + " Location(s) gefunden.");
+				logger.info(locations.size() + " Location(s) gefunden.");
+			}
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("0 Locations gefunden.");
+			logger.info("NULL Locations gefunden.");
+		}
 		return re;
 	}
 
@@ -273,6 +294,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public ReturnCodeResponse commentOnLocation(int sessionId, int locationId, String text) {
+		logger.info("commentOnLocation() aufgerufen.");
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		Location location = dao.findLocationById(locationId);
 		NoobSession session = dao.findSessionById(sessionId);
@@ -283,15 +305,19 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				dao.persist(location);				
 				re.setReturnCode(0);
 				re.setMessage("Kommentar wurde gespeichert.");
+				logger.info("Kommentar wurde gespeichert.");
+				logger.info("Kommentartext: " + text);
 			}
 			else {
 				re.setReturnCode(2);
 				re.setMessage("Location existiert nicht.");
+				logger.info("Location existiert nicht.");
 			}
 		}
 		else {
 			re.setReturnCode(1);
 			re.setMessage("Kein Benutzer angemeldet.");
+			logger.info("Kein Benutzer angemeldet.");
 		}
 		return re;
 	}

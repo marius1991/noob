@@ -13,7 +13,7 @@ public class CommentTO implements Serializable {
 	
 	private List<CommentTO> comments;
 	
-	private LocationTO location;
+	private int locationId;
 	
 	private String ownerId;
 
@@ -22,7 +22,7 @@ public class CommentTO implements Serializable {
 		this.id = id;
 		this.text = text;
 		this.comments = comments;
-		this.location = location;
+		this.locationId = location.getId();
 		this.ownerId = ownerId;
 	}
 
@@ -50,12 +50,12 @@ public class CommentTO implements Serializable {
 		this.comments = comments;
 	}
 
-	public LocationTO getLocation() {
-		return location;
+	public int getLocationId() {
+		return locationId;
 	}
 
-	public void setLocation(LocationTO location) {
-		this.location = location;
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
 	}
 
 	public String getOwnerId() {
