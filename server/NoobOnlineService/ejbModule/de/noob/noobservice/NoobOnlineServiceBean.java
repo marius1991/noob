@@ -11,7 +11,6 @@ import de.noob.dto.LocationTO;
 import de.noob.dto.UserLoginResponse;
 import de.noob.dto.ReturnCodeResponse;
 import de.noob.dto.UserTO;
-import de.noob.entities.Comment;
 import de.noob.entities.Location;
 import de.noob.entities.NoobSession;
 import de.noob.entities.User;
@@ -121,12 +120,19 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	 * 
 	 * @return ReturncodeResponse
 	 */
+	@SuppressWarnings("unused")
 	@Override
 	public ReturnCodeResponse logout(int sessionId) {
+		logger.info("logout() aufgerufen.");
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);		
+		logger.info(session.getUser().getName() + "s Session gefunden.");
 		if(session != null) {
 			dao.remove(session);
+			NoobSession oldSession = dao.findSessionById(sessionId);
+			if(oldSession == null) {
+				logger.info("Session gelöscht.");
+			}
 			re.setReturnCode(0);
 			re.setMessage("Erfolgreich ausgeloggt.");
 			logger.info("Ergolgreich ausgeloggt");
@@ -301,12 +307,18 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		if(session != null) {
 			User user = session.getUser();
 			if(location != null) {
-				location.addComment(user, text);
-				dao.persist(location);				
-				re.setReturnCode(0);
-				re.setMessage("Kommentar wurde gespeichert.");
-				logger.info("Kommentar wurde gespeichert.");
-				logger.info("Kommentartext: " + text);
+				if(text.length() <= 1000) {
+					location.addComment(user, text);
+					dao.persist(location);				
+					re.setReturnCode(0);
+					re.setMessage("Kommentar wurde gespeichert.");
+					logger.info("Kommentartext: " + text);
+					logger.info("Kommentar wurde gespeichert.");
+				}
+				else {
+					re.setReturnCode(3);
+					re.setMessage("Kommentar darf maximal 1000 Zeichen enthalten!");
+				}
 			}
 			else {
 				re.setReturnCode(2);
@@ -322,30 +334,30 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		return re;
 	}
 
-	@Override
-	public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
-		ReturnCodeResponse re = new ReturnCodeResponse();
-		Comment comment = dao.findCommentById(commentId);
-		NoobSession session = dao.findSessionById(sessionId);
-		if(session != null) {
-			User user = session.getUser();
-			if(comment != null) {
-				comment.addComment(user, text);
-				dao.persist(comment);				
-				re.setReturnCode(0);
-				re.setMessage("Kommentar wurde gespeichert.");
-			}
-			else {
-				re.setReturnCode(2);
-				re.setMessage("Kommentar existiert nicht.");
-			}
-		}
-		else {
-			re.setReturnCode(1);
-			re.setMessage("Kein Benutzer angemeldet.");
-		}
-		return re;
-	}
+//	@Override
+//	public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
+//		ReturnCodeResponse re = new ReturnCodeResponse();
+//		Comment comment = dao.findCommentById(commentId);
+//		NoobSession session = dao.findSessionById(sessionId);
+//		if(session != null) {
+//			User user = session.getUser();
+//			if(comment != null) {
+//				comment.addComment(user, text);
+//				dao.persist(comment);				
+//				re.setReturnCode(0);
+//				re.setMessage("Kommentar wurde gespeichert.");
+//			}
+//			else {
+//				re.setReturnCode(2);
+//				re.setMessage("Kommentar existiert nicht.");
+//			}
+//		}
+//		else {
+//			re.setReturnCode(1);
+//			re.setMessage("Kein Benutzer angemeldet.");
+//		}
+//		return re;
+//	}
 
 	@SuppressWarnings("unused")
 	@Override
@@ -364,6 +376,40 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 					plz,
 					city,
 					user);
+			try {
+			dao.persist(location);
+			}
+			catch(Exception e) {
+				logger.error(e.getMessage());
+			}
+			re.setReturnCode(0);
+			re.setMessage("Location gespeichert");
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Kein Benutzer angemeldet.");
+		}
+		return re;
+	}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public ReturnCodeResponse createLocationWithImage(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+		logger.info("createLocation() aufgerufen.");
+		ReturnCodeResponse re = new ReturnCodeResponse();
+		NoobSession session = dao.findSessionById(sessionId);
+		logger.info(session.getUser().getName() + "s Session gefunden.");
+		if(session != null) {
+			User user = session.getUser();
+			Location location = new Location(name,
+					category,
+					description,
+					street,
+					number,
+					plz,
+					city,
+					user,
+					image);
 			try {
 			dao.persist(location);
 			}
@@ -416,17 +462,48 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		}		
 		return re;
 	}
+	
+	@Override
+	public LocationTO getLocationDetails(int locationId) {
+		logger.info("getLocationDetails() aufgerufen.");
+		LocationTO re = new LocationTO();
+		Location location = dao.findLocationById(locationId);
+		if(location != null) {
+			re.setAverageRating(location.getAverageRating());
+			re.setCategory(location.getCategory());
+			re.setCity(location.getCity());
+			re.setComments(dtoAssembler.makeCommentsDTO(location.getComments()));
+			re.setDescription(location.getDescription());
+			re.setId(location.getId());
+			re.setName(location.getName());
+			re.setStreet(location.getStreet());
+			re.setNumber(location.getNumber());
+			re.setPlz(location.getPlz());
+			re.setRatings(dtoAssembler.makeRatingsDTO(location.getRatings()));
+			re.setOwnerId(location.getOwner().getEmail());
+			re.setReturnCode(0);
+			re.setMessage("Location erfolgreich abgerufen.");
+			logger.info("Location erfolgreich abgerufen.");
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Location existiert nicht!");
+		}
+		return re;
+	}
 
 	@Override
-	public ReturnCodeResponse setUserDetails(int sessionId, int id, String name, String email, String password) {
+	public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password) {
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			User user = session.getUser();
-			if (user.getId() == id) {
+			if (user.getEmail().equals(email)) {
 				user.setName(name);
 				user.setEmail(email);
 				user.setPassword(password);
+				re.setReturnCode(0);
+				re.setMessage("Daten erfolgreich gespeichert.");
 			}
 			else {
 				re.setReturnCode(2);
@@ -442,16 +519,20 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 
 	@Override
 	public UserTO getUserDetails(int sessionId) {
+		logger.info("getUserDetails() aufgerufen.");
+		logger.info("SessionId: " + sessionId);
 		UserTO userTO = new UserTO();
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
 			userTO = dtoAssembler.makeDTO(session.getUser());
 			userTO.setReturnCode(0);
 			userTO.setMessage("User abgerufen.");
+			logger.info("User abgerufen.");
 		}
 		else {
 			userTO.setReturnCode(1);
 			userTO.setMessage("Kein Benutzer angemeldet!");
+			logger.info("Kein Benutzer angemeldet");
 		}
 		return userTO;
 	}

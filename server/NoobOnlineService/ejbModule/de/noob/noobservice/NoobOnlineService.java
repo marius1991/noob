@@ -86,14 +86,14 @@ public interface NoobOnlineService {
 	public ReturnCodeResponse commentOnLocation(int sessionId, int locationId,
 			String text);
 
-	/**
-	 * @param sessionId
-	 * @param commentId
-	 * @param text
-	 * @return
-	 */
-	public ReturnCodeResponse commentOnComment(int sessionId, int commentId,
-			String text);
+//	/**
+//	 * @param sessionId
+//	 * @param commentId
+//	 * @param text
+//	 * @return
+//	 */
+//	public ReturnCodeResponse commentOnComment(int sessionId, int commentId,
+//			String text);
 
 	/**
 	 * @param sessionId
@@ -110,6 +110,12 @@ public interface NoobOnlineService {
 			String category, String description, String street, String number,
 			int plz, String city);
 
+	public ReturnCodeResponse createLocationWithImage(int sessionId, String name,
+	String category, String description, String street, String number,
+	int plz, String city, byte[] image);
+
+	public LocationTO getLocationDetails(int locationId);
+
 	/**
 	 * @param sessionId
 	 * @param newLocationDetails
@@ -120,16 +126,20 @@ public interface NoobOnlineService {
 	
 	/**
 	 * @param sessionId
-	 * @param newUser
-	 * @return
-	 */
-	public ReturnCodeResponse setUserDetails(int sessionId, int id, String name, String email, String password);
-
-	/**
-	 * @param sessionId
 	 * @return
 	 */
 	public UserTO getUserDetails(int sessionId);
+
+	/**
+	 * 
+	 * @param sessionId
+	 * @param name
+	 * @param email
+	 * @param password
+	 * @return
+	 */
+	public ReturnCodeResponse setUserDetails(int sessionId, String name, String email,
+	String password);
 
 	/**
 	 * @param sessionId

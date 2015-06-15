@@ -1,7 +1,9 @@
 package de.noob.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -17,10 +19,11 @@ public class Comment implements Serializable {
 	@GeneratedValue
 	private int id;
 	
+	@Column(length  = 1000)
 	private String text;
 	
-	@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Comment> comments;
+	//@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//private List<Comment> comments;
 	
 	@ManyToOne
 	private Location location;
@@ -28,19 +31,23 @@ public class Comment implements Serializable {
 	@ManyToOne
 	private User owner;
 	
-	@ManyToOne
-	private Comment superComment;
+	private String date;
+	
+	//@ManyToOne
+	//private Comment superComment;
 	
 	
 	
 	public Comment() {
 	}
 	
-	public Comment( User user, String text, Location location, Comment comment){
+	public Comment( User user, String text, Location location){
 		this.setOwner(user);
 		this.setText(text);
 		this.setLocation(location);
-		this.setSuperComment(comment);
+		Format format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		this.date = format.format(new Date());
+		//this.setSuperComment(comment);
 	}
 	
 
@@ -60,13 +67,13 @@ public class Comment implements Serializable {
 		this.text = text;
 	}
 
-	public List<Comment> getComments() {
-		return comments;
-	}
+//	public List<Comment> getComments() {
+//		return comments;
+//	}
 
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
+//	public void setComments(List<Comment> comments) {
+//		this.comments = comments;
+//	}
 
 	public Location getLocation() {
 		return location;
@@ -84,17 +91,25 @@ public class Comment implements Serializable {
 		this.owner = owner;
 	}
 
-	public Comment getSuperComment() {
-		return superComment;
+	public String getDate() {
+		return date;
 	}
 
-	public void setSuperComment(Comment superComment) {
-		this.superComment = superComment;
+	public void setDate(String date) {
+		this.date = date;
 	}
+	
 
-	public void addComment(User user, String text) {
-		this.comments.add(new Comment(user, text, null, this));
-		
-	}
+//	public Comment getSuperComment() {
+//		return superComment;
+//	}
+//
+//	public void setSuperComment(Comment superComment) {
+//		this.superComment = superComment;
+//	}
+//
+//	public void addComment(User user, String text) {
+//		this.comments.add(new Comment(user, text, null, this));	
+//	}
 	
 }

@@ -25,14 +25,17 @@ public class User implements Serializable {
 	@Id
 	private String email;
 	
-	@OneToMany (mappedBy ="owner", fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "owner", fetch = FetchType.LAZY)
 	private List<Location> locations;
 	
-	@OneToMany (mappedBy ="owner", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="owner", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
+	
+	//@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//private NoobSession session;
 	
 	public User() {
 	}
