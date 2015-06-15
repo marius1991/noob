@@ -1,6 +1,6 @@
-<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"> -->
+    android:layout_height="match_parent">
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -15,18 +15,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/title_activity_location_adresse"
+            android:text="@string/activity_location_show_adresse"
             android:id="@+id/textView10"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/imageView3"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="149dp" />
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/title_activity_location_beschreibung"
+            android:text="@string/activity_location_show_beschreibung"
             android:id="@+id/textView11"
             android:layout_marginTop="20dp"
             android:layout_below="@+id/textView14"
@@ -37,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/title_activity_location_bewertung"
+            android:text="@string/activity_location_show_bewertung"
             android:id="@+id/textView12"
             android:layout_marginTop="26dp"
             android:layout_below="@+id/textView15"
@@ -48,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/title_activity_location_kommentare"
+            android:text="@string/activity_location_show_kommentare"
             android:id="@+id/textView13"
             android:layout_marginTop="20dp"
             android:layout_below="@+id/ratingBar"
@@ -85,27 +84,45 @@
             android:id="@+id/ratingBar"
             android:layout_below="@+id/textView12"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView3"
-            android:layout_below="@+id/textView13"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:stepSize="1.0" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_activity_location_kommentieren"
+            android:text="@string/activity_location_show_kommentieren"
             android:id="@+id/button7"
-            android:layout_above="@+id/listView3"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:onClick="clickFuncComment" />
+            android:onClick="clickFuncComment"
+            android:layout_below="@+id/ratingBar"
+            android:layout_alignRight="@+id/textView15"
+            android:layout_alignEnd="@+id/textView15" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:background="#fff"
+            android:paddingBottom="40dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:paddingTop="3dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/noimage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/activity_location_show_image" />
+
+        <LinearLayout
+            android:id="@+id/comments"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/button7"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+        </LinearLayout>
 
     </RelativeLayout>
 
-<!-- </ScrollView> -->
+</ScrollView>

@@ -1,7 +1,10 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -10,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -19,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CommentTO;
+import de.fh_muenster.noob.LocationTO;
+import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
@@ -29,6 +36,7 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 public class LocationShowActivity extends ActionBarActivity {
 
     private static final String TAG = LocationShowActivity.class.getName();
+    private int newRating = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,51 +47,36 @@ public class LocationShowActivity extends ActionBarActivity {
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
 
+        //Bild anzeigen
+        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        //TODO: Bild laden
+
         //Adresse ersetzten
         TextView textViewAddress = (TextView)findViewById(R.id.textView14);
         textViewAddress.setText(myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity());
 
         //Beschreibung ersetzen
         TextView textViewDescription = (TextView)findViewById(R.id.textView15);
-        //textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Inhaber: " + myApp.getLocation().getOwner().getName());
+        textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Erstellt von: " + myApp.getLocation().getOwnerId());
 
         //Rating ersetzen
         TextView textViewRating = (TextView)findViewById(R.id.textView12);
-        textViewRating.append(" " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
+        textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
+    }
 
-        //RatingBar füllen, falls vorher bereits bewertet wurde
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                //Rating asynchron zum Server senden
-                new SendRatingToServer().execute(Math.round(rating));
-            }
-        });
-        if(myApp.getLocation().getRatings() != null) {
-            for (int i = 0; i < myApp.getLocation().getRatings().size(); i++) {
-                if (myApp.getLocation().getRatings().get(i).getOwnerId().equals(myApp.getUserId())) {
-                    ratingBar.setRating(myApp.getLocation().getRatings().get(i).getValue());
-                    //ratingBar.setRating(2.5f);
-                    //TODO hier muss noch geprüft werden ob bereits bewertet wurde
-                }
-            }
-        }
-        else {
-            Log.d(TAG, "Die Location wurde noch nicht bewertet");
-            //ratingBar.setRating(2.5f);
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NoobApplication myApp = (NoobApplication) getApplication();
+        //Aktualisierte Location abrufen
+        new GetLocationDetailsFromServer().execute(myApp.getLocation().getId());
+    }
 
-        //Kommentarliste füllen
-        List <CommentTO> comments;
-        List <String> valueList = new ArrayList<>();
-        comments = myApp.getLocation().getComments();
-        if (comments != null) {
-            for (int i=0; i<comments.size(); i++) {
-                valueList.add(comments.get(i).getText());
-            }
-            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.comment_item, valueList);
-            final ListView lv = (ListView)findViewById(R.id.listView3);
-            lv.setAdapter(adapter);
+    @Override
+    protected  void onPause() {
+        super.onPause();
+        if(newRating != 0) {
+            new SendRatingToServer().execute(Math.round(newRating));
         }
     }
 
@@ -119,6 +112,24 @@ public class LocationShowActivity extends ActionBarActivity {
         startActivity(i);
     }
 
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
+    }
+
     /**
      * @author marius
      * Dieser AsyncTask schickt das Rating zum Server
@@ -132,7 +143,7 @@ public class LocationShowActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute()
         {
-            Dialog.setMessage("Locationinformationen abrufen...");
+            Dialog.setMessage("Rating an den Server senden...");
             Dialog.show();
         }
 
@@ -157,14 +168,68 @@ public class LocationShowActivity extends ActionBarActivity {
         @Override
         protected  void onPostExecute(ReturnCodeResponse response) {
             Dialog.dismiss();
-            if (response != null) {
-                Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_LONG).show();
-            }
-            else {
+            if (response.getReturnCode() == 10) {
                 Log.d(TAG, "keine Verbindung zum Server");
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    public class GetLocationDetailsFromServer extends AsyncTask<Integer, String, LocationTO> {
+
+        @Override
+        protected LocationTO doInBackground(Integer... params) {
+            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            LocationTO locationTO = onlineService.getLocationDetails(params[0]);
+            return locationTO;
+        }
+
+        @Override
+        protected void onPostExecute (LocationTO locationTO) {
+            if (locationTO.getReturnCode() == 10) {
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                NoobApplication myApp = (NoobApplication) getApplication();
+                myApp.setLocation(locationTO);
+                Log.d(TAG, "Locationdetails abgerufen");
+                //Kommentarliste füllen
+                List<CommentTO> comments = myApp.getLocation().getComments();
+                LinearLayout list = (LinearLayout)findViewById(R.id.comments);
+                list.removeAllViews();
+                if (comments != null) {
+                    for (int i=0; i<comments.size(); i++) {
+                        CommentTO comment = comments.get(i);
+                        TextView authorLine = new TextView(LocationShowActivity.this);
+                        authorLine.setText(comment.getOwnerId() + " (" + comment.getDate() +")");
+                        authorLine.setTypeface(null, Typeface.BOLD);
+                        TextView commentLine = new TextView(LocationShowActivity.this);
+                        commentLine.setText(" " + comment.getText());
+                        list.addView(authorLine);
+                        list.addView(commentLine);
+                    }
+                }
+                //RatingBar füllen, falls vorher bereits bewertet wurde
+                RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        //Rating asynchron zum Server senden
+//                new SendRatingToServer().execute(Math.round(rating));
+                        newRating = Math.round(rating);
+                    }
+                });
+                if(myApp.getLocation().getRatings() != null) {
+                    for (int i = 0; i < myApp.getLocation().getRatings().size(); i++) {
+                        if (myApp.getLocation().getRatings().get(i).getOwnerId().equals(myApp.getUserId())) {
+                            Log.d(TAG, "Gespeichertes Rating: " + myApp.getLocation().getRatings().get(i).getValue());
+                            ratingBar.setRating(myApp.getLocation().getRatings().get(i).getValue());
+                        }
+                    }
+                }
+                else {
+                    Log.d(TAG, "Die Location wurde noch nicht bewertet");
+                }
+            }
+        }
+    }
 }

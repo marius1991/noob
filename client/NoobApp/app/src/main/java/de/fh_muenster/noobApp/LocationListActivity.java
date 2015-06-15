@@ -1,6 +1,8 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -39,7 +41,11 @@ public class LocationListActivity extends ActionBarActivity {
         //Titel der Activity ersetzen
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getCity() + ": " + myApp.getCategory());
+    }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
         //Activities asynchron abrufen
         new GetLocationsFromServer().execute();
     }
@@ -74,6 +80,24 @@ public class LocationListActivity extends ActionBarActivity {
     public void clickFuncFilter(View view){
         Intent i = new Intent(LocationListActivity.this, LocationSortActivity.class);
         startActivity(i);
+    }
+
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
     }
 
     /**
@@ -114,11 +138,15 @@ public class LocationListActivity extends ActionBarActivity {
         protected void onPostExecute (LocationListResponse response) {
             Dialog.dismiss();
             final List<LocationTO> valueListLocation;
-            if(response != null) {
+            if(response.getReturnCode() == 10) {
+                Log.d(TAG, "keine Verbindung zum Server");
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
                 valueListLocation = response.getLocations();
                 final List<String> valueList = new ArrayList<>();
                 for (int i = 0; i < valueListLocation.size(); i++) {
-                    valueList.add(valueListLocation.get(i).getName());
+                    valueList.add(valueListLocation.get(i).getName() + " - " + valueListLocation.get(i).getAverageRating() + "/5.0 Sterne");
                 }
                 //Den eingestellten Filter anwenden
                 NoobApplication myApp = (NoobApplication) getApplication();
@@ -128,6 +156,16 @@ public class LocationListActivity extends ActionBarActivity {
                     }
                     if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachName2))) {
                         Collections.sort(valueList, Collections.reverseOrder());
+                    }
+                    List<String> valueListSubstring = new ArrayList<>();
+                    for(int i=0; i<valueList.size(); i++) {
+                        valueListSubstring.add(valueList.get(i).substring(selectedFromList.length() - 17, selectedFromList.length()));
+                    }
+                    if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachRating1))) {
+                        Collections.sort(valueListSubstring);
+                    }
+                    if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachRating2))) {
+                        Collections.sort(valueListSubstring, Collections.reverseOrder());
                     }
                 }
 
@@ -145,8 +183,10 @@ public class LocationListActivity extends ActionBarActivity {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         LocationTO selected = null;
                         for (int i = 0; i < valueListLocation.size(); i++) {
-                            if (valueListLocation.get(i).getName().equals(selectedFromList)) {
+                            if (valueListLocation.get(i).getName().equals(selectedFromList.substring(0, selectedFromList.length() - 17))) {
                                 selected = valueListLocation.get(i);
+                                Log.d(TAG, String.valueOf(selectedFromList.substring(0, selectedFromList.length())));
+                                Log.d(TAG, String.valueOf(selectedFromList));
                             }
                         }
                         myApp.setLocation(selected);
@@ -155,10 +195,6 @@ public class LocationListActivity extends ActionBarActivity {
                     }
 
                 });
-            }
-            else {
-                Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -38,11 +38,12 @@
 
     <!-- Strings für die ShowLocationActivity -->
     <string name="title_activity_location_show">LocationShowActivity</string>
-    <string name="title_activity_location_adresse">Adresse</string>
-    <string name="title_activity_location_beschreibung">Beschreibung</string>
-    <string name="title_activity_location_bewertung">Bewertung</string>
-    <string name="title_activity_location_kommentare">Kommentare</string>
-    <string name="title_activity_location_kommentieren">Kommentieren</string>
+    <string name="activity_location_show_adresse">Adresse</string>
+    <string name="activity_location_show_beschreibung">Beschreibung</string>
+    <string name="activity_location_show_bewertung">Bewertung</string>
+    <string name="activity_location_show_kommentare">Kommentare</string>
+    <string name="activity_location_show_kommentieren">Kommentieren</string>
+    <string name="activity_location_show_image">Bild der Location</string>
 
 
     <!-- Strings für die LocationSortActivity -->
@@ -51,6 +52,8 @@
     <string name="activity_location_sort_filtern">Filtern</string>
     <string name="activity_location_sort_nachName1">nach Name (aufwärts)</string>
     <string name="activity_location_sort_nachName2">nach Name (abwärts)</string>
+    <string name="activity_location_sort_nachRating1">nach Rating (aufwärts)</string>
+    <string name="activity_location_sort_nachRating2">nach Rating (abwärts)</string>
     <string name="activity_location_sort_anwenden">Anwenden</string>
 
     <!-- Strings für die LocationSearchActivity -->
@@ -59,6 +62,7 @@
     <!-- Strings für die LocationCommentActivity -->
     <string name="title_activity_location_comment">LocationCommentActivity</string>
     <string name="activity_location_comment_kommentieren">Kommentieren</string>
+    <string name="activity_location_comment_hint">Verfassen Sie hier Ihre Bewertung</string>
 
     <!-- Strings für die Menüs -->
     <string name="menu_neueLoc">Neue Location</string>

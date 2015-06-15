@@ -28,19 +28,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_location_sort_nachName1"
-            android:id="@+id/radioButton1"
-            android:layout_below="@+id/textView6"
-            android:layout_alignRight="@+id/textView6"
-            android:layout_alignEnd="@+id/textView6" />
+            android:id="@+id/radioButton1" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_location_sort_nachName2"
-            android:id="@+id/radioButton2"
-            android:layout_below="@+id/radioButton1"
-            android:layout_alignLeft="@+id/radioButton1"
-            android:layout_alignStart="@+id/radioButton1" />
+            android:id="@+id/radioButton2" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_location_sort_nachRating1"
+            android:id="@+id/radioButton3" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_location_sort_nachRating2"
+            android:id="@+id/radioButton4" />
 
     </RadioGroup>
 

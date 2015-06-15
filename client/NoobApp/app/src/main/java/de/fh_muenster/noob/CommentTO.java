@@ -1,7 +1,7 @@
 package de.fh_muenster.noob;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 public class CommentTO implements Serializable {
 	
@@ -11,19 +11,31 @@ public class CommentTO implements Serializable {
 	
 	private String text;
 	
-	private List<CommentTO> comments;
+	//private List<CommentTO> comments;
 	
-	private LocationTO location;
+	private int locationId;
 	
 	private String ownerId;
 
-	public CommentTO(int id, String text, List<CommentTO> comments,
-			LocationTO location, String ownerId) {
+	private String date;
+	
+	//private int superCommentId;
+
+	public CommentTO () {}
+
+	public CommentTO(int id,
+			String text,
+			//List<CommentTO> comments,
+			int locationId,
+			String ownerId
+			//int superCommentId
+			) {
 		this.id = id;
 		this.text = text;
-		this.comments = comments;
-		this.location = location;
+		//this.comments = comments;
+		this.locationId = locationId;
 		this.ownerId = ownerId;
+		//this.superCommentId = superCommentId;
 	}
 
 	public int getId() {
@@ -42,20 +54,20 @@ public class CommentTO implements Serializable {
 		this.text = text;
 	}
 
-	public List<CommentTO> getComments() {
-		return comments;
+//	public List<CommentTO> getComments() {
+//		return comments;
+//	}
+//
+//	public void setComments(List<CommentTO> comments) {
+//		this.comments = comments;
+//	}
+
+	public int getLocationId() {
+		return locationId;
 	}
 
-	public void setComments(List<CommentTO> comments) {
-		this.comments = comments;
-	}
-
-	public LocationTO getLocation() {
-		return location;
-	}
-
-	public void setLocation(LocationTO location) {
-		this.location = location;
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
 	}
 
 	public String getOwnerId() {
@@ -65,5 +77,20 @@ public class CommentTO implements Serializable {
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
 	}
-	
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+//	public int getSuperCommentId() {
+//		return superCommentId;
+//	}
+//
+//	public void setSuperCommentId(int superCommentId) {
+//		this.superCommentId = superCommentId;
+//	}
 }

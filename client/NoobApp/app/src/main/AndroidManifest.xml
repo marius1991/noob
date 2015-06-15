@@ -8,7 +8,7 @@
     android:name=".NoobApplication"
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
-    android:theme="@style/ThemeFullScreen">
+    android:theme="@style/Theme.AppCompat.Light">
     <activity
         android:name="de.fh_muenster.noobApp.LoginActivity"
         android:label="Willkommen Nooby" >
@@ -47,27 +47,32 @@
         </activity>
         <activity
             android:name="de.fh_muenster.noobApp.CategorySelectionActivity"
-            android:label="@string/title_activity_category_selection" >
+            android:label="@string/title_activity_category_selection"
+            android:parentActivityName="de.fh_muenster.noobApp.CitySelectionActivity" >
         </activity>
         <activity
             android:name=".LocationListActivity"
-            android:label="@string/title_activity_category_list" >
+            android:label="@string/title_activity_category_list"
+            android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
         </activity>
         <activity
             android:name=".LocationShowActivity"
-            android:label="@string/title_activity_location_show" >
+            android:label="@string/title_activity_location_show"
+            android:parentActivityName="de.fh_muenster.noobApp.LocationListActivity" >
         </activity>
         <activity
             android:name=".LocationSortActivity"
-            android:label="@string/title_activity_location_sort" >
+            android:label="@string/title_activity_location_sort"
+            android:parentActivityName="de.fh_muenster.noobApp.LocationListActivity" >
         </activity>
         <activity
             android:name=".LocationSearchActivity"
-            android:label="@string/title_activity_location_search" >
+            android:label="@string/title_activity_location_search"
+            android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
         </activity>
         <activity
             android:name="de.fh_muenster.noobApp.LocationCommentActivity"
-            android:label="@string/title_activity_location_comment" >
+            android:label="@string/title_activity_location_comment" android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
         </activity>
     </application>
 

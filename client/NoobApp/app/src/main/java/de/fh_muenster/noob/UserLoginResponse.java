@@ -6,6 +6,8 @@ public class UserLoginResponse extends ReturnCodeResponse {
 
 	private int sessionId;
 	
+	private int userId;
+	
 	
 	public int getSessionId() {
 		return sessionId;
@@ -13,6 +15,14 @@ public class UserLoginResponse extends ReturnCodeResponse {
 
 	public void setSessionId(int sessionId) {
 		this.sessionId = sessionId;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }
