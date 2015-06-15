@@ -19,7 +19,7 @@ public class Comment implements Serializable {
 	
 	private String text;
 	
-	@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL)
+	@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
 	
 	@ManyToOne
