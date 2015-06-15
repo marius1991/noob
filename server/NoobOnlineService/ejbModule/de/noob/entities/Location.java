@@ -63,6 +63,19 @@ public class Location implements Serializable {
 		this.city = city;
 		this.owner = owner;
 	}	
+	
+	public Location(String name, String category, String description,
+			String street, String number, int plz, String city, User owner, byte[] image) {
+		this.name = name;
+		this.category = category;
+		this.description = description;
+		this.street = street;
+		this.number = number;
+		this.plz = plz;
+		this.city = city;
+		this.owner = owner;
+		this.image = image;
+	}	
 
 	public int getId() {
 		return id;
