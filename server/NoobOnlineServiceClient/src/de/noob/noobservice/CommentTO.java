@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="date" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="locationId" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "commentTO", propOrder = {
+    "date",
     "id",
     "locationId",
     "ownerId",
@@ -37,10 +39,35 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CommentTO {
 
+    protected String date;
     protected int id;
     protected int locationId;
     protected String ownerId;
     protected String text;
+
+    /**
+     * Ruft den Wert der date-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * Legt den Wert der date-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDate(String value) {
+        this.date = value;
+    }
 
     /**
      * Ruft den Wert der id-Eigenschaft ab.

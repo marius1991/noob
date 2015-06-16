@@ -120,13 +120,11 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	 * 
 	 * @return ReturncodeResponse
 	 */
-	@SuppressWarnings("unused")
 	@Override
 	public ReturnCodeResponse logout(int sessionId) {
 		logger.info("logout() aufgerufen.");
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);		
-		logger.info(session.getUser().getName() + "s Session gefunden.");
 		if(session != null) {
 			dao.remove(session);
 			NoobSession oldSession = dao.findSessionById(sessionId);
@@ -493,21 +491,23 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	}
 
 	@Override
-	public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password) {
+	public ReturnCodeResponse setUserDetails(int sessionId, String name, String password, String passwordConfirmation) {
+		logger.info("setUserDetails() aufgerufen.");
+		logger.info("Passwort: " + password + " Confirmation: " + passwordConfirmation);
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null) {
-			User user = session.getUser();
-			if (user.getEmail().equals(email)) {
+			if(password.equals(passwordConfirmation)) {
+				User user = session.getUser();
 				user.setName(name);
-				user.setEmail(email);
 				user.setPassword(password);
+				dao.persist(user);
 				re.setReturnCode(0);
 				re.setMessage("Daten erfolgreich gespeichert.");
 			}
 			else {
 				re.setReturnCode(2);
-				re.setMessage("Es ist nicht erlaubt die Daten eines anderen Users zu ändern!");
+				re.setMessage("Passwörter stimmen nicht überein!");
 			}
 		}
 		else {
@@ -538,19 +538,29 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	}
 
 	@Override
-	public ReturnCodeResponse deleteUser(int sessionId) {
+	public ReturnCodeResponse deleteUser(int sessionId, String password) {
+		logger.info("deleteUser() aufgerufen.");
 		ReturnCodeResponse re = new ReturnCodeResponse();
 		NoobSession session = dao.findSessionById(sessionId);
 		if(session != null){
 			User user = session.getUser();
-			dao.remove(session);
-			dao.remove(user);
-			re.setReturnCode(0);
-			re.setMessage("Benutzer erfolgreich gelöscht.");
+			if(user.getPassword().equals(password)) {
+				dao.remove(session);
+				dao.remove(user);
+				re.setReturnCode(0);
+				re.setMessage("Benutzer erfolgreich gelöscht.");
+				logger.info("Benutzer erfolgreich gelöscht.");
+			}
+			else {
+				re.setReturnCode(2);
+				re.setMessage("Passwort ist nicht korrekt!");
+				logger.info("Passwort ist nicht korrekt!");
+			}
 		}
 		else {
 			re.setReturnCode(1);
 			re.setMessage("Kein Benutzer angemeldet!");
+			logger.info("Kein Benutzer angemeldet!");
 		}
 		return re;
 	}	

@@ -3,6 +3,7 @@
 	<name>NoobOnlineServiceClient</name>
 	<comment></comment>
 	<projects>
+		<project>NoobOnlineService</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
