@@ -32,6 +32,7 @@
         android:inputType="textPassword"
         android:ems="10"
         android:hint="Passwort"
+        android:text=""
         android:id="@+id/editText14"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />

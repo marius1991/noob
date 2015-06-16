@@ -18,7 +18,7 @@ import de.fh_muenster.exceptions.InvalidRegisterException;
 import de.fh_muenster.noob.*;
 
 /**
- * @author marius,philipp
+ * @author marius,philipp,marco
  */
 public class NoobOnlineServiceImpl implements NoobOnlineService {
     private static final String NAMESPACE = "http://noobservice.noob.de/";
@@ -430,29 +430,58 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     @Override
     public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
-        return null;
+        String METHOD_NAME="setLocationDetails";
+        //In der NoobApplication ist die akutelle Location drin. Wenn man zur LocationShowActivity gelangt.
+        ReturnCodeResponse returnCodeResponse= new ReturnCodeResponse();
+        SoapObject response=null;
+        try{
+            response=executeSoapAction(METHOD_NAME,sessionId,newLocationDetails);
+        }
+        catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+        returnCodeResponse.setMessage(response.getProperty("message").toString());
+        return returnCodeResponse;
     }
 
     @Override
-    public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser) {
-        return null;
+    public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password) {
+        String METHOD_NAME = "setUserDetails";
+        ReturnCodeResponse returnCodeResponse= new ReturnCodeResponse();
+        SoapObject response=null;
+        try{
+            response=executeSoapAction(METHOD_NAME,sessionId,name,email,password);
+        }
+        catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+        returnCodeResponse.setMessage(response.getProperty("message").toString());
+        return returnCodeResponse;
     }
 
     @Override
     public UserTO getUserDetails(int sessionId) {
         String METHOD_NAME = "getUserDetails";
-        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        UserTO userTO=new UserTO();
         Log.d(TAG, "Get Userdetails:");
 
         SoapObject response = null;
         try {
             response = executeSoapAction(METHOD_NAME, sessionId);
+            userTO.setName(response.getProperty("name").toString());
+            Log.d(TAG,response.getProperty("name").toString() );
+            userTO.setEmail(response.getProperty("email").toString());
+            userTO.setPassword(response.getProperty("password").toString());
+            userTO.setReturnCode(Integer.parseInt(response.getProperty("returnCode").toString()));
+
         } catch (SoapFault soapFault) {
             soapFault.printStackTrace();
         }
         Log.d(TAG, response.getProperty("message").toString());
         Log.d(TAG, response.getProperty("returnCode").toString());
-        return null;
+        return userTO;
     }
 
     @Override

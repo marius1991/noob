@@ -119,7 +119,7 @@ public interface NoobOnlineService {
      * @param newUser
      * @return
      */
-    public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser);
+    public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password);
 
     /**
      * @param sessionId
