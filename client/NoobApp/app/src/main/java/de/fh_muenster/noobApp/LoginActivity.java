@@ -89,7 +89,7 @@ public class LoginActivity extends ActionBarActivity {
     }
     */
     public void openRegisterActivity(View view){
-        Intent y= new Intent(LoginActivity.this,RegisterActivity.class);
+        Intent y= new Intent(LoginActivity.this,UserManagementAcitivtiy.class);
         startActivity(y);
     }
 
@@ -148,8 +148,9 @@ public class LoginActivity extends ActionBarActivity {
                 email.requestFocus();
                 if (returnCode == 0) {
                     NoobApplication myApp = (NoobApplication) getApplication();
-
                     myApp.setSessionId(sessionId);
+                    GetUserDetails userDetails = new GetUserDetails(getApplicationContext(),(NoobApplication) getApplication());
+                    userDetails.execute();
                     Intent i = new Intent(context, CitySelectionActivity.class);
                     startActivity(i);
                 }
