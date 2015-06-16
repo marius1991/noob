@@ -130,21 +130,15 @@ public interface NoobOnlineService {
 	 */
 	public UserTO getUserDetails(int sessionId);
 
+	ReturnCodeResponse setUserDetails(int sessionId, String name,
+	String password, String passwordConfirmation);
+
 	/**
 	 * 
 	 * @param sessionId
-	 * @param name
-	 * @param email
 	 * @param password
 	 * @return
 	 */
-	public ReturnCodeResponse setUserDetails(int sessionId, String name, String email,
-	String password);
-
-	/**
-	 * @param sessionId
-	 * @return
-	 */
-	public ReturnCodeResponse deleteUser(int sessionId);
+	public ReturnCodeResponse deleteUser(int sessionId, String password);
 
 }
