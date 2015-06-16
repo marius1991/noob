@@ -48,7 +48,7 @@ public class LocationShowActivity extends ActionBarActivity {
         setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
 
         //Bild anzeigen
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        ImageView imageView = (ImageView)findViewById(R.id.imageView3);
         //TODO: Bild laden
 
         //Adresse ersetzten
