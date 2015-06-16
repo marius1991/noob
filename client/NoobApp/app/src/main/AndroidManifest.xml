@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.fh_muenster.noobapp" >
+    package="de.fh_muenster.noobApp" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- android:name=".NoobApplication" -->
     <application
+        android:name=".NoobApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/ThemeFullScreen" >
         <activity
             android:name=".LoginActivity"
             android:label="Willkommen Nooby" >
-
             <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".Register"
-            android:label="@string/title_activity_register" >
         </activity>
         <activity
             android:name=".RegisterActivity"
@@ -31,14 +30,51 @@
             android:label="Help Center"
             android:parentActivityName=".LoginActivity" >
         </activity>
+        <!--
         <activity
-            android:name=".NewLocationActivity"
+            android:name="de.fh_muenster.noobApp.NewLocationActivity"
             android:label="Neue Location anlegen" >
         </activity>
+        -->
         <activity
             android:name=".UserManagementAcitivtiy"
             android:label="Kontoverwaltung" >
         </activity>
+        <activity
+            android:name=".CitySelectionActivity"
+            android:label="@string/title_activity_city_selection" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.CategorySelectionActivity"
+            android:label="@string/title_activity_category_selection"
+            android:parentActivityName="de.fh_muenster.noobApp.CitySelectionActivity" >
+        </activity>
+        <activity
+            android:name=".LocationListActivity"
+            android:label="@string/title_activity_category_list"
+            android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
+        </activity>
+        <activity
+            android:name=".LocationShowActivity"
+            android:label="@string/title_activity_location_show"
+            android:parentActivityName="de.fh_muenster.noobApp.LocationListActivity" >
+        </activity>
+        <activity
+            android:name=".LocationSortActivity"
+            android:label="@string/title_activity_location_sort"
+            android:parentActivityName="de.fh_muenster.noobApp.LocationListActivity" >
+        </activity>
+        <activity
+            android:name=".LocationSearchActivity"
+            android:label="@string/title_activity_location_search"
+            android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.LocationCommentActivity"
+            android:label="@string/title_activity_location_comment" 
+			android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
+        </activity>
+
     </application>
 
 </manifest>

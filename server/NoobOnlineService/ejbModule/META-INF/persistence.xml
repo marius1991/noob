@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+<persistence-unit name="NoobPersistenceUnit">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <!-- Durch "java:jboss/datasources/ExampleDS" wird JBoss angewiesen, die integrierte HSQLDB,
+         die als "Example Datasource" eingebunden ist, für die Persistenz der Applikation zu verwenden -->
+    <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
+    <properties>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+        <!--Die Eigenschaft "hibernate.hbm2ddl.auto" legt fest, wie mit bereits 
+            bestehenden Tabellen verfahren werden soll. "create-drop" bedeutet, 
+            dass alle Tabellen bei einem Deployment der Applikation gelöscht und 
+            neu angelegt werden. Sobald sich an Ihrer Entity Beans nichts mehr
+            ändert, kann hier auch "update" gewählt werden, damit bleiben einmal
+            angelegte Daten erhalten.  -->
+        <property name="hibernate.hbm2ddl.auto" value="create"/>
+    </properties>
+</persistence-unit>
+</persistence>
