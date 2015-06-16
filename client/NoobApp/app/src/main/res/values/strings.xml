@@ -69,5 +69,6 @@
     <string name="menu_kontoverw">Konto verwalten</string>
     <string name="menu_ausloggen">Ausloggen</string>
     <string name="menu_locBearb">Location bearbeiten</string>
+    <string name="title_activity_set_location_details">SetLocationDetailsActivity</string>
 
 </resources>

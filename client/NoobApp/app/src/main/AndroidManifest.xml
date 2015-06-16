@@ -1,49 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.fh_muenster.noobApp" >
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name= "android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--android:name=".NoobApplication"-->
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- android:name=".NoobApplication" -->
     <application
-    android:name=".NoobApplication"
-    android:allowBackup="true"
-    android:icon="@mipmap/ic_launcher"
-    android:theme="@style/Theme.AppCompat.Light">
-    <activity
-        android:name="de.fh_muenster.noobApp.LoginActivity"
-        android:label="Willkommen Nooby">
-
-        <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
-
+        android:name=".NoobApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/ThemeFullScreen" >
+        <activity
+            android:name=".LoginActivity"
+            android:label="Willkommen Nooby" >
+            <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="de.fh_muenster.noobApp.RegisterActivity"
+            android:name=".RegisterActivity"
             android:label="Registrierung"
-            android:parentActivityName="de.fh_muenster.noobApp.LoginActivity" >
+            android:parentActivityName=".LoginActivity" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.HelpActivity"
+            android:name=".HelpActivity"
             android:label="Help Center"
-            android:parentActivityName="de.fh_muenster.noobApp.LoginActivity" >
+            android:parentActivityName=".LoginActivity" >
         </activity>
-        <!--<activity
+        <!--
+        <activity
             android:name="de.fh_muenster.noobApp.NewLocationActivity"
             android:label="Neue Location anlegen" >
-        </activity>-->
+        </activity>
+        -->
         <activity
-            android:name="de.fh_muenster.noobApp.UserManagementAcitivtiy"
+            android:name=".UserManagementAcitivtiy"
             android:label="Kontoverwaltung" >
         </activity>
-
         <activity
-            android:name="de.fh_muenster.noobApp.CitySelectionActivity"
+            android:name=".CitySelectionActivity"
             android:label="@string/title_activity_city_selection" >
         </activity>
         <activity
@@ -73,8 +71,10 @@
         </activity>
         <activity
             android:name="de.fh_muenster.noobApp.LocationCommentActivity"
-            android:label="@string/title_activity_location_comment" android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
+            android:label="@string/title_activity_location_comment" 
+			android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
         </activity>
+
     </application>
 
 </manifest>

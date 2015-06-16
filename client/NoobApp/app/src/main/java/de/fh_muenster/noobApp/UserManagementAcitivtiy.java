@@ -1,11 +1,15 @@
 package de.fh_muenster.noobApp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,26 +24,46 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
     private EditText password;
     private EditText passwordwdh;
     private EditText benutzername;
+    private String emailString="";
+    private String passwordString="";
+    private String passwordStringWdh="";
+    private String benutzernameString="";
     private Button userLoeschen;
     private Button setUserDetails;
-    private String emailString = "";
-    private String passwordString = "";
-    private String passwordStringWdh = "";
-    private String benutzernameString = "";
+    private UserTO userTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_management_acitivtiy);
-        GetUserDetails getUser = new GetUserDetails(getApplicationContext());
-        getUser.execute();
-
         email = (EditText) findViewById(R.id.editText12);
         password = (EditText) findViewById(R.id.editText14);
         passwordwdh = (EditText) findViewById(R.id.editText15);
         userLoeschen = (Button) findViewById(R.id.button11);
         benutzername = (EditText) findViewById(R.id.editText13);
+        setUserDetails=(Button) findViewById(R.id.button10);
+
+        setUserDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                emailString = email.getText().toString();
+                passwordString = password.getText().toString();
+                passwordStringWdh = passwordwdh.getText().toString();
+                benutzernameString =benutzername.getText().toString();
+                SetUserDetails setUser = new SetUserDetails(view.getContext());
+                setUser.execute(benutzernameString,emailString,passwordString);
+                NoobApplication myapp= (NoobApplication) getApplication();
+                userTO= myapp.getUser();
+                email.setText(userTO.getEmail());
+                password.setText(userTO.getPassword());
+                passwordwdh.setText(userTO.getPassword());
+                benutzername.setText(userTO.getName());
+            }
+
+        });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,42 +87,7 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class GetUserDetails extends AsyncTask<String, String, UserTO> {
-        private Context context;
-        private String message;
-        private int returnCode;
-        private int sessionId;
-        UserTO userTO;
 
-        public GetUserDetails(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected UserTO doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-            UserTO userTO;
-            try {
-                NoobApplication myApp = (NoobApplication) getApplication();
-                sessionId = myApp.getSessionId();
-                userTO = onlineService.getUserDetails(sessionId);
-                return userTO;
-            } catch (Exception e) {
-
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(UserTO userTO) {
-            if (userTO.getReturnCode() == 0) {
-                email.setText(userTO.getEmail(), TextView.BufferType.EDITABLE);
-                password.setText(userTO.getPassword(), TextView.BufferType.EDITABLE);
-                passwordwdh.setText(userTO.getPassword(), TextView.BufferType.EDITABLE);
-                benutzername.setText(userTO.getName(), TextView.BufferType.EDITABLE);
-            }
-        }
-    }
 
     public class DeleteAccount extends AsyncTask<String, String, ReturnCodeResponse> {
         private Context context;
@@ -134,22 +123,49 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
         private Context context;
         private int returnCode;
         private int sessionId;
+        private String message;
+        private ProgressDialog Dialog = new ProgressDialog(UserManagementAcitivtiy.this);
+
 
         public SetUserDetails(Context context) {
             this.context = context;
         }
         @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Holt Daten vom Server");
+            Dialog.show();
+        }
+
+        @Override
         protected ReturnCodeResponse doInBackground(String... params) {
+            String name=params[0];
+            String email=params[1];
+            String passwort=params[2];
+            NoobApplication myApp = (NoobApplication) getApplication();
+
+            sessionId=myApp.getSessionId();
             ReturnCodeResponse setUserDetails = null;
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             try {
-                //setUserDetails = onlineService.setUserDetails(UserTO);
+                setUserDetails = onlineService.setUserDetails(sessionId,name,email,passwort);
                 returnCode = setUserDetails.getReturnCode();
+                message=setUserDetails.getMessage();
                 return setUserDetails;
             } catch (Exception e) {
 
             }
             return null;
         }
+        protected void onPostExecute(ReturnCodeResponse returncode){
+            Dialog.dismiss();
+                if (returnCode == 0) {
+                    Toast.makeText(context, returncode.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            else {
+                Toast.makeText(context, "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }

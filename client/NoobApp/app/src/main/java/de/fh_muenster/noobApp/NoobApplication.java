@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationTO;
+import de.fh_muenster.noob.UserTO;
 
 /**
  * Created by marius on 02.06.15.
@@ -19,6 +20,7 @@ public class NoobApplication extends Application {
     private String category;
     private LocationTO location;
     private String sortBy;
+    private UserTO user;
     private List<LocationTO> locationSearchResults;
     private String search;
 
@@ -77,6 +79,10 @@ public class NoobApplication extends Application {
     public void setLocation(LocationTO location) {
         this.location = location;
     }
+
+    public UserTO getUser(){return user;}
+
+    public void setUser(UserTO user){this.user=user;}
 
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
