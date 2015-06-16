@@ -98,15 +98,14 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByName(String name, String city) {
-		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name");
+		logger.info("DB-Query: " + "SELECT l FROM Location l WHERE l.city = :stadt AND lower(l.name) = lower(:name)");
 		try {
-			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt AND l.name= :name", Location.class).setParameter("stadt",city).setParameter("name",name).getResultList();
+			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND lower(l.name) = lower(:name)", Location.class).setParameter("stadt",city).setParameter("name",name).getResultList();
 		}
 		catch(Exception e) {
 			logger.info(e.getMessage());
+			return null;
 		}
-		
-		return null;
 	}
 
 	/**
