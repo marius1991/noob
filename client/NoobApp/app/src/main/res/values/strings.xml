@@ -11,7 +11,7 @@
     <string name="title_activity_maintenance">Maintenance</string>
 
     <string name="title_activity_login">LoginActivity</string>
-    <string name="username">Username</string>
+    <string name="username">Email</string>
     <string name="password">Password</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf dem "Register Button und geben Sie Ihre Daten im Formular ein.</string>

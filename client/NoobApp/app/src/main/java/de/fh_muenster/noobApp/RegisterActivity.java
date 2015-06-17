@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +34,7 @@ public class RegisterActivity extends ActionBarActivity {
     private String passwordString="";
     private String passwordStringWdh="";
     private String benutzernameString="";
+    private String passwordStringHash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +54,9 @@ public class RegisterActivity extends ActionBarActivity {
             public void onClick(View view) {
                 emailString = email.getText().toString();
                 passwordString = password.getText().toString();
+                passwordString=hashPasswort(passwordString);
                 passwordStringWdh = passwordwdh.getText().toString();
+                passwordStringHash=hashPasswort(passwordStringWdh);
                 benutzernameString =benutzername.getText().toString();
 
                  if(emailString.equals("")) {
@@ -106,6 +112,20 @@ public class RegisterActivity extends ActionBarActivity {
         }
         return false;
     }
+    private String hashPasswort(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            String passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
+            //String passwordnew = messageDigest.toString();
+            return passwordnew;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 
     @Override
