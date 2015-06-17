@@ -14,6 +14,8 @@ public class LocationTO extends ReturnCodeResponse implements Comparable<Locatio
 	private int id;
 	
 	private String name;
+
+	private String ownerName;
 	
 	private String category;
 	
@@ -170,5 +172,13 @@ public class LocationTO extends ReturnCodeResponse implements Comparable<Locatio
 			result = 1;
 		}
 		return result;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 }

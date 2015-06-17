@@ -105,17 +105,6 @@ public class CitySelectionActivity extends ActionBarActivity {
     }
 
     /**
-     * Diese Methode wird aufgerufen, wenn im Menü auf den Eintrag "Neue Location" geklickt wird.
-     * Die Activity zum Anlegen der Location wird geöffnet.
-     * @param item
-     */
-    public void clickFuncNewLocation(MenuItem item) {
-        Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
-        Intent i = new Intent(CitySelectionActivity.this, NewLocationActivity.class);
-        startActivity(i);
-    }
-
-    /**
      * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
      * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
      * Dann wird ein LogoutTask gestartet.
