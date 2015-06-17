@@ -29,6 +29,10 @@ public class LocationCommentActivity extends ActionBarActivity {
     private EditText editText;
     private static final String TAG = LocationCommentActivity.class.getName();
 
+    /**
+     * Diese Methode wird beim Start der Activity aufgerufen. Sie ändert den Titel der Activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,6 @@ public class LocationCommentActivity extends ActionBarActivity {
         //Titel der Activity ersetzen
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getLocation().getName() + " kommentieren");
-
         editText = (EditText)findViewById(R.id.editText16);
     }
 
@@ -54,20 +57,28 @@ public class LocationCommentActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn auf den Button "Kommentieren" geklickt wird.
+     * Sie startet den AsyncTask zum Kommentieren einer Location.
+     * @param view
+     */
     public void clickFuncCommentOnLocation(View view) {
-        NoobApplication myApp = (NoobApplication) getApplication();
         new CommentOnLocation().execute(editText.getText().toString());
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
@@ -86,11 +97,15 @@ public class LocationCommentActivity extends ActionBarActivity {
                 .show();
     }
 
+    /**
+     * @author marius
+     * Dieser AsyncTask realisiert die Kommentarfunktion.
+     */
     class CommentOnLocation extends AsyncTask<String, String, ReturnCodeResponse> {
         private ProgressDialog Dialog = new ProgressDialog(LocationCommentActivity.this);
 
         /**
-         * Während des Kommentierens wird ein Dialog angezeigt
+         * Während des Kommentierens wird ein Dialog angezeigt.
          */
         @Override
         protected void onPreExecute()
@@ -99,6 +114,11 @@ public class LocationCommentActivity extends ActionBarActivity {
             Dialog.show();
         }
 
+        /**
+         * Startet einen neuen Thread, in dem der Kommentar zum Server geschickt wird.
+         * @param params
+         * @return
+         */
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
@@ -108,6 +128,10 @@ public class LocationCommentActivity extends ActionBarActivity {
             return returnCodeResponse;
         }
 
+        /**
+         * Der Returncode des Servers wird entgegengenommen
+         * @param response
+         */
         @Override
         protected void onPostExecute (ReturnCodeResponse response) {
             Dialog.dismiss();

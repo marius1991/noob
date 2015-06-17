@@ -10,7 +10,7 @@
         android:name=".NoobApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/ThemeFullScreen" >
+        android:theme="@style/noob_theme">
         <activity
             android:name=".LoginActivity"
             android:label="Willkommen Nooby" >

@@ -19,13 +19,19 @@ import de.fh_muenster.noobApp.R;
 
 /**
  * @author marius
- * Diese Activity zeigt die Suchergebnisse an,nachdem nach einer Location gesucht wurde
+ * Diese Activity zeigt die Suchergebnisse an, nachdem nach einer Location gesucht wurde.
  */
 public class LocationSearchActivity extends ActionBarActivity {
 
     private LocationTO selectedFromList = null;
     private static final String TAG = LocationSearchActivity.class.getName();
 
+    /**
+     * Diese Methode wird aufgerufen, wenn die Activity gestartet wird.
+     * Der Titel der Activity wird gesetzt.
+     * Die Suchergebnisse werden in einer Liste angezeigt.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,15 +74,19 @@ public class LocationSearchActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)

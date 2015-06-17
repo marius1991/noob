@@ -30,7 +30,7 @@ import de.fh_muenster.noob.LocationTO;
  * Created by marius on 02.06.15.
  * @author marius
  * In dieser Activity werden die Locationkategorien der ausgewählten Stadt angezeigt.
- * Außerdem kann nach Locations in der Stadt gesucht werden
+ * Außerdem kann nach Locations in der Stadt gesucht werden.
  */
 public class CategorySelectionActivity extends ActionBarActivity {
 
@@ -38,17 +38,19 @@ public class CategorySelectionActivity extends ActionBarActivity {
     private String selected;
     private EditText editText;
 
-
+    /**
+     * Diese Methode wird aufgerufen wenn die Activity erstellt wird. Der Name der Activity wird
+     * angepasst und der AsyncTask für den Kategorienabruf wird gestartet.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_selection);
         editText = (EditText)findViewById(R.id.editText3);
         NoobApplication myApp = (NoobApplication) getApplication();
-
         //Titel der Activity durch den Namen der ausgewählten Stadt ersetzen
         setTitle(myApp.getCity());
-
         //Kategorien der Stadt asynchron abrufen
         new GetCategoriesFromServer().execute();
     }
@@ -66,18 +68,16 @@ public class CategorySelectionActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * Die Funktion wird aufgerufen, wenn der Button "Auswählen" gedrückt wird.
-     * Die ausgewählte Kategorie wird gespeichert und die nächste Activitx aufgerufen
+     * Die Methode wird aufgerufen, wenn der Button "Auswählen" gedrückt wird.
+     * Die ausgewählte Kategorie wird gespeichert und die nächste Activity aufgerufen.
      * @param view
      */
     public void clickFuncSelectCategory(View view) {
@@ -88,8 +88,8 @@ public class CategorySelectionActivity extends ActionBarActivity {
     }
 
     /**
-     * Die Funktion wird aufgerufen, wenn der Button "Suchen" gedrückt wird.
-     * Die Suche wird asynchron an den Server geschickt
+     * Die Methode wird aufgerufen, wenn der Button "Suchen" gedrückt wird.
+     * Die Suche wird asynchron an den Server geschickt.
      * @param view
      */
     public void clickFuncSearchLocation(View view) {
@@ -99,6 +99,12 @@ public class CategorySelectionActivity extends ActionBarActivity {
         new SearchLocationOnServer().execute(editText.getText().toString());
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
@@ -119,7 +125,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
 
     /**
      * @author marius
-     * In diesem AsycTask werden die Kategorien einer Stadt vom Server abgerufen
+     * In diesem AsycTask werden die Kategorien einer Stadt vom Server abgerufen.
      */
     class GetCategoriesFromServer extends AsyncTask<String, String, CategoryListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
@@ -135,7 +141,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Startet einen neuen Thread, der die Kategorienliste abholen soll
+         * Startet einen neuen Thread, der die Kategorienliste abholen soll.
          * @param params
          * @return
          */
@@ -152,7 +158,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Nimmt die Kategorienliste entgegen und befüllt damit das Spinner Objekt
+         * Nimmt die Kategorienliste entgegen und befüllt damit das Spinner Objekt.
          * @param response
          */
         @Override
@@ -163,9 +169,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
             else {
-                Integer returnCode = response.getReturnCode();
                 List<String> valueList;
-                //Toast.makeText(CategorySelectionActivity.this, returnCode.toString(), Toast.LENGTH_LONG ).show();
                 valueList = response.getCategories();
                 ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
                 Spinner sp = (Spinner) findViewById(R.id.spinner);
@@ -187,7 +191,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
 
     /**
      * @author marius
-     * In diesem Asynchronen Task wird nach einer Location gesucht
+     * In diesem AsyncTask wird nach einer Location gesucht.
      */
     class SearchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
@@ -203,7 +207,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Startet einen neuen Thread für die Abfrage der Locationliste vom Server
+         * Startet einen neuen Thread für die Abfrage der Locationliste vom Server.
          * @param params
          * @return
          */
@@ -217,7 +221,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Nimmt die Locationliste entgegen und speichert sie
+         * Nimmt die Locationliste entgegen und speichert sie.
          * @param response
          */
         @Override

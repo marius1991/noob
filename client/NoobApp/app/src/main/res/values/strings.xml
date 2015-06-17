@@ -44,16 +44,18 @@
     <string name="activity_location_show_kommentare">Kommentare</string>
     <string name="activity_location_show_kommentieren">Kommentieren</string>
     <string name="activity_location_show_image">Bild der Location</string>
+    <string name="activity_location_show_bearb">bearb.</string>
 
 
     <!-- Strings für die LocationSortActivity -->
     <string name="title_activity_location_sort">Filtern und Sortieren</string>
     <string name="activity_location_sort_sortieren">Sortieren</string>
     <string name="activity_location_sort_filtern">Filtern</string>
-    <string name="activity_location_sort_nachName1">nach Name (aufwärts)</string>
-    <string name="activity_location_sort_nachName2">nach Name (abwärts)</string>
+    <string name="activity_location_sort_nachName1">nach Name (A-Z)</string>
+    <string name="activity_location_sort_nachName2">nach Name (Z-A)</string>
     <string name="activity_location_sort_nachRating1">nach Rating (aufwärts)</string>
     <string name="activity_location_sort_nachRating2">nach Rating (abwärts)</string>
+    <string name="activity_location_sort_minRating">Min. Rating</string>
     <string name="activity_location_sort_anwenden">Anwenden</string>
 
     <!-- Strings für die LocationSearchActivity -->

@@ -269,6 +269,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                     locationTO.setStreet(soapObject.getProperty("street").toString());
                     locationTO.setPlz(Integer.parseInt(soapObject.getProperty("plz").toString()));
                     locationTO.setCity(soapObject.getProperty("city").toString());
+                    locationTO.setOwnerId(soapObject.getProperty("ownerId").toString());
                     if(soapObject.hasProperty("city")) {
                         Log.d(TAG, "Has Cities");
                     }
@@ -365,6 +366,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                     locationTO.setStreet(soapObject.getProperty("street").toString());
                     locationTO.setPlz(Integer.parseInt(soapObject.getProperty("plz").toString()));
                     locationTO.setCity(soapObject.getProperty("city").toString());
+                    locationTO.setOwnerId(soapObject.getProperty("ownerId").toString());
                     if (soapObject.hasProperty("city")) {
                         Log.d(TAG, "Has Cities");
                     }
@@ -533,6 +535,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             locationTO.setStreet(response.getProperty("street").toString());
             locationTO.setPlz(Integer.parseInt(response.getProperty("plz").toString()));
             locationTO.setCity(response.getProperty("city").toString());
+            locationTO.setOwnerId(response.getProperty("ownerId").toString());
 
             List<RatingTO> ratings = new ArrayList<>();
             if (response.hasProperty("ratings")) {
