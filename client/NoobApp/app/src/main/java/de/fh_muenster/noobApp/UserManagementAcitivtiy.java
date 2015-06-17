@@ -76,7 +76,7 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
                 }
                 SetUserDetails setUser = new SetUserDetails(view.getContext());
                 setUser.execute(benutzernameString,passwordString, passwordStringWdh);
-                //Für Get USer Details soll in der Action Bar ausgeführt werden
+                //FÃ¼r Get USer Details soll in der Action Bar ausgefÃ¼hrt werden
                 //NoobApplication myapp= (NoobApplication) getApplication();
                 //userTO= myapp.getUser();
                 //email.setText(userTO.getEmail());

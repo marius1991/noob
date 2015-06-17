@@ -139,6 +139,12 @@ public class CitySelectionActivity extends ActionBarActivity {
                 .show();
     }
 
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(CitySelectionActivity.this, UserManagementAcitivtiy.class);
+        startActivity(i);
+    }
+
     /**
      * @author marius
      * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen.

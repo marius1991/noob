@@ -30,12 +30,10 @@
             android:label="Help Center"
             android:parentActivityName=".LoginActivity" >
         </activity>
-        <!--
         <activity
             android:name="de.fh_muenster.noobApp.NewLocationActivity"
             android:label="Neue Location anlegen" >
         </activity>
-        -->
         <activity
             android:name=".UserManagementAcitivtiy"
             android:label="Kontoverwaltung" >
@@ -73,6 +71,11 @@
             android:name="de.fh_muenster.noobApp.LocationCommentActivity"
             android:label="@string/title_activity_location_comment" 
 			android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
+        </activity>
+        <activity
+            android:name="de.fh_muenster.noobApp.SetLocationDetailsActivity"
+            android:label="@string/title_activity_set_location_details"
+            android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
         </activity>
 
     </application>

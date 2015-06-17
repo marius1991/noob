@@ -169,7 +169,7 @@ public class LoginActivity extends ActionBarActivity {
                     myApp.setSessionId(sessionId);
                     GetUserDetails userDetails = new GetUserDetails(getApplicationContext(),(NoobApplication) getApplication());
                     userDetails.execute();
-                    Intent i = new Intent(context, UserManagementAcitivtiy.class);
+                    Intent i = new Intent(context, CitySelectionActivity.class);
                     startActivity(i);
                 }
             }

@@ -54,23 +54,23 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         nummer= (EditText) findViewById(R.id.editText19);
         plz= (EditText) findViewById(R.id.editText2);
         ort= (EditText) findViewById(R.id.editText20);
-        //Hier eventuell noch überprüfen ob locationTO nicht leer ist
+        //Hier eventuell noch Ã¼berprÃ¼fen ob locationTO nicht leer ist
         locationame.setHint(locationTO.getName());
         beschreibung.setHint(locationTO.getDescription());
         strasse.setHint(locationTO.getStreet());
         nummer.setHint(locationTO.getNumber());
-        plz.setHint(locationTO.getPlz());
+        plz.setHint(String.valueOf(locationTO.getPlz()));
         ort.setHint(locationTO.getCity());
         GetCategories getCategories = new GetCategories();
         getCategories.execute();
-        //Befüllt Spinner mit dem Array from Kategories vom Server(categoryList)
+        //BefÃ¼llt Spinner mit dem Array from Kategories vom Server(categoryList)
         if(!categoryList.isEmpty()) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, categoryList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Spinner spinner = (Spinner) findViewById(R.id.spinner3);
             spinner.setAdapter(adapter);
-            //krallt sich die SpinnerPosition von der ausgewählten Kategory
+            //krallt sich die SpinnerPosition von der ausgewÃ¤hlten Kategory
             int spinnerPostion = adapter.getPosition(locationTO.getCategory());
             //Setzt den Spinner auf die Kategorie
             spinner.setSelection(spinnerPostion);
@@ -90,7 +90,7 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
             });
         }
 
-        //ClickListener für setLocationDetails
+        //ClickListener fÃ¼r setLocationDetails
         editlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
