@@ -169,6 +169,8 @@ public class CategorySelectionActivity extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
             else {
+                NoobApplication myApp = (NoobApplication) getApplication();
+                myApp.setCategories(response.getCategories());
                 List<String> valueList;
                 valueList = response.getCategories();
                 ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);

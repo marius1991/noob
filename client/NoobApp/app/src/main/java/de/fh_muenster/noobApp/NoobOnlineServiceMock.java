@@ -198,6 +198,11 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     }
 
     @Override
+    public ReturnCodeResponse createLocationWithImage(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+        return null;
+    }
+
+    @Override
     public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
         return null;
     }
@@ -221,7 +226,8 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     }
 
     @Override
-    public ReturnCodeResponse deleteUser(int sessionId) {
+    public ReturnCodeResponse deleteUser(int sessionId, String password) {
         return null;
     }
+
 }

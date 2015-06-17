@@ -2,6 +2,7 @@ package de.fh_muenster.noobApp;
 
 import android.app.Application;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CategoryListResponse;
@@ -14,6 +15,8 @@ import de.fh_muenster.noob.UserTO;
  * Subklasse von Application --> Austausch von Daten unter den Activities
  */
 public class NoobApplication extends Application {
+    private String userName;
+    private List<String> categories;
     private int sessionId;
     private String userId;
     private String city;
@@ -99,5 +102,21 @@ public class NoobApplication extends Application {
 
     public void setRatingFilter(int ratingFilter) {
         this.ratingFilter = ratingFilter;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }
