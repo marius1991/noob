@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -26,6 +29,7 @@ public class LoginActivity extends ActionBarActivity {
     private EditText email;
     private EditText password;
     private Button loginButton;
+    private String passwordStringHash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +44,9 @@ public class LoginActivity extends ActionBarActivity {
                 password = (EditText) findViewById(R.id.editText4);
                 String emailString = email.getText().toString();
                 String passwordString = password.getText().toString();
-                if (!emailString.equals("") && !passwordString.equals("")) {
-                    loginTask.execute(emailString, passwordString);
+                passwordStringHash=hashPasswort(passwordString);
+                if (!emailString.equals("") && !passwordStringHash.equals("")) {
+                    loginTask.execute(emailString, passwordStringHash);
                     NoobApplication myApp = (NoobApplication) getApplication();
                     myApp.setUserId(emailString);
                 } else {
@@ -51,7 +56,7 @@ public class LoginActivity extends ActionBarActivity {
             }
 
         });
-        }
+    }
 
 
     @Override
@@ -92,6 +97,19 @@ public class LoginActivity extends ActionBarActivity {
         Intent y= new Intent(LoginActivity.this,UserManagementAcitivtiy.class);
         startActivity(y);
     }
+    private String hashPasswort(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            String passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
+            //String passwordnew = messageDigest.toString();
+            return passwordnew;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public void openNewLocation(View view){
         Intent z= new Intent(LoginActivity.this,NewLocationActivity.class);
@@ -151,7 +169,7 @@ public class LoginActivity extends ActionBarActivity {
                     myApp.setSessionId(sessionId);
                     GetUserDetails userDetails = new GetUserDetails(getApplicationContext(),(NoobApplication) getApplication());
                     userDetails.execute();
-                    Intent i = new Intent(context, CitySelectionActivity.class);
+                    Intent i = new Intent(context, UserManagementAcitivtiy.class);
                     startActivity(i);
                 }
             }

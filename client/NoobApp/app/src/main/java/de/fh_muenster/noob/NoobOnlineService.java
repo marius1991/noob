@@ -111,6 +111,12 @@ public interface NoobOnlineService {
      * @param newLocationDetails
      * @return
      */
+
+    public ReturnCodeResponse createLocationWithImage(int sessionId, String name,
+                                                      String category, String description, String street, String number,
+                                                      int plz, String city, byte[] image);
+
+
     public ReturnCodeResponse setLocationDetails(int sessionId,
                                                  LocationTO newLocationDetails);
 
@@ -126,7 +132,7 @@ public interface NoobOnlineService {
      * @param newUser
      * @return
      */
-    public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password);
+    public ReturnCodeResponse setUserDetails(int sessionId, String name, String password, String passwordwdh);
 
     /**
      * @param sessionId
@@ -138,6 +144,6 @@ public interface NoobOnlineService {
      * @param sessionId
      * @return
      */
-    public ReturnCodeResponse deleteUser(int sessionId);
+    public ReturnCodeResponse deleteUser(int sessionId, String password);
 
 }
