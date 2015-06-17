@@ -31,30 +31,20 @@
             android:gravity="top|left"
             android:scrollbars="vertical"
             android:background="@drawable/bordershape"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_below="@+id/editText28"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="34dp" />
 
-        <EditText
+    <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText26"
-            android:hint="Straße"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="88dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bild von Kamera"
+            android:text="Kamera"
             android:id="@+id/button18"
             android:onClick="startKamera"
-            android:layout_alignBaseline="@+id/button23"
-            android:layout_alignBottom="@+id/button23"
-            android:layout_toRightOf="@+id/editText17"
-            android:layout_toEndOf="@+id/editText17" />
+            android:layout_below="@+id/editText27"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -62,28 +52,20 @@
             android:layout_height="wrap_content"
             android:text="Bild hochladen"
             android:id="@+id/button16"
-            android:layout_alignTop="@+id/imageView22"
-            android:layout_toLeftOf="@+id/button23"
-            android:layout_toStartOf="@+id/button23" />
+            android:layout_alignBottom="@+id/imageView22"
+            android:layout_alignLeft="@+id/editText17"
+            android:layout_alignStart="@+id/editText17" />
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinner3"
-            android:layout_below="@+id/button25"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_below="@+id/button16"
+            android:layout_toLeftOf="@+id/editText2"
+            android:layout_toRightOf="@+id/imageView22"
+            android:layout_toEndOf="@+id/imageView22" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Kategorie waehlen"
-            android:id="@+id/button25"
-            android:layout_below="@+id/editText28"
-            android:layout_toRightOf="@+id/editText16"
-            android:layout_toEndOf="@+id/editText16" />
-
-        <EditText
+    <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/editText17"
@@ -94,42 +76,83 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BILD VOM FILE"
+            android:text="Explorer"
             android:onClick="pickPhoto"
             android:id="@+id/button23"
-            android:layout_alignBottom="@+id/editText21"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/editText27"
+            android:layout_toRightOf="@+id/button9"
+            android:layout_toEndOf="@+id/button9" />
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:scaleType="fitCenter"
             android:id="@+id/imageView22"
             android:background="@drawable/pictureshape"
-            android:layout_alignBottom="@+id/editText26"
-            android:layout_toLeftOf="@+id/editText17"
-            android:layout_toStartOf="@+id/editText17" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText16"
-            android:hint="Hausnummer"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/editText27"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/editText21"
-            android:layout_below="@+id/editText16"
-            android:layout_toRightOf="@+id/button7"
-            android:layout_toLeftOf="@+id/button13"
-            android:layout_toStartOf="@+id/button13"
-            android:hint="Stadt" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kategorie auswählen"
+        android:id="@+id/button"
+        android:layout_below="@+id/spinner3"
+        android:layout_toLeftOf="@+id/button18"
+        android:layout_toStartOf="@+id/button18" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText20"
+        android:hint="Ort"
+        android:layout_below="@+id/button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/editText2"
+        android:layout_toLeftOf="@+id/editText2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:hint="Postleitzahl"
+        android:layout_below="@+id/button"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText12"
+        android:hint="Straße"
+        android:layout_below="@+id/editText20"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/editText20"
+        android:layout_alignEnd="@+id/editText20" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText19"
+        android:hint="NR"
+        android:layout_below="@+id/editText2"
+        android:layout_alignRight="@+id/button18"
+        android:layout_alignEnd="@+id/button18"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_alignStart="@+id/editText2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location Editieren"
+        android:id="@+id/button9"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
-
-    </RelativeLayout>
+</RelativeLayout>
 

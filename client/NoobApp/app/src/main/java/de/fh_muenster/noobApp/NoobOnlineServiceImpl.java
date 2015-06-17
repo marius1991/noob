@@ -505,6 +505,13 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         returnCodeResponse.setMessage(response.getProperty("message").toString());
         return returnCodeResponse;
     }
+    @Override
+    public ReturnCodeResponse createLocationWithImage(int sessionId, String name, String category, String description, String street, String number,
+                                                      int plz, String city, byte[] image){
+        String METHOD_NAME = "createLocationWithImage";
+
+        return null ;
+    }
 
     @Override
     public LocationTO getLocationDetails(int locationId) {
@@ -604,12 +611,12 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     }
 
     @Override
-    public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password) {
+    public ReturnCodeResponse setUserDetails(int sessionId, String name, String password, String passwordwdh) {
         String METHOD_NAME = "setUserDetails";
         ReturnCodeResponse returnCodeResponse= new ReturnCodeResponse();
         SoapObject response=null;
         try{
-            response=executeSoapAction(METHOD_NAME,sessionId,name,email,password);
+            response=executeSoapAction(METHOD_NAME,sessionId,name,password,passwordwdh);
         }
         catch (SoapFault soapFault) {
             soapFault.printStackTrace();
@@ -643,7 +650,19 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     }
 
     @Override
-    public ReturnCodeResponse deleteUser(int sessionId) {
-        return null;
+    public ReturnCodeResponse deleteUser(int sessionId, String password) {
+        String METHOD_NAME="deleteUser";
+        SoapObject response =null;
+        ReturnCodeResponse returnCodeResponse= new ReturnCodeResponse();
+        try{
+            response=executeSoapAction(METHOD_NAME,sessionId,password);
+        }
+        catch(SoapFault soapFault){
+            soapFault.printStackTrace();
+        }
+        returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+        returnCodeResponse.setMessage(response.getProperty("message").toString());
+        return returnCodeResponse;
+
     }
 }

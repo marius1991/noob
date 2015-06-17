@@ -28,6 +28,7 @@ public class ObjectFactory {
     private final static QName _CommentOnLocation_QNAME = new QName("http://noobservice.noob.de/", "commentOnLocation");
     private final static QName _LoginResponse_QNAME = new QName("http://noobservice.noob.de/", "loginResponse");
     private final static QName _ListAllLocationsResponse_QNAME = new QName("http://noobservice.noob.de/", "listAllLocationsResponse");
+    private final static QName _GetLocationDetailsResponse_QNAME = new QName("http://noobservice.noob.de/", "getLocationDetailsResponse");
     private final static QName _ListLocationsWithCategoryResponse_QNAME = new QName("http://noobservice.noob.de/", "listLocationsWithCategoryResponse");
     private final static QName _Logout_QNAME = new QName("http://noobservice.noob.de/", "logout");
     private final static QName _CreateLocationWithImageResponse_QNAME = new QName("http://noobservice.noob.de/", "createLocationWithImageResponse");
@@ -39,6 +40,7 @@ public class ObjectFactory {
     private final static QName _SetUserDetailsResponse_QNAME = new QName("http://noobservice.noob.de/", "setUserDetailsResponse");
     private final static QName _DeleteUser_QNAME = new QName("http://noobservice.noob.de/", "deleteUser");
     private final static QName _CreateLocation_QNAME = new QName("http://noobservice.noob.de/", "createLocation");
+    private final static QName _GetLocationDetails_QNAME = new QName("http://noobservice.noob.de/", "getLocationDetails");
     private final static QName _ListCategories_QNAME = new QName("http://noobservice.noob.de/", "listCategories");
     private final static QName _GetUserDetails_QNAME = new QName("http://noobservice.noob.de/", "getUserDetails");
     private final static QName _ListCities_QNAME = new QName("http://noobservice.noob.de/", "listCities");
@@ -233,6 +235,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetLocationDetailsResponse }
+     * 
+     */
+    public GetLocationDetailsResponse createGetLocationDetailsResponse() {
+        return new GetLocationDetailsResponse();
+    }
+
+    /**
      * Create an instance of {@link ListLocationsWithCategoryResponse }
      * 
      */
@@ -310,6 +320,14 @@ public class ObjectFactory {
      */
     public DeleteUser createDeleteUser() {
         return new DeleteUser();
+    }
+
+    /**
+     * Create an instance of {@link GetLocationDetails }
+     * 
+     */
+    public GetLocationDetails createGetLocationDetails() {
+        return new GetLocationDetails();
     }
 
     /**
@@ -429,6 +447,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetLocationDetailsResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "getLocationDetailsResponse")
+    public JAXBElement<GetLocationDetailsResponse> createGetLocationDetailsResponse(GetLocationDetailsResponse value) {
+        return new JAXBElement<GetLocationDetailsResponse>(_GetLocationDetailsResponse_QNAME, GetLocationDetailsResponse.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ListLocationsWithCategoryResponse }{@code >}}
      * 
      */
@@ -525,6 +552,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "createLocation")
     public JAXBElement<CreateLocation> createCreateLocation(CreateLocation value) {
         return new JAXBElement<CreateLocation>(_CreateLocation_QNAME, CreateLocation.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetLocationDetails }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "getLocationDetails")
+    public JAXBElement<GetLocationDetails> createGetLocationDetails(GetLocationDetails value) {
+        return new JAXBElement<GetLocationDetails>(_GetLocationDetails_QNAME, GetLocationDetails.class, null, value);
     }
 
     /**

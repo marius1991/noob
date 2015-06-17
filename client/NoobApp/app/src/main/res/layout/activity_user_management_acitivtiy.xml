@@ -10,19 +10,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:id="@+id/editText12"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/editText13"
         android:hint="Benutzername"
-        android:layout_below="@+id/editText12"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="63dp" />
 
@@ -34,8 +23,10 @@
         android:hint="Passwort"
         android:text=""
         android:id="@+id/editText14"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/editText13"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="52dp" />
 
     <EditText
         android:layout_width="match_parent"
@@ -45,7 +36,8 @@
         android:ems="10"
         android:id="@+id/editText15"
         android:layout_below="@+id/editText14"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="48dp" />
 
     <Button
@@ -53,9 +45,9 @@
         android:layout_height="wrap_content"
         android:text="Bestätigen"
         android:id="@+id/button10"
-        android:layout_below="@+id/editText15"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -64,4 +56,26 @@
         android:id="@+id/button11"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/editText30"
+        android:layout_above="@+id/button10"
+        android:layout_alignRight="@+id/button11"
+        android:layout_alignEnd="@+id/button11" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Passwort eintragen um Account zu löschen oder zu editieren"
+        android:id="@+id/textView"
+        android:textSize="12dp"
+        android:layout_above="@+id/editText30"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

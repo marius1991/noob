@@ -25,7 +25,7 @@ public class User implements Serializable {
 	@Id
 	private String email;
 	
-	@OneToMany (mappedBy = "owner", fetch = FetchType.LAZY)
+	@OneToMany (mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Location> locations;
 	
 	@OneToMany (mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -88,5 +88,15 @@ public class User implements Serializable {
 		return comments;
 	}
 
+	public void setLocations(List<Location> locations) {
+		this.locations = locations;
+	}
 
+	public void setRatings(List<Rating> ratings) {
+		this.ratings = ratings;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 }

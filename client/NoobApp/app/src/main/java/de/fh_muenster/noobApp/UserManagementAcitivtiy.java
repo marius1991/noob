@@ -1,8 +1,10 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import de.fh_muenster.noob.ReturnCodeResponse;
 import de.fh_muenster.noob.UserTO;
@@ -30,13 +36,13 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
     private String benutzernameString="";
     private Button userLoeschen;
     private Button setUserDetails;
+    private String passwordStringHash;
     private UserTO userTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_management_acitivtiy);
-        email = (EditText) findViewById(R.id.editText12);
         password = (EditText) findViewById(R.id.editText14);
         passwordwdh = (EditText) findViewById(R.id.editText15);
         userLoeschen = (Button) findViewById(R.id.button11);
@@ -46,21 +52,74 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
         setUserDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                emailString = email.getText().toString();
+
                 passwordString = password.getText().toString();
+                passwordString=hashPasswort(passwordString);
                 passwordStringWdh = passwordwdh.getText().toString();
+                passwordStringHash=hashPasswort(passwordStringWdh);
                 benutzernameString =benutzername.getText().toString();
+                if (passwordString.equals("")){
+                    password.setError("Bitte trage ein Passwort ein");
+                    password.requestFocus();
+                }  else if (passwordStringWdh.equals("")) {
+                    passwordwdh.setError("Bitte Wiederhole dein Passwort");
+                    passwordwdh.requestFocus();
+                }  else if (benutzernameString.equals("")) {
+                    benutzername.setError("Bitte trage einen Benutzernamen ein");
+                    benutzername.requestFocus();
+                }  else if (!validPassword(passwordString)) {
+                    password.setError("Passwort muss mindestens 8 Zeichen haben");
+                    password.requestFocus();
+                }  else if (!validPasswordWdh(passwordString, passwordStringWdh)) {
+                    passwordwdh.setError("Passwort stimmt nicht ueberein");
+                    passwordwdh.requestFocus();
+                }
                 SetUserDetails setUser = new SetUserDetails(view.getContext());
-                setUser.execute(benutzernameString,emailString,passwordString);
-                NoobApplication myapp= (NoobApplication) getApplication();
-                userTO= myapp.getUser();
-                email.setText(userTO.getEmail());
-                password.setText(userTO.getPassword());
-                passwordwdh.setText(userTO.getPassword());
-                benutzername.setText(userTO.getName());
+                setUser.execute(benutzernameString,passwordString, passwordStringWdh);
+                //Für Get USer Details soll in der Action Bar ausgeführt werden
+                //NoobApplication myapp= (NoobApplication) getApplication();
+                //userTO= myapp.getUser();
+                //email.setText(userTO.getEmail());
+                //password.setText(userTO.getPassword());
+                //passwordwdh.setText(userTO.getPassword());
+                //benutzername.setText(userTO.getName());
             }
 
         });
+
+        userLoeschen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(view.getContext())
+                        .setMessage("Wollen Sie ihren Account wirklich loescchen?")
+                        .setCancelable(false)
+                        .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                DeleteAccount accountLoeschen = new DeleteAccount();
+                                password = (EditText) findViewById(R.id.editText30);
+                                String passwordString = password.getText().toString();
+                                accountLoeschen.execute(passwordString);
+                            }
+                        })
+                        .setNegativeButton("Nein", null)
+                        .show();
+            }
+
+        });
+    }
+    private boolean validPassword(String password){
+
+        if(password!=null&&password.length()>=8){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validPasswordWdh(String password, String passwordwdh){
+        if(password.equals(passwordwdh)){
+            return true;
+        }
+        return false;
     }
 
 
@@ -86,25 +145,33 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
+    private String hashPasswort(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            String passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
+            //String passwordnew = messageDigest.toString();
+            return passwordnew;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
     public class DeleteAccount extends AsyncTask<String, String, ReturnCodeResponse> {
-        private Context context;
-        private int returnCode;
         private int sessionId;
 
-        public DeleteAccount(Context context) {
-            this.context = context;
-        }
 
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
+            String password=params[0];
             ReturnCodeResponse userDelete = null;
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            sessionId=myApp.getSessionId();
             try {
-                userDelete = onlineService.deleteUser(sessionId);
-                returnCode = userDelete.getReturnCode();
+                userDelete = onlineService.deleteUser(sessionId,password);
                 return userDelete;
             } catch (Exception e) {
 
@@ -140,15 +207,15 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
             String name=params[0];
-            String email=params[1];
-            String passwort=params[2];
+            String passwort=params[1];
+            String passwortwdh=params[2];
             NoobApplication myApp = (NoobApplication) getApplication();
 
             sessionId=myApp.getSessionId();
             ReturnCodeResponse setUserDetails = null;
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             try {
-                setUserDetails = onlineService.setUserDetails(sessionId,name,email,passwort);
+                setUserDetails = onlineService.setUserDetails(sessionId,name,passwort,passwortwdh);
                 returnCode = setUserDetails.getReturnCode();
                 message=setUserDetails.getMessage();
                 return setUserDetails;
@@ -157,14 +224,11 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
             }
             return null;
         }
-        protected void onPostExecute(ReturnCodeResponse returncode){
+        protected void onPostExecute(ReturnCodeResponse returnCodeResponse){
             Dialog.dismiss();
-                if (returnCode == 0) {
-                    Toast.makeText(context, returncode.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            else {
-                Toast.makeText(context, "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
-            }
+
+                    Toast.makeText(context, returnCodeResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
         }
 
     }
