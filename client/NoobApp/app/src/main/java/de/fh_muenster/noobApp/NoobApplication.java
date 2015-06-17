@@ -15,7 +15,6 @@ import de.fh_muenster.noob.UserTO;
  * Subklasse von Application --> Austausch von Daten unter den Activities
  */
 public class NoobApplication extends Application {
-    private String userName;
     private List<String> categories;
     private int sessionId;
     private String userId;
@@ -110,13 +109,5 @@ public class NoobApplication extends Application {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 }

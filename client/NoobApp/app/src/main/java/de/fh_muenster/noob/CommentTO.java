@@ -18,6 +18,8 @@ public class CommentTO implements Serializable {
 	private String ownerId;
 
 	private String date;
+
+	private String ownerName;
 	
 	//private int superCommentId;
 
@@ -84,6 +86,14 @@ public class CommentTO implements Serializable {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
 	}
 
 //	public int getSuperCommentId() {
