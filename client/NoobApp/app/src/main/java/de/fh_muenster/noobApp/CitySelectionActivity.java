@@ -39,6 +39,11 @@ public class CitySelectionActivity extends ActionBarActivity {
         setContentView(R.layout.activity_city_selection);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn auf die Activity gewechselt wird. Auch wenn sie vorher
+     * nur pausiert wurde. Der AsyncTask für den Städteabruf wird gestartet.
+     */
+    @Override
     protected void onResume(){
         super.onResume();
         //Cities asynchron abrufen
@@ -59,15 +64,17 @@ public class CitySelectionActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn von der Activity aus der Zurück-Button auf dem
+     * Smartphone gedrückt wird. Es wird ein LogoutTask gestartet wenn ein Dialog bestätigt wird.
+     */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -86,7 +93,7 @@ public class CitySelectionActivity extends ActionBarActivity {
 
     /**
      * Diese Methode wird ausgeführt wenn aus den Button "Übernehmen" geklickt wird.
-     * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity
+     * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity.
      * @param view
      */
     public void clickFuncCitySelection(View view){
@@ -97,12 +104,23 @@ public class CitySelectionActivity extends ActionBarActivity {
         startActivity(i);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn im Menü auf den Eintrag "Neue Location" geklickt wird.
+     * Die Activity zum Anlegen der Location wird geöffnet.
+     * @param item
+     */
     public void clickFuncNewLocation(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
         Intent i = new Intent(CitySelectionActivity.this, NewLocationActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
@@ -123,7 +141,7 @@ public class CitySelectionActivity extends ActionBarActivity {
 
     /**
      * @author marius
-     * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen
+     * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen.
      */
     class GetCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CitySelectionActivity.this);
@@ -139,7 +157,7 @@ public class CitySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Startet einen neuen Thread, der die Städteliste abholen soll
+         * Startet einen neuen Thread, der die Städteliste abholen soll.
          * @param params
          * @return
          */
@@ -151,7 +169,7 @@ public class CitySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Nimmt die Städtliste entgegen und füllt das Spinner Objekt
+         * Nimmt die Städtliste entgegen und füllt das Spinner Objekt.
          * @param response
          */
         @Override

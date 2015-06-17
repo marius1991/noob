@@ -10,7 +10,9 @@ import android.widget.Toast;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
- * Created by marius on 15.06.15.
+ * @author marius
+ * Dieser AsyncTask realisiert das Abmelden.
+ * Er wurde in eine eigene Klasse ausgelagert, damit er von allen Activites aus aufgerufen werden kann.
  */
 public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> {
     private static final String TAG = LogoutTask.class.getName();
@@ -20,6 +22,11 @@ public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> 
         this.context = context;
     }
 
+    /**
+     * Es wird ein Thread gestartet, in dem der Logout-Befehl an den Server gesendet wird.
+     * @param params
+     * @return
+     */
     @Override
     protected ReturnCodeResponse doInBackground(Integer... params) {
         NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
@@ -27,6 +34,10 @@ public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> 
         return response;
     }
 
+    /**
+     * Der Returncode vom Server wird entgegen genommen.
+     * @param response
+     */
     @Override
     protected void onPostExecute (ReturnCodeResponse response) {
         if (response != null) {

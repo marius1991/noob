@@ -31,13 +31,19 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 /**
  * Created by marius on 02.06.15.
  * @author marius
- * Diese Activity zeigt eine Location und deren Details
+ * Diese Activity zeigt eine Location und deren Details.
  */
 public class LocationShowActivity extends ActionBarActivity {
 
     private static final String TAG = LocationShowActivity.class.getName();
     private int newRating = 0;
 
+    /**
+     * Diese Methode wird beim Starten der Activity aufgerufen.
+     * Der Titel der Activity wird gesetzt.
+     * Die Details der Location werden angezeigt.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +68,13 @@ public class LocationShowActivity extends ActionBarActivity {
         //Rating ersetzen
         TextView textViewRating = (TextView)findViewById(R.id.textView12);
         textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
+
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn auf die Activity gewechselt wird. Auch wenn sie vorher
+     * nur pausiert wurde. Die aktualisierten Locationinformationen werden mit einem AsyncTask abgerufen.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -72,6 +83,10 @@ public class LocationShowActivity extends ActionBarActivity {
         new GetLocationDetailsFromServer().execute(myApp.getLocation().getId());
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn man die Activity verlässt.
+     * Das Rating wird mit einem AsyncTask zum Server gesendet.
+     */
     @Override
     protected  void onPause() {
         super.onPause();
@@ -93,25 +108,39 @@ public class LocationShowActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     /**
      * Diese Funktion wird aufgerufen, wenn auf den Button "Kommentieren" gedrückt wird
-     * Sie startet eine neue Activity
+     * Sie startet eine neue Activity.
      * @param view
      */
-    public void clickFuncComment(View view){
+    public void clickFuncComment(View view) {
         Intent i = new Intent(LocationShowActivity.this, LocationCommentActivity.class);
         startActivity(i);
     }
 
+    /**
+     * Diese Funktion wird aufgerufen, wenn auf den Button "Bearbeiten" gedrückt wird.
+     * Dieser wird nur für den ersteller der Location angezeigt
+     * @param view
+     */
+    public void clickFuncChange(View view) {
+        Intent i = new Intent(LocationShowActivity.this, SetLocationDetailsActivity.class);
+        startActivity(i);
+    }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
@@ -132,7 +161,7 @@ public class LocationShowActivity extends ActionBarActivity {
 
     /**
      * @author marius
-     * Dieser AsyncTask schickt das Rating zum Server
+     * Dieser AsyncTask schickt das Rating zum Server.
      */
     public class SendRatingToServer extends AsyncTask<Integer, String, ReturnCodeResponse> {
         private ProgressDialog Dialog = new ProgressDialog(LocationShowActivity.this);
@@ -148,7 +177,7 @@ public class LocationShowActivity extends ActionBarActivity {
         }
 
         /**
-         * Es wird ein neuer Thread gestartet, in dem das Rating zum Server geschickt wird
+         * Es wird ein neuer Thread gestartet, in dem das Rating zum Server geschickt wird.
          * @param params
          * @return
          */
@@ -162,7 +191,7 @@ public class LocationShowActivity extends ActionBarActivity {
         }
 
         /**
-         * Gibt bei Erfolg eine Meldung
+         * Nimmt den Returncode des Servers entgegen.
          * @param response
          */
         @Override
@@ -175,8 +204,28 @@ public class LocationShowActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * @author marius
+     * Dieser AsyncTask ruft die Locationinformation der angezeigten Location vom Server ab.
+     */
     public class GetLocationDetailsFromServer extends AsyncTask<Integer, String, LocationTO> {
+        private ProgressDialog Dialog = new ProgressDialog(LocationShowActivity.this);
 
+        /**
+         * Während des Abrufs der Location wird ein Dialog angezeigt.
+         */
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Rating an den Server senden...");
+            Dialog.show();
+        }
+
+        /**
+         * Es wird ein Thread gestartet, in dem die Location vom Server abgerufen werden.
+         * @param params
+         * @return
+         */
         @Override
         protected LocationTO doInBackground(Integer... params) {
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
@@ -184,8 +233,14 @@ public class LocationShowActivity extends ActionBarActivity {
             return locationTO;
         }
 
+        /**
+         * Die Location wird vom Server entgegengenommen und bei Erfolg werden die aktuellen
+         * Ratings und Kommentare angezeigt.
+         * @param locationTO
+         */
         @Override
         protected void onPostExecute (LocationTO locationTO) {
+            Dialog.dismiss();
             if (locationTO.getReturnCode() == 10) {
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
@@ -193,6 +248,14 @@ public class LocationShowActivity extends ActionBarActivity {
                 NoobApplication myApp = (NoobApplication) getApplication();
                 myApp.setLocation(locationTO);
                 Log.d(TAG, "Locationdetails abgerufen");
+                //Falls der aktuelle User der Ersteller einer Location ist, wird der Button sichtbar
+                View b = findViewById(R.id.button);
+                if(myApp.getLocation().getOwnerId().equals(myApp.getUserId())) {
+                    b.setVisibility(View.VISIBLE);
+                }
+                else {
+                    b.setVisibility(View.INVISIBLE);
+                }
                 //Kommentarliste füllen
                 List<CommentTO> comments = myApp.getLocation().getComments();
                 LinearLayout list = (LinearLayout)findViewById(R.id.comments);
@@ -213,8 +276,6 @@ public class LocationShowActivity extends ActionBarActivity {
                 RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                 ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        //Rating asynchron zum Server senden
-//                new SendRatingToServer().execute(Math.round(rating));
                         newRating = Math.round(rating);
                     }
                 });

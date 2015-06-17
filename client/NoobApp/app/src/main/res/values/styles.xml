@@ -1,21 +1,43 @@
 <resources>
     <!-- Base application theme. -->
-    <color name="white_opaque">#FFFFFFFF</color>
-    <style name="ThemeFullScreen" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="noob_theme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/noob_theme.actionbar</item>
+        <item name="android:buttonStyle">@style/noob_button</item>-->
+        <item name="android:windowBackground">@color/noob_white</item>
+        <item name="colorControlNormal">#c5c5c5</item>
+        <item name="colorControlActivated">@color/noob_blue</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
     </style>
-    <style name="MyActionBar" parent="Widget.AppCompat.ActionBar.Solid">
-        <item name="background">@color/hint_foreground_material_light</item>
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+
+
+    <style name="noob_theme.actionbar" parent="Widget.AppCompat.ActionBar">
+        <item name="background">@color/noob_blue</item>
+        <item name="titleTextStyle">@style/noob_theme.actionbar.titletext</item>
+        <item name="android:actionMenuTextAppearance">@color/noob_blue</item>
+        <item name="logo">@drawable/icon</item>
+        <!--<item name="displayOptions">useLogo|showHome|showTitle</item>-->
     </style>
+
+
     <!-- ActionBar title text -->
-    <style name="MyActionBarTitleText"
-        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@android:color/holo_blue_light</item>
+    <style name="noob_theme.actionbar.titletext" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/noob_white</item>
     </style>
+
+
+    <style name="noob_button" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/noob_white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@drawable/buttonshape</item>
+    </style>
+
     <style name="Textcolor">
-        <item name="android:textColor">@android:color/holo_blue_light</item>
+        <item name="android:textColor">@color/noob_blue</item>
+    </style>
+
+    <style name="PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/noob_blue_dark</item>
     </style>
 
 </resources>

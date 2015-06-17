@@ -20,6 +20,7 @@ public class NoobApplication extends Application {
     private String category;
     private LocationTO location;
     private String sortBy;
+    private int ratingFilter;
     private UserTO user;
     private List<LocationTO> locationSearchResults;
     private String search;
@@ -90,5 +91,13 @@ public class NoobApplication extends Application {
 
     public String getSortBy() {
         return sortBy;
+    }
+
+    public int getRatingFilter() {
+        return ratingFilter;
+    }
+
+    public void setRatingFilter(int ratingFilter) {
+        this.ratingFilter = ratingFilter;
     }
 }
