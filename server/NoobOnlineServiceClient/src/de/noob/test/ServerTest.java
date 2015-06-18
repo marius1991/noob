@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.noob.noobservice.CityListResponse;
+import de.noob.noobservice.LocationTO;
 import de.noob.noobservice.NoobOnlineServiceBean;
 import de.noob.noobservice.NoobOnlineServiceBeanService;
 import de.noob.noobservice.ReturnCodeResponse;
@@ -73,7 +74,7 @@ public class ServerTest {
 	}	
 	
 	@Test
-	public void createLocationScenarios() {
+	public void locationScenarios() {
 		//Alles ok
 		ReturnCodeResponse registerRe = remoteSystem.register("philipp", "p@p.de", "12345678", "12345678");
 		assertEquals(registerRe.getMessage(), 0, registerRe.getReturnCode());
@@ -82,32 +83,53 @@ public class ServerTest {
 		assertEquals(loginRe.getMessage(), 0, loginRe.getReturnCode());
 		//======================createLocationTests========================
 		//Alles ok
-		ReturnCodeResponse clRe = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg");
+		ReturnCodeResponse clRe = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg", null);
 		assertEquals(clRe.getMessage(), 0, clRe.getReturnCode());
 		//Sind neue Locations am User gespeichert?
 		UserTO user = remoteSystem.getUserDetails(loginRe.getSessionId());
 		assertEquals(user.getMessage(), "p@p.de", user.getEmail());
 		assertEquals("Hat ein User auch Locations?", "Körners", user.getLocations().get(0).getName());
 		//Dieselbe Location nochmal erstellen, sollte abgewiesen werden.
-		ReturnCodeResponse clRe2 = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg");
+		ReturnCodeResponse clRe2 = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg", null);
 		assertEquals(clRe2.getMessage(), 2, clRe2.getReturnCode());
+		//========================commentOnLocationTests=========================
+		ReturnCodeResponse comment = remoteSystem.commentOnLocation(loginRe.getSessionId(), user.getLocations().get(0).getId(), "Beste Stammtischkneipe im Sauerland!!!");
+		assertEquals(comment.getMessage(), 0, comment.getReturnCode());		
+		//User aktualisieren und Kommentartext vergleichen
+		UserTO user1 = remoteSystem.getUserDetails(loginRe.getSessionId());
+		assertEquals(comment.getMessage(), "Beste Stammtischkneipe im Sauerland!!!", user1.getComments().get(0).getText());
+		//An nicht existierender Location kommentieren
+		ReturnCodeResponse comment1 = remoteSystem.commentOnLocation(loginRe.getSessionId(), 99999999, "Dieser Kommentar sollte nicht zu sehen sein!");
+		assertEquals(comment1.getMessage(), 2, comment1.getReturnCode());
+		//LocationDetails runterladen um zu schauen ob der erste Kommentar vorhanden ist, aber nicht der zweite Kommentar.
+		LocationTO location = remoteSystem.getLocationDetails(user.getLocations().get(0).getId());
+		assertEquals(location.getMessage(), 1, location.getComments().size());
+		assertEquals(location.getMessage(), "Beste Stammtischkneipe im Sauerland!!!", location.getComments().get(0).getText());
 		//Falsche SessionId nach Logout
 		ReturnCodeResponse logoutRe = remoteSystem.logout(loginRe.getSessionId());
 		assertEquals("ReturnCode muss 0 sein.", 0, logoutRe.getReturnCode());	
-		ReturnCodeResponse clRe1 = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg");
+		ReturnCodeResponse clRe1 = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg", null);
 		assertEquals(clRe1.getMessage(), 1, clRe1.getReturnCode());
 		//wieder einloggen
 		UserLoginResponse login = remoteSystem.login("p@p.de", "12345678");
 		assertEquals(login.getMessage(), 0, login.getReturnCode());
+		//=============================giveRatingTests==================================
+		ReturnCodeResponse rating = remoteSystem.giveRating(login.getSessionId(), user.getLocations().get(0).getId(), 5);
+		assertEquals(rating.getMessage(), 0, rating.getReturnCode());
+		
 		//=============================User wieder löschen====================
-		ReturnCodeResponse deleteRe = remoteSystem.deleteUser(loginRe.getSessionId(), "12345678");
+		ReturnCodeResponse deleteRe = remoteSystem.deleteUser(login.getSessionId(), "12345678");
 		assertEquals(deleteRe.getMessage(), 0, deleteRe.getReturnCode());
+		//erneuter Login muss abgewiesen werden
+		UserLoginResponse login2 = remoteSystem.login("p@p.de", "12345678");
+		assertEquals(login2.getMessage(), 2, login2.getReturnCode());
 	}
 	
 	
 	public void listLocationScenarios() {
 		CityListResponse cityRe = remoteSystem.listCities();
 		assertEquals("ReturnCode muss 0 sein.", 0, cityRe.getReturnCode());
+		//assert
 	}
 	
 }

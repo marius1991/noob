@@ -10,6 +10,7 @@ import de.noob.dto.LocationTO;
 import de.noob.dto.RatingTO;
 import de.noob.dto.UserTO;
 import de.noob.entities.Comment;
+import de.noob.entities.Image;
 import de.noob.entities.Location;
 import de.noob.entities.Rating;
 import de.noob.entities.User;
@@ -28,8 +29,7 @@ public class DtoAssembler {
 	 * @return
 	 */
 	public UserTO makeDTO(User user) {
-		UserTO dto = new UserTO(user.getId(), 
-				user.getName(), 
+		UserTO dto = new UserTO(user.getName(), 
 				user.getPassword(), 
 				user.getEmail(),
 				this.makeLocationsDTO(user.getLocations()), 
@@ -44,6 +44,11 @@ public class DtoAssembler {
 	 * @return
 	 */
 	public LocationTO makeDTO(Location location) {
+		List<byte[]> images = new ArrayList<byte[]>();
+		for(Image image: location.getImages()) {
+			images.add(image.getData());
+		}
+		
 		LocationTO dto = new LocationTO(location.getId(), 
 				location.getName(), 
 				location.getCategory(),
@@ -55,7 +60,9 @@ public class DtoAssembler {
 				location.getAverageRating(), 
 				makeRatingsDTO(location.getRatings()), 
 				makeCommentsDTO(location.getComments()), 
-				location.getOwner().getEmail());
+				location.getOwner().getEmail(),
+				location.getOwner().getName(),
+				images);
 		return dto;
 	}
 
@@ -83,6 +90,7 @@ public class DtoAssembler {
 				//makeCommentsDTO(comment.getComments()),
 				comment.getLocation().getId(), 
 				comment.getOwner().getEmail(),
+				comment.getOwner().getName(),
 				comment.getDate());
 		return dto;
 	}

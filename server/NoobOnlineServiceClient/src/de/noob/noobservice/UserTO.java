@@ -21,7 +21,6 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="comments" type="{http://noobservice.noob.de/}commentTO" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="email" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="locations" type="{http://noobservice.noob.de/}locationTO" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -38,7 +37,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "userTO", propOrder = {
     "comments",
     "email",
-    "id",
     "locations",
     "name",
     "password",
@@ -51,7 +49,6 @@ public class UserTO
     @XmlElement(nillable = true)
     protected List<CommentTO> comments;
     protected String email;
-    protected int id;
     @XmlElement(nillable = true)
     protected List<LocationTO> locations;
     protected String name;
@@ -110,22 +107,6 @@ public class UserTO
      */
     public void setEmail(String value) {
         this.email = value;
-    }
-
-    /**
-     * Ruft den Wert der id-Eigenschaft ab.
-     * 
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Legt den Wert der id-Eigenschaft fest.
-     * 
-     */
-    public void setId(int value) {
-        this.id = value;
     }
 
     /**
