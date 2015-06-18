@@ -95,7 +95,7 @@ public class LocationSearchActivity extends ActionBarActivity {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
-                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);

@@ -1,11 +1,12 @@
 package de.fh_muenster.noobApp;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fh_muenster.exceptions.BadConnectionException;
-import de.fh_muenster.exceptions.InvalidRegisterException;
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.CityListResponse;
 import de.fh_muenster.noob.CommentTO;
@@ -22,6 +23,8 @@ import de.fh_muenster.noob.UserTO;
  */
 public class NoobOnlineServiceMock implements NoobOnlineService {
     private List<LocationTO> locations = new ArrayList<>();
+    private List<CommentTO> comments = new ArrayList<>();
+    private List<RatingTO> ratings = new ArrayList<>();
 
     public NoobOnlineServiceMock() {
         if(locations.isEmpty()) {
@@ -37,7 +40,6 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
             locationTO.setDescription("Die verwinkelte Kult-Kneipe mit Kunsttapeten, Live-Bühne und westfälischer Kost war einst ein Hippie-Treff.");
             locationTO.setId(1);
             CommentTO commentTO = new CommentTO();
-            List<CommentTO> comments = new ArrayList<>();
             commentTO.setDate("2015-01-01 00:00");
             commentTO.setId(1);
             commentTO.setOwnerId("test@test.de");
@@ -46,7 +48,6 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
             comments.add(commentTO);
             locationTO.setComments(comments);
             RatingTO ratingTO = new RatingTO();
-            List<RatingTO> ratings = new ArrayList<>();
             ratingTO.setOwnerId("test@test.de");
             ratingTO.setId(1);
             ratingTO.setValue(3);
@@ -58,7 +59,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     }
 
     @Override
-    public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) throws InvalidRegisterException {
+    public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         if(password.equals(passwordConfirmation)) {
             returnCodeResponse.setReturnCode(0);
@@ -75,7 +76,15 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     @Override
     public UserLoginResponse login(String email, String password) {
         UserLoginResponse userLoginResponse = new UserLoginResponse();
-        if(email.equals("test@test.de") && password.equals("test")) {
+        MessageDigest passwordHash = null;
+        try {
+            passwordHash = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        passwordHash.update("test".getBytes());
+        String passwordHex= new BigInteger(1,passwordHash.digest()).toString(16);
+        if(email.equals("test@test.de") && password.equals(passwordHex)) {
             userLoginResponse.setReturnCode(0);
             userLoginResponse.setMessage("Erfolgreich angemeldet");
             userLoginResponse.setSessionId(1);
@@ -98,7 +107,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     }
 
     @Override
-    public CategoryListResponse listCategories() throws BadConnectionException {
+    public CategoryListResponse listCategories() {
         CategoryListResponse categoryListResponse = new CategoryListResponse();
         categoryListResponse.setReturnCode(0);
         categoryListResponse.setMessage("Kategorien erfolgreich abgerufen");
@@ -148,11 +157,6 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     }
 
     @Override
-    public LocationListResponse listAllLocations(String city) {
-        return null;
-    }
-
-    @Override
     public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         RatingTO ratingTO = new RatingTO();
@@ -181,29 +185,26 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         commentTO.setOwnerId("test@test.de");
         commentTO.setLocationId(locationId);
         commentTO.setText(text);
-        locations.get(0).getComments().add(commentTO);
+        List<LocationTO> locationTOs = locations;
+        LocationTO locationTO = locationTOs.get(0);
+        List<CommentTO> commentTOs = new ArrayList<>();
+        commentTOs.add(commentTO);
+        locationTO.setComments(commentTOs);
+        locationTOs.add(locationTO);
+        locations = locationTOs;
         returnCodeResponse.setReturnCode(0);
         returnCodeResponse.setMessage("Erfolgreich kommentiert");
         return returnCodeResponse;
     }
 
     @Override
-    public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
+    public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
         return null;
     }
 
-    @Override
-    public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city) {
-        return null;
-    }
 
     @Override
-    public ReturnCodeResponse createLocationWithImage(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
-        return null;
-    }
-
-    @Override
-    public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
         return null;
     }
 
@@ -222,7 +223,25 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
 
     @Override
     public UserTO getUserDetails(int sessionId) {
-        return null;
+        UserTO userTO = new UserTO();
+        userTO.setName("Tester");
+        userTO.setMessage("Erfolgreich abgerufen");
+        userTO.setReturnCode(0);
+        userTO.setEmail("test@test.de");
+        userTO.setId(1);
+        MessageDigest passwordHash = null;
+        try {
+            passwordHash = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        passwordHash.update("test".getBytes());
+        String passwordHex= new BigInteger(1,passwordHash.digest()).toString(16);
+        userTO.setPassword(passwordHex);
+        userTO.setLocations(locations);
+        userTO.setComments(comments);
+        userTO.setRatings(ratings);
+        return userTO;
     }
 
     @Override

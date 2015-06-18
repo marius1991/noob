@@ -13,7 +13,7 @@
         android:theme="@style/noob_theme">
         <activity
             android:name=".LoginActivity"
-            android:label="Willkommen Nooby" >
+            android:label="NoobApp" >
             <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,6 +50,7 @@
         <activity
             android:name=".LocationListActivity"
             android:label="@string/title_activity_category_list"
+            android:launchMode = "singleTask"
             android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
         </activity>
         <activity

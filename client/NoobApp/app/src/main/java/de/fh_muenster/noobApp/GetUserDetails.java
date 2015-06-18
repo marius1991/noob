@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
+import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.UserTO;
 
 /**
@@ -23,7 +24,13 @@ public class GetUserDetails extends AsyncTask<String, String, UserTO> {
 
         @Override
         protected UserTO doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             UserTO userTO;
             sessionId = myApp.getSessionId();
             userTO = onlineService.getUserDetails(sessionId);

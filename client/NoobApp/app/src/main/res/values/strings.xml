@@ -13,6 +13,7 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="username">Email</string>
     <string name="password">Password</string>
+    <string name="register"><u>Registrieren</u></string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf dem "Register Button und geben Sie Ihre Daten im Formular ein.</string>
     <string name="helpquestion2">Wir versichern, dass wir Ihre Daten nicht an Dritte Personen weitergeben und ihr Passwort verschlüsselt auf unseren Server speichern</string>
@@ -44,8 +45,8 @@
     <string name="activity_location_show_kommentare">Kommentare</string>
     <string name="activity_location_show_kommentieren">Kommentieren</string>
     <string name="activity_location_show_image">Bild der Location</string>
-    <string name="activity_location_show_bearb">bearb.</string>
-
+    <string name="activity_location_show_bearb">Bearbeiten</string>
+    <string name="activity_location_show_maps"><u>Maps</u></string>
 
     <!-- Strings für die LocationSortActivity -->
     <string name="title_activity_location_sort">Filtern und Sortieren</string>
