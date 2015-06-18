@@ -38,16 +38,21 @@ public class Location implements Serializable {
 	
 	private double averageRating;
 	
-	@OneToMany (mappedBy="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Comment> comments;
 	
 	@ManyToOne
 	private User owner;
 	
-	private byte[] image;
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Image> images;
+	
+	//@Lob
+	//private byte[] image;
+	
 	
 	public Location() {
 	}
@@ -74,7 +79,6 @@ public class Location implements Serializable {
 		this.plz = plz;
 		this.city = city;
 		this.owner = owner;
-		this.image = image;
 	}	
 
 	public int getId() {
@@ -173,12 +177,21 @@ public class Location implements Serializable {
 		this.owner = owner;
 	}
 	
-	public byte[] getImage() {
-		return image;
-	}
 	
-	public void setImage(byte[] image) {
-		this.image = image;
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+
+	public void addImage(byte[] imageBytes, User user) {
+		Image image = new Image(); 
+		image.setData(imageBytes);
+		image.setLocation(this);
+		image.setOwner(user);
+		images.add(image);
 	}
 
 	public void addRating(User user, int value) {
