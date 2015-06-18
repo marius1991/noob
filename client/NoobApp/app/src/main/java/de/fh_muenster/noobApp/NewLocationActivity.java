@@ -47,6 +47,7 @@ public class NewLocationActivity extends ActionBarActivity {
     private String ortString;
     private Button neueLocation;
     private Bitmap bitmap;
+    NoobApplication myApp;
     private byte[] byteArray;
     List<String> categoryList;
     private String selectedSpinnerElement;
@@ -55,8 +56,8 @@ public class NewLocationActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_location2);
-        GetCategoriesServer getCategories = new GetCategoriesServer();
-        getCategories.execute();
+        myApp = (NoobApplication) getApplication();
+        categoryList=myApp.getCategories();
         locationame = (EditText) findViewById(R.id.editText9);
         beschreibung = (EditText) findViewById(R.id.editText10);
         strasse = (EditText) findViewById(R.id.editText18);
@@ -64,10 +65,11 @@ public class NewLocationActivity extends ActionBarActivity {
         plz = (EditText) findViewById(R.id.editText11);
         ort = (EditText) findViewById(R.id.editText);
         if (!categoryList.isEmpty()) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, categoryList);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner spinner = (Spinner) findViewById(R.id.spinner3);
+            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    //android.R.layout.simple_spinner_item, categoryList);
+            ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categoryList);
+            //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Spinner spinner = (Spinner) findViewById(R.id.spinner2);
             spinner.setAdapter(adapter);
 
 
@@ -88,22 +90,25 @@ public class NewLocationActivity extends ActionBarActivity {
         neueLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (locationame.getText().equals("")) {
+                if (locationame.getText().toString().equals("")) {
                     locationame.setError("Bitte Locationame Eintragen");
                     locationame.requestFocus();
-                } else if (beschreibung.getText().equals("")) {
+                } else if (beschreibung.getText().toString().equals("")) {
                     beschreibung.setError("Bitte Beschreibung eintragen");
                     beschreibung.requestFocus();
-                } else if (strasse.getText().equals("")) {
+                } else if (strasse.getText().toString().equals("")) {
                     strasse.setError("Bitte Strasse eintragen");
                     strasse.requestFocus();
-                } else if (nummer.getText().equals("")) {
+                } else if (nummer.getText().toString().equals("")) {
                     nummer.setError("Bitte Nummer eintragen");
                     nummer.requestFocus();
-                } else if (plz.getText().equals("")) {
+                } else if (plz.getText().toString().equals("")) {
                     plz.setError("Bitte PLZ eintragen");
                     plz.requestFocus();
-                } else if (ort.getText().equals("")) {
+                }else if (plz.getText().toString().length() == 5) {
+                        plz.setError("PLZ muss 5 Zeichen lang sein");
+                        plz.requestFocus();
+                } else if (ort.getText().toString().equals("")) {
                     ort.setError("Bitte Ort eintragen");
                     ort.requestFocus();
                 } else {
@@ -113,6 +118,8 @@ public class NewLocationActivity extends ActionBarActivity {
                     plZSring = plz.getText().toString();
                     ortString = ort.getText().toString();
                     nummerString = nummer.getText().toString();
+                    bitmapToByte();
+                    myApp.setByteArray(byteArray);
                     NewLocationTask newLocation = new NewLocationTask();
                     newLocation.execute(locationameString, selectedSpinnerElement, beschreibungString, strasseString, nummerString, plZSring, ortString);
                 }
@@ -125,7 +132,7 @@ public class NewLocationActivity extends ActionBarActivity {
 
     public void startKamera(View view) {
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i, 0);
+        startActivityForResult(i, PICK_IMAGE_REQUEST);
     }
 
 
@@ -214,36 +221,12 @@ public class NewLocationActivity extends ActionBarActivity {
             sessionID = myApp.getSessionId();
             int plz = Integer.parseInt(params[5]);
             ReturnCodeResponse response;
-            response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6]);
+            response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6],myApp.getByteArray());
             return response;
         }
 
         @Override
         protected void onPostExecute(ReturnCodeResponse response) {
-
-        }
-    }
-
-    class GetCategoriesServer extends AsyncTask<String, String, CategoryListResponse> {
-
-        @Override
-        protected CategoryListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-            CategoryListResponse response = null;
-            try {
-                response = onlineService.listCategories();
-            } catch (BadConnectionException e) {
-
-            }
-            return response;
-        }
-
-
-        @Override
-        protected void onPostExecute(CategoryListResponse response) {
-            Integer returnCode = response.getReturnCode();
-
-            categoryList = response.getCategories();
 
         }
     }

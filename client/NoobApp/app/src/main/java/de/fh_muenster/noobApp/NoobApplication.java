@@ -27,6 +27,7 @@ public class NoobApplication extends Application {
     private UserTO user;
     private List<LocationTO> locationSearchResults;
     private String search;
+    private byte[] byteArray;
 
     public String getUserId() {
         return userId;
@@ -71,7 +72,6 @@ public class NoobApplication extends Application {
     public void setCategory(String category) {
         this.category = category;
     }
-
     public String getCategory() {
         return this.category;
     }
@@ -118,5 +118,13 @@ public class NoobApplication extends Application {
 
     public void setTestmode(boolean testmode) {
         this.testmode = testmode;
+
+    public byte[] getByteArray() {
+        return byteArray;
+    }
+
+    public void setByteArray(byte[] byteArray) {
+        this.byteArray = byteArray;
+
     }
 }

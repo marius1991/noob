@@ -2,7 +2,11 @@ package de.fh_muenster.noobApp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,9 +17,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +32,7 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 
 
 public class SetLocationDetailsActivity extends ActionBarActivity {
+    private int PICK_IMAGE_REQUEST = 1;
     private EditText locationame;
     private EditText beschreibung;
     private EditText strasse;
@@ -36,6 +43,8 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
     private Button locationLoeschen;
     private LocationTO locationTO;
     private NoobApplication myApp;
+    private Bitmap bitmap;
+    private byte[] byteArray;
     List<String> categoryList;
     private String selectedSpinnerElement;
     private static final String TAG = SetLocationDetailsActivity.class.getName();
@@ -47,13 +56,14 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         myApp = (NoobApplication) getApplication();
         locationTO=myApp.getLocation();
         //ButtonsFestlegen
-        editlocation=(Button) findViewById(R.id.button9);
-        locationame = (EditText) findViewById(R.id.editText28);
-        beschreibung= (EditText) findViewById(R.id.editText27);
-        strasse= (EditText) findViewById(R.id.editText12);
-        nummer= (EditText) findViewById(R.id.editText19);
-        plz= (EditText) findViewById(R.id.editText2);
-        ort= (EditText) findViewById(R.id.editText20);
+        categoryList=myApp.getCategories();
+        editlocation=(Button) findViewById(R.id.button15);
+        locationame = (EditText) findViewById(R.id.editText9);
+        beschreibung= (EditText) findViewById(R.id.editText10);
+        strasse= (EditText) findViewById(R.id.editText18);
+        nummer= (EditText) findViewById(R.id.editText21);
+        plz= (EditText) findViewById(R.id.editText11);
+        ort= (EditText) findViewById(R.id.editText);
         //Hier eventuell noch überprüfen ob locationTO nicht leer ist
         locationame.setHint(locationTO.getName());
         beschreibung.setHint(locationTO.getDescription());
@@ -61,14 +71,12 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         nummer.setHint(locationTO.getNumber());
         plz.setHint(String.valueOf(locationTO.getPlz()));
         ort.setHint(locationTO.getCity());
-        GetCategories getCategories = new GetCategories();
-        getCategories.execute();
         //Befüllt Spinner mit dem Array from Kategories vom Server(categoryList)
         if(!categoryList.isEmpty()) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, categoryList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner spinner = (Spinner) findViewById(R.id.spinner3);
+            Spinner spinner = (Spinner) findViewById(R.id.spinner2);
             spinner.setAdapter(adapter);
             //krallt sich die SpinnerPosition von der ausgewählten Kategory
             int spinnerPostion = adapter.getPosition(locationTO.getCategory());
@@ -94,53 +102,74 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         editlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(locationame.getHint().equals("")||locationame.getText().equals("")){
-                    locationame.setError("Bitte Locationame Eintragen");
-                    locationame.requestFocus();
-                }else if(beschreibung.getHint().equals("")||beschreibung.getText().equals("")){
-                    beschreibung.setError("Bitte Beschreibung eintragen");
-                    beschreibung.requestFocus();
-                }else if(strasse.getHint().equals("")||strasse.getText().equals("")){
-                    strasse.setError("Bitte Strasse eintragen");
-                    strasse.requestFocus();
-                }else if(nummer.getHint().equals("")||nummer.getText().equals("")) {
-                    nummer.setError("Bitte Nummer eintragen");
-                    nummer.requestFocus();
-                }else if(plz.getHint().equals("")||plz.getText().equals("")) {
-                    plz.setError("Bitte PLZ eintragen");
-                    plz.requestFocus();
-                }else if(ort.getHint().equals("")||ort.getText().equals("")) {
-                    ort.setError("Bitte Ort eintragen");
-                    ort.requestFocus();
-                }else {
-                    if(!locationame.getText().equals("")) {
-                        locationTO.setName(locationame.getText().toString());
-                    }else if(!beschreibung.getText().equals("")){
-                        locationTO.setDescription(beschreibung.getText().toString());
-                    }else if(!strasse.getText().equals("")){
-                        locationTO.setStreet(strasse.getText().toString());
-                    }
-                    else if(!nummer.getText().equals("")){
-                        locationTO.setNumber(nummer.getText().toString());
-                    }else if(!plz.getText().equals("")){
-                        locationTO.setPlz(Integer.parseInt(plz.getText().toString()));
-                    }else if(!ort.getText().equals("")){
-                        locationTO.setCity(ort.getText().toString());
-                    }else {
-                        myApp.setLocation(locationTO);
-                        SetLocationDetails setLocation = new SetLocationDetails(view.getContext());
-                        setLocation.execute();
-                    }
-
+                if(!locationame.getText().toString().equals("")) {
+                    locationTO.setName(locationame.getText().toString());
                 }
-            }
+                if(!beschreibung.getText().toString().equals("")){
+                    locationTO.setDescription(beschreibung.getText().toString());
+                }
+                if(!strasse.getText().toString().equals("")) {
+                    locationTO.setStreet(strasse.getText().toString());
+                }
+                if(!nummer.getText().toString().equals("")) {
+                    locationTO.setNumber(nummer.getText().toString());
+                }
+                if(!plz.getText().toString().equals("")) {
+                    locationTO.setPlz(Integer.parseInt(plz.getText().toString()));
+                }
+                if(!ort.getText().toString().equals("")) {
+                    locationTO.setCity(ort.getText().toString());
+                }
+                if(locationame.getText().toString().isEmpty()&&beschreibung.getText().toString().isEmpty()&&strasse.getText().toString().isEmpty()&&nummer.getText().toString().isEmpty()) {
+                    Toast.makeText(view.getContext(), "Es wurde keine Werte geändert", Toast.LENGTH_SHORT).show();
+                }
+
+                if(!locationame.getText().toString().isEmpty()||!beschreibung.getText().toString().isEmpty()||!strasse.getText().toString().isEmpty()||!nummer.getText().toString().isEmpty()||!plz.getText().toString().isEmpty()||!ort.getText().toString().isEmpty()){
+                    myApp.setLocation(locationTO);
+                    SetLocationDetails setLocation = new SetLocationDetails(view.getContext());
+                    setLocation.execute();
+                }
+
+        }
+
 
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
+                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
 
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+    }
+    public void startKamera(View view) {
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(i, PICK_IMAGE_REQUEST);
+    }
+    public void pickPhoto(View view) {
+        Intent intent = new Intent();
+// Show only images, no videos or anything else
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+// Always show the chooser (if there are multiple options available)
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -175,48 +204,26 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         protected ReturnCodeResponse doInBackground(String... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
 
-            sessionId=myApp.getSessionId();
+            sessionId = myApp.getSessionId();
             ReturnCodeResponse setLocation = null;
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-            locationTO=myApp.getLocation();
+            locationTO = myApp.getLocation();
             try {
-                setLocation = onlineService.setLocationDetails(sessionId, locationTO);
+                //setLocation = onlineService.setLocationDetails(sessionId, locationTO);
                 returnCode = setLocation.getReturnCode();
-                message=setLocation.getMessage();
+                message = setLocation.getMessage();
                 return setLocation;
             } catch (Exception e) {
-
+                 return null;
             }
-            return null;
         }
+
         protected void onPostExecute(ReturnCodeResponse returnCodeResponse){
-                Toast.makeText(context, returnCodeResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
 
         }
 
     }
-    class GetCategories extends AsyncTask<String, String, CategoryListResponse> {
 
-        @Override
-        protected CategoryListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-            CategoryListResponse response = null;
-            try {
-                response = onlineService.listCategories();
-            } catch (BadConnectionException e) {
-
-            }
-            return response;
-        }
-
-
-        @Override
-        protected void onPostExecute (CategoryListResponse response) {
-                Integer returnCode = response.getReturnCode();
-
-                categoryList = response.getCategories();
-
-        }
-    }
 }
