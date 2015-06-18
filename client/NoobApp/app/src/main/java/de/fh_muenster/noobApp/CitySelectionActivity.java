@@ -1,7 +1,9 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CityListResponse;
+import de.fh_muenster.noob.NoobOnlineService;
 
 /**
  * Created by marius on 02.06.15.
@@ -37,6 +40,11 @@ public class CitySelectionActivity extends ActionBarActivity {
         setContentView(R.layout.activity_city_selection);
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn auf die Activity gewechselt wird. Auch wenn sie vorher
+     * nur pausiert wurde. Der AsyncTask für den Städteabruf wird gestartet.
+     */
+    @Override
     protected void onResume(){
         super.onResume();
         //Cities asynchron abrufen
@@ -57,18 +65,36 @@ public class CitySelectionActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     /**
+     * Diese Methode wird aufgerufen, wenn von der Activity aus der Zurück-Button auf dem
+     * Smartphone gedrückt wird. Es wird ein LogoutTask gestartet wenn ein Dialog bestätigt wird.
+     */
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
+                        CitySelectionActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
+    }
+
+    /**
      * Diese Methode wird ausgeführt wenn aus den Button "Übernehmen" geklickt wird.
-     * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity
+     * Sie speichert die ausgewählte Stadt und öffnet die nächste Activity.
      * @param view
      */
     public void clickFuncCitySelection(View view){
@@ -79,15 +105,39 @@ public class CitySelectionActivity extends ActionBarActivity {
         startActivity(i);
     }
 
-    public void clickFuncNewLocation(MenuItem item) {
-        Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
-        Intent i = new Intent(CitySelectionActivity.this, NewLocationActivity.class);
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
+    }
+
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(CitySelectionActivity.this, UserManagementAcitivtiy.class);
         startActivity(i);
     }
 
     /**
      * @author marius
-     * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen
+     * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen.
      */
     class GetCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CitySelectionActivity.this);
@@ -103,19 +153,26 @@ public class CitySelectionActivity extends ActionBarActivity {
         }
 
         /**
-         * Startet einen neuen Thread, der die Städteliste abholen soll
+         * Startet einen neuen Thread, der die Städteliste abholen soll.
          * @param params
          * @return
          */
         @Override
         protected CityListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             CityListResponse response = onlineService.listCities();
             return response;
         }
 
         /**
-         * Nimmt die Städtliste entgegen und füllt das Spinner Objekt
+         * Nimmt die Städtliste entgegen und füllt das Spinner Objekt.
          * @param response
          */
         @Override

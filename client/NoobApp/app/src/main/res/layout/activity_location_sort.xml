@@ -28,19 +28,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_location_sort_nachName1"
-            android:id="@+id/radioButton1"
-            android:layout_below="@+id/textView6"
-            android:layout_alignRight="@+id/textView6"
-            android:layout_alignEnd="@+id/textView6" />
+            android:id="@+id/radioButton1" />
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_location_sort_nachName2"
-            android:id="@+id/radioButton2"
-            android:layout_below="@+id/radioButton1"
-            android:layout_alignLeft="@+id/radioButton1"
-            android:layout_alignStart="@+id/radioButton1" />
+            android:id="@+id/radioButton2" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_location_sort_nachRating1"
+            android:id="@+id/radioButton3" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_location_sort_nachRating2"
+            android:id="@+id/radioButton4" />
 
     </RadioGroup>
 
@@ -63,6 +69,26 @@
         android:layout_marginTop="54dp"
         android:layout_below="@+id/radioGroup"
         android:layout_centerHorizontal="true" />
+
+    <SeekBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:max="5"
+        android:layout_alignLeft="@+id/button5"
+        android:layout_alignStart="@+id/button5"
+        android:layout_below="@+id/textViewSeekBar"
+        android:layout_alignRight="@+id/button5"
+        android:layout_alignEnd="@+id/button5" />
+
+    <TextView
+        android:id="@+id/textViewSeekBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/textView7"
+        android:layout_alignLeft="@+id/textView6"
+        android:layout_alignStart="@+id/textView6" />
 
 
 </RelativeLayout>

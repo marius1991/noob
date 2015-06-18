@@ -2,10 +2,12 @@ package de.fh_muenster.noobApp;
 
 import android.app.Application;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationTO;
+import de.fh_muenster.noob.UserTO;
 
 /**
  * Created by marius on 02.06.15.
@@ -13,14 +15,19 @@ import de.fh_muenster.noob.LocationTO;
  * Subklasse von Application --> Austausch von Daten unter den Activities
  */
 public class NoobApplication extends Application {
+    private boolean testmode = false;
+    private List<String> categories;
     private int sessionId;
     private String userId;
     private String city;
     private String category;
     private LocationTO location;
     private String sortBy;
+    private int ratingFilter;
+    private UserTO user;
     private List<LocationTO> locationSearchResults;
     private String search;
+    private byte[] byteArray;
 
     public String getUserId() {
         return userId;
@@ -65,7 +72,6 @@ public class NoobApplication extends Application {
     public void setCategory(String category) {
         this.category = category;
     }
-
     public String getCategory() {
         return this.category;
     }
@@ -78,11 +84,47 @@ public class NoobApplication extends Application {
         this.location = location;
     }
 
+    public UserTO getUser(){return user;}
+
+    public void setUser(UserTO user){this.user=user;}
+
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
     }
 
     public String getSortBy() {
         return sortBy;
+    }
+
+    public int getRatingFilter() {
+        return ratingFilter;
+    }
+
+    public void setRatingFilter(int ratingFilter) {
+        this.ratingFilter = ratingFilter;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public boolean isTestmode() {
+        return testmode;
+    }
+
+    public void setTestmode(boolean testmode) {
+        this.testmode = testmode;
+
+    public byte[] getByteArray() {
+        return byteArray;
+    }
+
+    public void setByteArray(byte[] byteArray) {
+        this.byteArray = byteArray;
+
     }
 }

@@ -7,13 +7,15 @@ import java.util.List;
  * @author philipp
  *
  */
-public class LocationTO extends ReturnCodeResponse {
+public class LocationTO extends ReturnCodeResponse implements Comparable<LocationTO> {
 
 	private static final long serialVersionUID = -5498069855610055362L;
 	
 	private int id;
 	
 	private String name;
+
+	private String ownerName;
 	
 	private String category;
 	
@@ -22,6 +24,8 @@ public class LocationTO extends ReturnCodeResponse {
 	private String street;
 	
 	private String number;
+
+	private byte[] image;
 	
 	private int plz;
 	
@@ -152,8 +156,39 @@ public class LocationTO extends ReturnCodeResponse {
 		this.ownerId = ownerId;
 	}
 
+	@Override
 	public String toString() {
-		return this.name;
+		return this.name  + " - " + this.averageRating  + "/5.0 Sterne";
 	}
 
+	@Override
+	public int compareTo(LocationTO another) {
+		// compareTo should return < 0 if this is supposed to be
+		// less than other, > 0 if this is supposed to be greater than
+		// other and 0 if they are supposed to be equal
+		int result = 0;
+		if(this.averageRating < another.averageRating) {
+			result = -1;
+		}
+		if(this.averageRating > another.averageRating) {
+			result = 1;
+		}
+		return result;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
 }

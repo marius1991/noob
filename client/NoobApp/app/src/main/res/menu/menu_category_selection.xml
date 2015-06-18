@@ -6,7 +6,8 @@
     <item
         android:id="@+id/action_neueLoc"
         android:title="@string/menu_neueLoc"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100"
+        android:onClick="clickFuncNewLocation" app:showAsAction="never" />
 
     <item
         android:id="@+id/action_kontoverw"
@@ -16,6 +17,7 @@
     <item
         android:id="@+id/action_ausloggen"
         android:title="@string/menu_ausloggen"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100"
+        android:onClick="clickFuncLogout" app:showAsAction="never" />
 
 </menu>

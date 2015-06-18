@@ -12,13 +12,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.UserLoginResponse;
 
 
@@ -26,11 +32,30 @@ public class LoginActivity extends ActionBarActivity {
     private EditText email;
     private EditText password;
     private Button loginButton;
+    private String passwordStringHash;
+    private Switch testMode;
+    private static final String TAG = LoginActivity.class.getName();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        final NoobApplication myApp = (NoobApplication) getApplication();
 
+        testMode = (Switch) findViewById(R.id.switch1);
+        testMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked == true) {
+                    myApp.setTestmode(true);
+                    Log.d(TAG, "TESTMODE ON");
+                }
+                if(isChecked == false) {
+                    myApp.setTestmode(false);
+                    Log.d(TAG, "TESTMODE OFF");
+                }
+            }
+        });
         loginButton=(Button) findViewById(R.id.button2);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,18 +65,19 @@ public class LoginActivity extends ActionBarActivity {
                 password = (EditText) findViewById(R.id.editText4);
                 String emailString = email.getText().toString();
                 String passwordString = password.getText().toString();
-                if (!emailString.equals("") && !passwordString.equals("")) {
-                    loginTask.execute(emailString, passwordString);
+                passwordStringHash=hashPasswort(passwordString);
+                if (!emailString.equals("") && !passwordStringHash.equals("")) {
+                    loginTask.execute(emailString, passwordStringHash);
                     NoobApplication myApp = (NoobApplication) getApplication();
                     myApp.setUserId(emailString);
                 } else {
-                    Toast.makeText(view.getContext(), "Username und Password duerfen nicht leer sein!",
+                    Toast.makeText(view.getContext(), "Username und Password dürfen nicht leer sein!",
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
         });
-        }
+    }
 
 
     @Override
@@ -89,22 +115,38 @@ public class LoginActivity extends ActionBarActivity {
     }
     */
     public void openRegisterActivity(View view){
-        Intent y= new Intent(LoginActivity.this,RegisterActivity.class);
+        Intent y= new Intent(LoginActivity.this,UserManagementAcitivtiy.class);
         startActivity(y);
     }
+    private String hashPasswort(String password) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            String passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
+            //String passwordnew = messageDigest.toString();
+            return passwordnew;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public void openNewLocation(View view){
         Intent z= new Intent(LoginActivity.this,NewLocationActivity.class);
         startActivity(z);
     }
 
+    public void testMode(View view) {
+        NoobApplication myApp = (NoobApplication) getApplication();
+        myApp.setTestmode(true);
+    }
 
-    public class LoginTask extends AsyncTask<String,String,Integer>{
+
+    public class LoginTask extends AsyncTask<String,String,UserLoginResponse>{
         private ProgressDialog Dialog = new ProgressDialog(LoginActivity.this);
 
         private Context context;
-        private String message;
-        private int returnCode;
 
         public LoginTask(Context context){
             this.context=context;
@@ -121,17 +163,21 @@ public class LoginActivity extends ActionBarActivity {
         }
 
         @Override
-        protected Integer doInBackground(String... params){
+        protected UserLoginResponse doInBackground(String... params){
             String email=params[0];
             String password=params[1];
             UserLoginResponse userLogin;
-            NoobOnlineServiceImpl onlineService=new NoobOnlineServiceImpl();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             try{
                 userLogin = onlineService.login(email, password);
-                Integer sessionId=userLogin.getSessionId();
-                message=userLogin.getMessage();
-                returnCode=userLogin.getReturnCode();
-                return sessionId;
+                return userLogin;
             }
             catch(Exception e){
 
@@ -139,23 +185,28 @@ public class LoginActivity extends ActionBarActivity {
             return null;
         }
 
-        protected void onPostExecute(Integer sessionId){
+        protected void onPostExecute(UserLoginResponse userLoginResponse){
             Dialog.dismiss();
-            if (sessionId != null) {
-                //Toast.makeText(context,message,
-                //      Toast.LENGTH_SHORT).show();
-                email.setError(message);
-                email.requestFocus();
-                if (returnCode == 0) {
+            if (userLoginResponse.getReturnCode() == 10) {
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                if(userLoginResponse.getReturnCode() == 1) {
+                    email.setError(userLoginResponse.getMessage());
+                    email.requestFocus();
+                }
+                if(userLoginResponse.getReturnCode() == 2) {
+                    Toast.makeText(getApplicationContext(), userLoginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                if (userLoginResponse.getReturnCode() == 0) {
+                    Toast.makeText(getApplicationContext(), userLoginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     NoobApplication myApp = (NoobApplication) getApplication();
-
-                    myApp.setSessionId(sessionId);
+                    myApp.setSessionId(userLoginResponse.getSessionId());
+                    GetUserDetails userDetails = new GetUserDetails(getApplicationContext(),(NoobApplication) getApplication());
+                    userDetails.execute();
                     Intent i = new Intent(context, CitySelectionActivity.class);
                     startActivity(i);
                 }
-            }
-            else {
-                Toast.makeText(context, "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
         }
     }

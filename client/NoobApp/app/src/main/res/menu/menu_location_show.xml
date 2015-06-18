@@ -4,11 +4,6 @@
     tools:context="de.fh_muenster.noobApp.LocationShowActivity">
 
     <item
-        android:id="@+id/action_locBearb"
-        android:title="@string/menu_locBearb"
-        android:orderInCategory="100" app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_kontoverw"
         android:title="@string/menu_kontoverw"
         android:orderInCategory="100" app:showAsAction="never" />
@@ -16,6 +11,7 @@
     <item
         android:id="@+id/action_ausloggen"
         android:title="@string/menu_ausloggen"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="100"
+        android:onClick="clickFuncLogout" app:showAsAction="never" />
 
 </menu>

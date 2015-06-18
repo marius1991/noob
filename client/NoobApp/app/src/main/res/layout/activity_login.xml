@@ -45,35 +45,30 @@
         android:layout_height="wrap_content"
         android:text="Login"
         android:id="@+id/button2"
-        android:background="@color/hint_foreground_material_light"
-        android:textColor="@color/white_opaque"
         android:layout_below="@+id/editText4"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginTop="32dp" />
 
-    <Button
-        android:layout_width="match_parent"
+    <Switch
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
-        android:background="@color/hint_foreground_material_light"
-        android:id="@+id/button3"
-        android:textColor="@color/white_opaque"
-        android:layout_below="@+id/button2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="5dp"
-        android:onClick="openRegisterActivity"/>
+        android:text="Testmode"
+        android:id="@+id/switch1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="©NoobAppGmBH"
-        android:id="@+id/textView5"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:text="@string/register"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:onClick="openRegisterActivity" />
 
 
 </RelativeLayout>

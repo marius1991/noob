@@ -1,196 +1,252 @@
-//package de.fh_muenster.noobApp;
-//
-//import java.security.acl.Owner;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import de.fh_muenster.exceptions.BadConnectionException;
-//import de.fh_muenster.noob.CategoryListResponse;
-//import de.fh_muenster.noob.CityListResponse;
-//import de.fh_muenster.noob.CommentTO;
-//import de.fh_muenster.noob.LocationListResponse;
-//import de.fh_muenster.noob.LocationTO;
-//import de.fh_muenster.noob.NoobOnlineService;
-//import de.fh_muenster.noob.RatingTO;
-//import de.fh_muenster.noob.ReturnCodeResponse;
-//import de.fh_muenster.noob.UserLoginResponse;
-//import de.fh_muenster.noob.UserTO;
-//
-///**
-// * Created by marius on 07.06.15.
-// */
-//public class NoobOnlineServiceMock implements NoobOnlineService {
-//
-//    private List<String> categoryList = new ArrayList<>();
-//    private List<String> cityList = new ArrayList<>();
-//
-//    public NoobOnlineServiceMock () {
-//        categoryList.add("Kneipe");
-//        categoryList.add("Arzt");
-//        categoryList.add("Supermarkt");
-//        categoryList.add("Bar");
-//        categoryList.add("Fastfood");
-//        categoryList.add("Tankstelle");
-//        cityList.add("Münster");
-//        cityList.add("Osnabrück");
-//        cityList.add("Bielefeld");
-//        cityList.add("Dortmund");
-//        cityList.add("Kassel");
-//        cityList.add("Berlin");
-//        cityList.add("Hamburg");
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
-//        return null;
-//    }
-//
-//    @Override
-//    public UserLoginResponse login(String email, String password) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse logout(int sessionId) {
-//        return null;
-//    }
-//
-//    @Override
-//    public CategoryListResponse listCategories() throws BadConnectionException{
-//        CategoryListResponse response = new CategoryListResponse();
-//        response.setCategories(categoryList);
-//        response.setReturnCode(100);
-//        return response;
-//    }
-//
-//    @Override
-//    public CityListResponse listCities() {
-//        CityListResponse response = new CityListResponse();
-//        response.setCities(cityList);
-//        response.setReturnCode(100);
-//        return response;
-//    }
-//
-//    @Override
-//    public LocationListResponse listLocationsWithCategory(String category, String city) {
-//        LocationListResponse response = new LocationListResponse();
-//        LocationTO lo = new LocationTO();
-//        LocationTO lo1 = new LocationTO();
-//        LocationTO lo2 = new LocationTO();
-//        UserTO owner = new UserTO();
-//        List<LocationTO> locationTOList = new ArrayList<>();
-//        if(category.equals("Bar") && city.equals("Münster")) {
-//            lo.setName("Gorilla Bar");
-//            lo1.setName("Rote Liebe");
-//            lo2.setName("Blaues Haus");
-//            lo.setDescription("Tolle Bar in der Altstadt von MS!");
-//            lo1.setDescription("Noch ein tolle Bar in der Altstadt von MS!");
-//            lo2.setDescription("und noch eine tolle Bar in der Altstadt von MS!");
-//            lo.setCity("Münster");
-//            lo.setPlz(48145);
-//            lo.setStreet("Jüdefelder Str.");
-//            lo.setNumber("15");
-//            lo.setCategory("Bar");
-//            owner.setName("Peter Lustig");
-//            lo.setOwner(owner);
-//            lo.setAverageRating(4.5);
-//            lo.setId(1);
-//            locationTOList.add(lo);
-//            locationTOList.add(lo1);
-//            locationTOList.add(lo2);
-//            response.setReturnCode(100);
-//            response.setLocations(locationTOList);
-//            return response;
-//        }
-//        else {
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public LocationListResponse listLocationsWithName(String name, String city) {
-//        LocationListResponse response = new LocationListResponse();
-//        LocationTO lo = new LocationTO();
-//        LocationTO lo1 = new LocationTO();
-//        LocationTO lo2 = new LocationTO();
-//        UserTO owner = new UserTO();
-//        List<LocationTO> locationTOList = new ArrayList<>();
-//        if(city.equals("Münster") && name.equals("bar")) {
-//            lo.setName("Gorilla Bar");
-//            lo1.setName("Atellier Bar");
-//            lo2.setName("Hafenbar");
-//            lo.setDescription("Tolle Bar in der Altstadt von MS!");
-//            lo1.setDescription("Noch ein tolle Bar in der Altstadt von MS!");
-//            lo2.setDescription("und noch eine tolle Bar in der Altstadt von MS!");
-//            lo.setCity("Münster");
-//            lo.setPlz(48145);
-//            lo.setStreet("Jüdefelder Str.");
-//            lo.setNumber("15");
-//            lo.setCategory("Bar");
-//            owner.setName("Peter Lustig");
-//            lo.setOwner(owner);
-//            lo.setAverageRating(4.5);
-//            lo.setId(1);
-//            CommentTO comment = new CommentTO(1, "test", null, lo, owner);
-//            List <CommentTO> list = new ArrayList<>();
-//            list.add(comment);
-//            lo.setComments(list);
-//
-//
-//            locationTOList.add(lo);
-//            locationTOList.add(lo1);
-//            locationTOList.add(lo2);
-//            response.setReturnCode(100);
-//            response.setLocations(locationTOList);
-//            return response;
-//        }
-//        else {
-//            return null;
-//        }
-//    }
-//
-//    @Override
-//    public LocationListResponse listAllLocations(String city) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse commentOnLocation(int sessionId, int locationId, String text) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse commentOnComment(int sessionId, int commentId, String text) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse setLocationDetails(int sessionId, LocationTO newLocationDetails) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse setUserDetails(int sessionId, UserTO newUser) {
-//        return null;
-//    }
-//
-//    @Override
-//    public UserTO getUserDetails(int sessionId) {
-//        return null;
-//    }
-//
-//    @Override
-//    public ReturnCodeResponse deleteUser(int sessionId) {
-//        return null;
-//    }
-//}
+package de.fh_muenster.noobApp;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.acl.Owner;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.fh_muenster.noob.CategoryListResponse;
+import de.fh_muenster.noob.CityListResponse;
+import de.fh_muenster.noob.CommentTO;
+import de.fh_muenster.noob.LocationListResponse;
+import de.fh_muenster.noob.LocationTO;
+import de.fh_muenster.noob.NoobOnlineService;
+import de.fh_muenster.noob.RatingTO;
+import de.fh_muenster.noob.ReturnCodeResponse;
+import de.fh_muenster.noob.UserLoginResponse;
+import de.fh_muenster.noob.UserTO;
+
+/**
+ * Created by marius on 07.06.15.
+ */
+public class NoobOnlineServiceMock implements NoobOnlineService {
+    private List<LocationTO> locations = new ArrayList<>();
+    private List<CommentTO> comments = new ArrayList<>();
+    private List<RatingTO> ratings = new ArrayList<>();
+
+    public NoobOnlineServiceMock() {
+        if(locations.isEmpty()) {
+            LocationTO locationTO = new LocationTO();
+            locationTO.setName("Blaues Haus");
+            locationTO.setCategory("Kneipe");
+            locationTO.setAverageRating(3.0);
+            locationTO.setCity("Münster");
+            locationTO.setPlz(48143);
+            locationTO.setStreet("Kreuzstraße");
+            locationTO.setNumber("13");
+            locationTO.setOwnerId("test@test.de");
+            locationTO.setDescription("Die verwinkelte Kult-Kneipe mit Kunsttapeten, Live-Bühne und westfälischer Kost war einst ein Hippie-Treff.");
+            locationTO.setId(1);
+            CommentTO commentTO = new CommentTO();
+            commentTO.setDate("2015-01-01 00:00");
+            commentTO.setId(1);
+            commentTO.setOwnerId("test@test.de");
+            commentTO.setLocationId(1);
+            commentTO.setText("Tolle Kneipe");
+            comments.add(commentTO);
+            locationTO.setComments(comments);
+            RatingTO ratingTO = new RatingTO();
+            ratingTO.setOwnerId("test@test.de");
+            ratingTO.setId(1);
+            ratingTO.setValue(3);
+            ratingTO.setLocationId(1);
+            ratings.add(ratingTO);
+            locationTO.setRatings(ratings);
+            locations.add(locationTO);
+        }
+    }
+
+    @Override
+    public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        if(password.equals(passwordConfirmation)) {
+            returnCodeResponse.setReturnCode(0);
+            returnCodeResponse.setMessage("Erfolgreich registriert");
+            return returnCodeResponse;
+        }
+        else {
+            returnCodeResponse.setReturnCode(1);
+            returnCodeResponse.setMessage("Registrierung fehlgeschlagen");
+            return returnCodeResponse;
+        }
+    }
+
+    @Override
+    public UserLoginResponse login(String email, String password) {
+        UserLoginResponse userLoginResponse = new UserLoginResponse();
+        MessageDigest passwordHash = null;
+        try {
+            passwordHash = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        passwordHash.update("test".getBytes());
+        String passwordHex= new BigInteger(1,passwordHash.digest()).toString(16);
+        if(email.equals("test@test.de") && password.equals(passwordHex)) {
+            userLoginResponse.setReturnCode(0);
+            userLoginResponse.setMessage("Erfolgreich angemeldet");
+            userLoginResponse.setSessionId(1);
+            userLoginResponse.setUserId(1);
+            return userLoginResponse;
+        }
+        else {
+            userLoginResponse.setReturnCode(1);
+            userLoginResponse.setMessage("Anmeldung fehlgeschlagen");
+            return userLoginResponse;
+        }
+    }
+
+    @Override
+    public ReturnCodeResponse logout(int sessionId) {
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        returnCodeResponse.setReturnCode(0);
+        returnCodeResponse.setMessage("Erfolgreich ausgeloggt");
+        return returnCodeResponse;
+    }
+
+    @Override
+    public CategoryListResponse listCategories() {
+        CategoryListResponse categoryListResponse = new CategoryListResponse();
+        categoryListResponse.setReturnCode(0);
+        categoryListResponse.setMessage("Kategorien erfolgreich abgerufen");
+        List<String> categories = new ArrayList<>();
+        categories.add("Kneipe");
+        categoryListResponse.setCategories(categories);
+        return categoryListResponse;
+    }
+
+    @Override
+    public CityListResponse listCities() {
+        CityListResponse cityListResponse = new CityListResponse();
+        cityListResponse.setReturnCode(0);
+        cityListResponse.setMessage("Städte erfolgreich abgerufen");
+        List<String> cities = new ArrayList<>();
+        cities.add("Münster");
+        cityListResponse.setCities(cities);
+        return cityListResponse;
+    }
+
+    @Override
+    public LocationListResponse listLocationsWithCategory(String category, String city) {
+        LocationListResponse locationListResponse = new LocationListResponse();
+        locationListResponse.setReturnCode(0);
+        locationListResponse.setMessage("Locations erfolgreich abgerufen");
+        if(city.equals("Münster") && category.equals("Kneipe")) {
+            locationListResponse.setLocations(locations);
+            return locationListResponse;
+        }
+        else {
+            return locationListResponse;
+        }
+    }
+
+    @Override
+    public LocationListResponse listLocationsWithName(String name, String city) {
+        LocationListResponse locationListResponse = new LocationListResponse();
+        locationListResponse.setReturnCode(0);
+        locationListResponse.setMessage("Locations erfolgreich abgerufen");
+        if(city.equals("Münster") && name.equals("Blaues Haus")) {
+            locationListResponse.setLocations(locations);
+            return locationListResponse;
+        }
+        else {
+            return locationListResponse;
+        }
+    }
+
+    @Override
+    public ReturnCodeResponse giveRating(int sessionId, int locationId, int value) {
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        RatingTO ratingTO = new RatingTO();
+        ratingTO.setOwnerId("test@test.de");
+        ratingTO.setId(2);
+        ratingTO.setValue(value);
+        ratingTO.setLocationId(locationId);
+        List<LocationTO> locationTOs = locations;
+        LocationTO locationTO = locationTOs.get(0);
+        List<RatingTO> ratings = locationTO.getRatings();
+        ratings.add(ratingTO);
+        locationTO.setRatings(ratings);
+        locationTOs.add(locationTO);
+        locations = locationTOs;
+        returnCodeResponse.setReturnCode(0);
+        returnCodeResponse.setMessage("Erfolgreich bewertet");
+        return returnCodeResponse;
+    }
+
+    @Override
+    public ReturnCodeResponse commentOnLocation(int sessionId, int locationId, String text) {
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        CommentTO commentTO = new CommentTO();
+        commentTO.setDate("2015-01-01 00:00");
+        commentTO.setId(2);
+        commentTO.setOwnerId("test@test.de");
+        commentTO.setLocationId(locationId);
+        commentTO.setText(text);
+        List<LocationTO> locationTOs = locations;
+        LocationTO locationTO = locationTOs.get(0);
+        List<CommentTO> commentTOs = new ArrayList<>();
+        commentTOs.add(commentTO);
+        locationTO.setComments(commentTOs);
+        locationTOs.add(locationTO);
+        locations = locationTOs;
+        returnCodeResponse.setReturnCode(0);
+        returnCodeResponse.setMessage("Erfolgreich kommentiert");
+        return returnCodeResponse;
+    }
+
+    @Override
+    public ReturnCodeResponse createLocation(int sessionId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+        return null;
+    }
+
+
+    @Override
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+        return null;
+    }
+
+    @Override
+    public LocationTO getLocationDetails(int locationId) {
+        LocationTO locationTO = locations.get(0);
+        locationTO.setReturnCode(0);
+        locationTO.setMessage("Erfolgreich abgerufen");
+        return locationTO;
+    }
+
+    @Override
+    public ReturnCodeResponse setUserDetails(int sessionId, String name, String email, String password) {
+        return null;
+    }
+
+    @Override
+    public UserTO getUserDetails(int sessionId) {
+        UserTO userTO = new UserTO();
+        userTO.setName("Tester");
+        userTO.setMessage("Erfolgreich abgerufen");
+        userTO.setReturnCode(0);
+        userTO.setEmail("test@test.de");
+        userTO.setId(1);
+        MessageDigest passwordHash = null;
+        try {
+            passwordHash = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        passwordHash.update("test".getBytes());
+        String passwordHex= new BigInteger(1,passwordHash.digest()).toString(16);
+        userTO.setPassword(passwordHex);
+        userTO.setLocations(locations);
+        userTO.setComments(comments);
+        userTO.setRatings(ratings);
+        return userTO;
+    }
+
+    @Override
+    public ReturnCodeResponse deleteUser(int sessionId, String password) {
+        return null;
+    }
+
+}
