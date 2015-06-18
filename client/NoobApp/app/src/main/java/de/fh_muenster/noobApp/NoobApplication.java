@@ -15,6 +15,7 @@ import de.fh_muenster.noob.UserTO;
  * Subklasse von Application --> Austausch von Daten unter den Activities
  */
 public class NoobApplication extends Application {
+    private boolean testmode = false;
     private List<String> categories;
     private int sessionId;
     private String userId;
@@ -109,5 +110,13 @@ public class NoobApplication extends Application {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public boolean isTestmode() {
+        return testmode;
+    }
+
+    public void setTestmode(boolean testmode) {
+        this.testmode = testmode;
     }
 }

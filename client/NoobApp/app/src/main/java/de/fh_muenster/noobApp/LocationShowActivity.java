@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -20,6 +23,10 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.kobjects.base64.Base64;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,12 +70,23 @@ public class LocationShowActivity extends ActionBarActivity {
 
         //Beschreibung ersetzen
         TextView textViewDescription = (TextView)findViewById(R.id.textView15);
-        textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Erstellt von: " + myApp.getLocation().getOwnerId());
+        textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Erstellt von: " + myApp.getLocation().getOwnerName());
 
         //Rating ersetzen
         TextView textViewRating = (TextView)findViewById(R.id.textView12);
         textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
 
+        //Bild laden
+        if(myApp.getLocation().getImage() != null) {
+            Log.d(TAG, "IMAGE VORHANDEN!");
+            byte[] imagebytes = myApp.getLocation().getImage();
+            Bitmap imagebitmap = BitmapFactory.decodeByteArray(imagebytes, 0, imagebytes.length);
+            imageView.setImageBitmap(imagebitmap);
+            Log.d(TAG, Base64.encode(imagebytes));
+        }
+        else {
+            Log.d(TAG, "KEIN IMAGE VORHANDEN!");
+        }
     }
 
     /**
@@ -116,7 +134,7 @@ public class LocationShowActivity extends ActionBarActivity {
     }
 
     /**
-     * Diese Funktion wird aufgerufen, wenn auf den Button "Kommentieren" gedrückt wird
+     * Diese Methode wird aufgerufen, wenn auf den Button "Kommentieren" gedrückt wird
      * Sie startet eine neue Activity.
      * @param view
      */
@@ -126,13 +144,26 @@ public class LocationShowActivity extends ActionBarActivity {
     }
 
     /**
-     * Diese Funktion wird aufgerufen, wenn auf den Button "Bearbeiten" gedrückt wird.
+     * Diese Methode wird aufgerufen, wenn auf den Button "Bearbeiten" gedrückt wird.
      * Dieser wird nur für den ersteller der Location angezeigt
      * @param view
      */
     public void clickFuncChange(View view) {
-        Intent i = new Intent(LocationShowActivity.this, SetLocationDetailsActivity.class);
-        startActivity(i);
+//        Intent i = new Intent(LocationShowActivity.this, SetLocationDetailsActivity.class);
+//        startActivity(i);
+    }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn auf den Link "Maps" gedrückt wird.
+     * Sie öffnet Google Maps und sucht nach der Adresse der Location
+     * @param view
+     */
+    public void clickFuncOpenMaps(View view) {
+        NoobApplication myApp = (NoobApplication) getApplication();
+        String address = myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity();
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/?q=" + address));
+        startActivity(intent);
     }
 
     /**
@@ -149,7 +180,7 @@ public class LocationShowActivity extends ActionBarActivity {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
-                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -184,7 +215,13 @@ public class LocationShowActivity extends ActionBarActivity {
         @Override
         protected ReturnCodeResponse doInBackground(Integer... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             Log.d(TAG, "ÜBERGABE: " + String.valueOf(myApp.getSessionId()));
             ReturnCodeResponse response = onlineService.giveRating(myApp.getSessionId(), myApp.getLocation().getId(), params[0]);
             return response;
@@ -228,7 +265,14 @@ public class LocationShowActivity extends ActionBarActivity {
          */
         @Override
         protected LocationTO doInBackground(Integer... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             LocationTO locationTO = onlineService.getLocationDetails(params[0]);
             return locationTO;
         }
@@ -264,10 +308,11 @@ public class LocationShowActivity extends ActionBarActivity {
                     for (int i=0; i<comments.size(); i++) {
                         CommentTO comment = comments.get(i);
                         TextView authorLine = new TextView(LocationShowActivity.this);
-                        authorLine.setText(comment.getOwnerId() + " (" + comment.getDate() +")");
+                        authorLine.setText(comment.getOwnerName() + " (" + comment.getDate() +")");
                         authorLine.setTypeface(null, Typeface.BOLD);
+                        authorLine.setTextColor(getResources().getColor(R.color.noob_blue));
                         TextView commentLine = new TextView(LocationShowActivity.this);
-                        commentLine.setText(" " + comment.getText());
+                        commentLine.setText(comment.getText());
                         list.addView(authorLine);
                         list.addView(commentLine);
                     }
@@ -293,4 +338,22 @@ public class LocationShowActivity extends ActionBarActivity {
             }
         }
     }
+//    public class test extends AsyncTask<String, String, ReturnCodeResponse> {
+//
+//        @Override
+//        protected ReturnCodeResponse doInBackground(String... params) {
+//            NoobApplication myApp = (NoobApplication) getApplication();
+//            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+//            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//            byte[] byteArray = stream.toByteArray();
+//            ReturnCodeResponse returnCodeResponse = onlineService.setLocationDetails(myApp.getSessionId(), myApp.getLocation().getId(), myApp.getLocation().getName(), myApp.getLocation().getCategory(), myApp.getLocation().getDescription(), myApp.getLocation().getStreet(), myApp.getLocation().getNumber(), myApp.getLocation().getPlz(), myApp.getLocation().getCity(), byteArray);
+//            return returnCodeResponse;
+//        }
+//        @Override
+//        protected void onPostExecute (ReturnCodeResponse response) {
+//            Log.d(TAG, "BILDUPLOAD: " + response.getMessage());
+//        }
+//    }
 }

@@ -24,6 +24,8 @@ public class LocationTO extends ReturnCodeResponse implements Comparable<Locatio
 	private String street;
 	
 	private String number;
+
+	private byte[] image;
 	
 	private int plz;
 	
@@ -180,5 +182,13 @@ public class LocationTO extends ReturnCodeResponse implements Comparable<Locatio
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 }

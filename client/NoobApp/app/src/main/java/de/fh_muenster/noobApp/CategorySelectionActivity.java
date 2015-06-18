@@ -21,10 +21,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fh_muenster.exceptions.BadConnectionException;
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationListResponse;
 import de.fh_muenster.noob.LocationTO;
+import de.fh_muenster.noob.NoobOnlineService;
 
 /**
  * Created by marius on 02.06.15.
@@ -124,7 +124,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
-                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -158,13 +158,16 @@ public class CategorySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected CategoryListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-            CategoryListResponse response = null;
-            try {
-                response = onlineService.listCategories();
-            } catch (BadConnectionException e) {
-                Toast.makeText(CategorySelectionActivity.this, new Integer(response.getReturnCode()).toString(), Toast.LENGTH_LONG ).show();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
             }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
+            CategoryListResponse response = null;
+            response = onlineService.listCategories();
             return response;
         }
 
@@ -226,9 +229,15 @@ public class CategorySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected LocationListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-            LocationListResponse response;
             NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
+            LocationListResponse response;
             response = onlineService.listLocationsWithName(params[0], myApp.getCity());
             return response;
         }

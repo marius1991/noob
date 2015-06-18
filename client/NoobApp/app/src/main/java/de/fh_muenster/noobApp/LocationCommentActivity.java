@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CommentTO;
+import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
@@ -87,7 +88,7 @@ public class LocationCommentActivity extends ActionBarActivity {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
-                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -121,8 +122,14 @@ public class LocationCommentActivity extends ActionBarActivity {
          */
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             ReturnCodeResponse returnCodeResponse;
             returnCodeResponse = onlineService.commentOnLocation(myApp.getSessionId(), myApp.getLocation().getId(), params[0]);
             return returnCodeResponse;

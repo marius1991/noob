@@ -1,8 +1,6 @@
 package de.fh_muenster.noob;
 
 
-import de.fh_muenster.exceptions.BadConnectionException;
-import de.fh_muenster.exceptions.InvalidRegisterException;
 
 /**
  * @author philipp
@@ -18,7 +16,7 @@ public interface NoobOnlineService {
      * @return
      */
     public ReturnCodeResponse register(String username, String email,
-                                       String password, String passwordConfirmation) throws InvalidRegisterException;
+                                       String password, String passwordConfirmation);
 
     /**
      * Mit dieser Methode kann ein User eingeloggt werden. Dazu Email und Passwort angeben.
@@ -36,7 +34,7 @@ public interface NoobOnlineService {
     /**
      * @return
      */
-    public CategoryListResponse listCategories() throws BadConnectionException;
+    public CategoryListResponse listCategories();
 
     /**
      * @return
@@ -58,11 +56,6 @@ public interface NoobOnlineService {
      */
     public LocationListResponse listLocationsWithName(String name, String city);
 
-    /**
-     * @param city
-     * @return
-     */
-    public LocationListResponse listAllLocations(String city);
 
     /**
      * @param sessionId
@@ -81,15 +74,7 @@ public interface NoobOnlineService {
      */
     public ReturnCodeResponse commentOnLocation(int sessionId, int locationId,
                                                 String text);
-
-    /**
-     * @param sessionId
-     * @param commentId
-     * @param text
-     * @return
-     */
-    public ReturnCodeResponse commentOnComment(int sessionId, int commentId,
-                                               String text);
+    
 
     /**
      * @param sessionId
@@ -104,21 +89,24 @@ public interface NoobOnlineService {
      */
     public ReturnCodeResponse createLocation(int sessionId, String name,
                                              String category, String description, String street, String number,
-                                             int plz, String city);
+                                             int plz, String city, byte[] image);
+
 
     /**
+     *
      * @param sessionId
-     * @param newLocationDetails
+     * @param locationId
+     * @param name
+     * @param category
+     * @param description
+     * @param street
+     * @param number
+     * @param plz
+     * @param city
+     * @param image
      * @return
      */
-
-    public ReturnCodeResponse createLocationWithImage(int sessionId, String name,
-                                                      String category, String description, String street, String number,
-                                                      int plz, String city, byte[] image);
-
-
-    public ReturnCodeResponse setLocationDetails(int sessionId,
-                                                 LocationTO newLocationDetails);
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image);
 
     /**
      *
@@ -128,8 +116,11 @@ public interface NoobOnlineService {
     public LocationTO getLocationDetails(int locationId);
 
     /**
+     *
      * @param sessionId
-     * @param newUser
+     * @param name
+     * @param password
+     * @param passwordwdh
      * @return
      */
     public ReturnCodeResponse setUserDetails(int sessionId, String name, String password, String passwordwdh);

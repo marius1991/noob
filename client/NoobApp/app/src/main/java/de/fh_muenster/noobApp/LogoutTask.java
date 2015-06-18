@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
@@ -17,9 +18,11 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> {
     private static final String TAG = LogoutTask.class.getName();
     private Context context;
+    private NoobApplication myApp;
 
-    public LogoutTask (Context context) {
+    public LogoutTask (Context context, NoobApplication myApp) {
         this.context = context;
+        this.myApp = myApp;
     }
 
     /**
@@ -29,7 +32,13 @@ public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> 
      */
     @Override
     protected ReturnCodeResponse doInBackground(Integer... params) {
-        NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+        NoobOnlineService onlineService;
+        if(myApp.isTestmode()) {
+            onlineService = new NoobOnlineServiceMock();
+        }
+        else {
+            onlineService  = new NoobOnlineServiceImpl();
+        }
         ReturnCodeResponse response = onlineService.logout(params[0]);
         return response;
     }

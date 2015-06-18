@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fh_muenster.noob.CityListResponse;
+import de.fh_muenster.noob.NoobOnlineService;
 
 /**
  * Created by marius on 02.06.15.
@@ -83,7 +84,7 @@ public class CitySelectionActivity extends ActionBarActivity {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
-                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         CitySelectionActivity.this.finish();
                     }
                 })
@@ -118,7 +119,7 @@ public class CitySelectionActivity extends ActionBarActivity {
                 .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
-                        new LogoutTask(getApplicationContext()).execute(myApp.getSessionId());
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -158,7 +159,14 @@ public class CitySelectionActivity extends ActionBarActivity {
          */
         @Override
         protected CityListResponse doInBackground(String... params) {
-            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
             CityListResponse response = onlineService.listCities();
             return response;
         }
