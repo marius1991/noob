@@ -23,8 +23,8 @@ import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
- * @author marius
  * In dieser Activity kann ein Kommentar zu einer Location geschrieben werden
+ * @author marius
  */
 public class LocationCommentActivity extends ActionBarActivity {
     private EditText editText;
@@ -99,8 +99,8 @@ public class LocationCommentActivity extends ActionBarActivity {
     }
 
     /**
-     * @author marius
      * Dieser AsyncTask realisiert die Kommentarfunktion.
+     * @author marius
      */
     class CommentOnLocation extends AsyncTask<String, String, ReturnCodeResponse> {
         private ProgressDialog Dialog = new ProgressDialog(LocationCommentActivity.this);

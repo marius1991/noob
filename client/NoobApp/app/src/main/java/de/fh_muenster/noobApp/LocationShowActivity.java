@@ -1,24 +1,36 @@
 package de.fh_muenster.noobApp;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +39,11 @@ import org.kobjects.base64.Base64;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.fh_muenster.noob.CommentTO;
 import de.fh_muenster.noob.LocationTO;
@@ -37,13 +52,16 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
  * Created by marius on 02.06.15.
- * @author marius
  * Diese Activity zeigt eine Location und deren Details.
+ * @author marius
  */
 public class LocationShowActivity extends ActionBarActivity {
 
     private static final String TAG = LocationShowActivity.class.getName();
     private int newRating = 0;
+    private int currentimageindex = 0;
+    private ImageView slidingimage;
+    private List<byte[]> imagesbytes;
 
     /**
      * Diese Methode wird beim Starten der Activity aufgerufen.
@@ -60,33 +78,19 @@ public class LocationShowActivity extends ActionBarActivity {
         NoobApplication myApp = (NoobApplication) getApplication();
         setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
 
-        //Bild anzeigen
-        ImageView imageView = (ImageView)findViewById(R.id.imageView3);
-        //TODO: Bild laden
-
         //Adresse ersetzten
-        TextView textViewAddress = (TextView)findViewById(R.id.textView14);
+        TextView textViewAddress = (TextView) findViewById(R.id.textView14);
         textViewAddress.setText(myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity());
 
         //Beschreibung ersetzen
-        TextView textViewDescription = (TextView)findViewById(R.id.textView15);
+        TextView textViewDescription = (TextView) findViewById(R.id.textView15);
         textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Erstellt von: " + myApp.getLocation().getOwnerName());
 
         //Rating ersetzen
-        TextView textViewRating = (TextView)findViewById(R.id.textView12);
+        TextView textViewRating = (TextView) findViewById(R.id.textView12);
         textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
 
-        //Bild laden
-        if(myApp.getLocation().getImage() != null) {
-            Log.d(TAG, "IMAGE VORHANDEN!");
-            byte[] imagebytes = myApp.getLocation().getImage();
-            Bitmap imagebitmap = BitmapFactory.decodeByteArray(imagebytes, 0, imagebytes.length);
-            imageView.setImageBitmap(imagebitmap);
-            Log.d(TAG, Base64.encode(imagebytes));
-        }
-        else {
-            Log.d(TAG, "KEIN IMAGE VORHANDEN!");
-        }
+//        new Test().execute();
     }
 
     /**
@@ -190,22 +194,77 @@ public class LocationShowActivity extends ActionBarActivity {
                 .show();
     }
 
+    public void clickFuncUpload(View view) {
+        Intent i = new Intent(LocationShowActivity.this, LocationAddImage.class);
+        startActivity(i);
+    }
+
     /**
-     * @author marius
+     * Helpermethode für die Bilderslideshow
+     */
+    private void AnimateandSlideShow() {
+        slidingimage = (ImageView) findViewById(R.id.imageView3);
+        List<Bitmap> imageBitmaps = new ArrayList<>();
+        for (int i = 0; i < imagesbytes.size(); i++) {
+            imageBitmaps.add(BitmapFactory.decodeByteArray(imagesbytes.get(i), 0, imagesbytes.get(i).length));
+        }
+        slidingimage.setImageBitmap(imageBitmaps.get(currentimageindex));
+        if(currentimageindex < imagesbytes.size()-1) {
+            currentimageindex++;
+        }
+        else {
+            currentimageindex = 0;
+        }
+        Animation rotateimage = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        slidingimage.startAnimation(rotateimage);
+    }
+
+    /**
+     * Diese Methode dient zum Anzeigen der Slideshow
+     */
+    public void showImages() {
+        //Bild anzeigen
+        final Handler mHandler = new Handler();
+        NoobApplication myApp = (NoobApplication) getApplication();
+        ImageView imageView = (ImageView) findViewById(R.id.imageView3);
+        if (myApp.getLocation().getImages() != null) {
+            if (!myApp.getLocation().getImages().isEmpty()) {
+                imagesbytes = myApp.getLocation().getImages();
+                for (int i = 0; i < imagesbytes.size(); i++) {
+                    Log.d(TAG, "IMAGE: " + Base64.encode(imagesbytes.get(i)));
+                }
+                if (imagesbytes.size() == 1) {
+                    Bitmap image = BitmapFactory.decodeByteArray(imagesbytes.get(0), 0, imagesbytes.get(0).length);
+                    imageView.setImageBitmap(image);
+                } else {
+                    final Runnable mUpdateResults = new Runnable() {
+                        public void run() {
+                            AnimateandSlideShow();
+                        }
+                    };
+                    int delay = 1000; // delay for 1 sec.
+                    int period = 7500; // repeat every 2 sec.
+                    Timer timer = new Timer();
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        public void run() {
+                            mHandler.post(mUpdateResults);
+                        }
+                    }, delay, period);
+                }
+            } else {
+                imageView.setImageDrawable(getResources().getDrawable(R.drawable.noimage));
+            }
+        } else {
+            imageView.setImageDrawable(getResources().getDrawable(R.drawable.noimage));
+        }
+    }
+
+
+    /**
      * Dieser AsyncTask schickt das Rating zum Server.
+     * @author marius
      */
     public class SendRatingToServer extends AsyncTask<Integer, String, ReturnCodeResponse> {
-        private ProgressDialog Dialog = new ProgressDialog(LocationShowActivity.this);
-
-        /**
-         * Während des Abrufs der Location wird ein Dialog angezeigt.
-         */
-        @Override
-        protected void onPreExecute()
-        {
-            Dialog.setMessage("Rating an den Server senden...");
-            Dialog.show();
-        }
 
         /**
          * Es wird ein neuer Thread gestartet, in dem das Rating zum Server geschickt wird.
@@ -233,7 +292,6 @@ public class LocationShowActivity extends ActionBarActivity {
          */
         @Override
         protected  void onPostExecute(ReturnCodeResponse response) {
-            Dialog.dismiss();
             if (response.getReturnCode() == 10) {
                 Log.d(TAG, "keine Verbindung zum Server");
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
@@ -242,8 +300,8 @@ public class LocationShowActivity extends ActionBarActivity {
     }
 
     /**
-     * @author marius
      * Dieser AsyncTask ruft die Locationinformation der angezeigten Location vom Server ab.
+     * @author marius
      */
     public class GetLocationDetailsFromServer extends AsyncTask<Integer, String, LocationTO> {
         private ProgressDialog Dialog = new ProgressDialog(LocationShowActivity.this);
@@ -254,7 +312,7 @@ public class LocationShowActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute()
         {
-            Dialog.setMessage("Rating an den Server senden...");
+            Dialog.setMessage("Locationdetails abrufen...");
             Dialog.show();
         }
 
@@ -293,7 +351,7 @@ public class LocationShowActivity extends ActionBarActivity {
                 myApp.setLocation(locationTO);
                 Log.d(TAG, "Locationdetails abgerufen");
                 //Falls der aktuelle User der Ersteller einer Location ist, wird der Button sichtbar
-                View b = findViewById(R.id.button);
+                View b = findViewById(R.id.buttonBearb);
                 if(myApp.getLocation().getOwnerId().equals(myApp.getUserId())) {
                     b.setVisibility(View.VISIBLE);
                 }
@@ -335,25 +393,9 @@ public class LocationShowActivity extends ActionBarActivity {
                 else {
                     Log.d(TAG, "Die Location wurde noch nicht bewertet");
                 }
+                //Images laden
+                showImages();
             }
         }
     }
-//    public class test extends AsyncTask<String, String, ReturnCodeResponse> {
-//
-//        @Override
-//        protected ReturnCodeResponse doInBackground(String... params) {
-//            NoobApplication myApp = (NoobApplication) getApplication();
-//            NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
-//            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//            byte[] byteArray = stream.toByteArray();
-//            ReturnCodeResponse returnCodeResponse = onlineService.setLocationDetails(myApp.getSessionId(), myApp.getLocation().getId(), myApp.getLocation().getName(), myApp.getLocation().getCategory(), myApp.getLocation().getDescription(), myApp.getLocation().getStreet(), myApp.getLocation().getNumber(), myApp.getLocation().getPlz(), myApp.getLocation().getCity(), byteArray);
-//            return returnCodeResponse;
-//        }
-//        @Override
-//        protected void onPostExecute (ReturnCodeResponse response) {
-//            Log.d(TAG, "BILDUPLOAD: " + response.getMessage());
-//        }
-//    }
 }

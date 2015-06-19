@@ -11,8 +11,8 @@ import de.fh_muenster.noob.UserTO;
 
 /**
  * Created by marius on 02.06.15.
- * @author marius
  * Subklasse von Application --> Austausch von Daten unter den Activities
+ * @author marius
  */
 public class NoobApplication extends Application {
     private boolean testmode = false;

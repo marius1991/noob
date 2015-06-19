@@ -74,7 +74,7 @@ public interface NoobOnlineService {
      */
     public ReturnCodeResponse commentOnLocation(int sessionId, int locationId,
                                                 String text);
-    
+
 
     /**
      * @param sessionId
@@ -136,5 +136,7 @@ public interface NoobOnlineService {
      * @return
      */
     public ReturnCodeResponse deleteUser(int sessionId, String password);
+
+    public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image);
 
 }

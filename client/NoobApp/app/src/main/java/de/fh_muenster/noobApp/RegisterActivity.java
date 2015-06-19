@@ -18,7 +18,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.fh_muenster.exceptions.InvalidRegisterException;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 
@@ -55,7 +54,7 @@ public class RegisterActivity extends ActionBarActivity {
                 emailString = email.getText().toString();
                 passwordString = password.getText().toString();
                 passwordString=hashPasswort(passwordString);
-                passwordStringWdh = passwordwdh.getText().toString();
+                passwordStringWdh = hashPasswort(passwordwdh.getText().toString());
                 passwordStringHash=hashPasswort(passwordStringWdh);
                 benutzernameString =benutzername.getText().toString();
 
@@ -166,13 +165,11 @@ public class RegisterActivity extends ActionBarActivity {
             String benutzername=params[1];
             String passwort=params[2];
             String passwortwdh=params[3];
-            try{
-                userRegister = onlineService.register(benutzername,email,passwort,passwortwdh);
-                message=userRegister.getMessage();
-                returnCode=userRegister.getReturnCode();
-            }catch (InvalidRegisterException e) {
-                e.printStackTrace();
-            }
+
+            userRegister = onlineService.register(benutzername,email,passwort,passwortwdh);
+            message=userRegister.getMessage();
+            returnCode=userRegister.getReturnCode();
+
             return userRegister;
         }
 

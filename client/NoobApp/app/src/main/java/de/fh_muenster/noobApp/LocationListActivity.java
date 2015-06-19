@@ -26,8 +26,8 @@ import de.fh_muenster.noob.NoobOnlineService;
 
 /**
  * Created by marius on 02.06.15.
- * @author marius
  * Diese Activity zeigt die Locations einer zuvor ausgewählten Kategorie in eine zuvor ausgewählten Stadt.
+ * @author marius
  */
 public class LocationListActivity extends ActionBarActivity {
 
@@ -114,8 +114,8 @@ public class LocationListActivity extends ActionBarActivity {
     }
 
     /**
-     * @author marius
      * In diesem AsycTask werden die Locations einer Stadt und Kategorie vom Server abgerufen.
+     * @author marius
      */
     class GetLocationsFromServer extends AsyncTask<String, String, LocationListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(LocationListActivity.this);

@@ -22,41 +22,7 @@ import de.fh_muenster.noob.UserTO;
  * Created by marius on 07.06.15.
  */
 public class NoobOnlineServiceMock implements NoobOnlineService {
-    private List<LocationTO> locations = new ArrayList<>();
-    private List<CommentTO> comments = new ArrayList<>();
-    private List<RatingTO> ratings = new ArrayList<>();
-
-    public NoobOnlineServiceMock() {
-        if(locations.isEmpty()) {
-            LocationTO locationTO = new LocationTO();
-            locationTO.setName("Blaues Haus");
-            locationTO.setCategory("Kneipe");
-            locationTO.setAverageRating(3.0);
-            locationTO.setCity("Münster");
-            locationTO.setPlz(48143);
-            locationTO.setStreet("Kreuzstraße");
-            locationTO.setNumber("13");
-            locationTO.setOwnerId("test@test.de");
-            locationTO.setDescription("Die verwinkelte Kult-Kneipe mit Kunsttapeten, Live-Bühne und westfälischer Kost war einst ein Hippie-Treff.");
-            locationTO.setId(1);
-            CommentTO commentTO = new CommentTO();
-            commentTO.setDate("2015-01-01 00:00");
-            commentTO.setId(1);
-            commentTO.setOwnerId("test@test.de");
-            commentTO.setLocationId(1);
-            commentTO.setText("Tolle Kneipe");
-            comments.add(commentTO);
-            locationTO.setComments(comments);
-            RatingTO ratingTO = new RatingTO();
-            ratingTO.setOwnerId("test@test.de");
-            ratingTO.setId(1);
-            ratingTO.setValue(3);
-            ratingTO.setLocationId(1);
-            ratings.add(ratingTO);
-            locationTO.setRatings(ratings);
-            locations.add(locationTO);
-        }
-    }
+    TestDB testDB = TestDB.getInstance();
 
     @Override
     public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
@@ -134,6 +100,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         locationListResponse.setReturnCode(0);
         locationListResponse.setMessage("Locations erfolgreich abgerufen");
         if(city.equals("Münster") && category.equals("Kneipe")) {
+            List<LocationTO> locations = testDB.getLocations();
             locationListResponse.setLocations(locations);
             return locationListResponse;
         }
@@ -148,6 +115,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         locationListResponse.setReturnCode(0);
         locationListResponse.setMessage("Locations erfolgreich abgerufen");
         if(city.equals("Münster") && name.equals("Blaues Haus")) {
+            List<LocationTO> locations = testDB.getLocations();
             locationListResponse.setLocations(locations);
             return locationListResponse;
         }
@@ -164,13 +132,14 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         ratingTO.setId(2);
         ratingTO.setValue(value);
         ratingTO.setLocationId(locationId);
-        List<LocationTO> locationTOs = locations;
+        List<LocationTO> locations = testDB.getLocations();
+        List<LocationTO> locationTOs = locations.subList(0, 1);
         LocationTO locationTO = locationTOs.get(0);
         List<RatingTO> ratings = locationTO.getRatings();
         ratings.add(ratingTO);
         locationTO.setRatings(ratings);
-        locationTOs.add(locationTO);
-        locations = locationTOs;
+        locations.set(0, locationTO);
+        testDB.setLocations(locations);
         returnCodeResponse.setReturnCode(0);
         returnCodeResponse.setMessage("Erfolgreich bewertet");
         return returnCodeResponse;
@@ -185,13 +154,14 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         commentTO.setOwnerId("test@test.de");
         commentTO.setLocationId(locationId);
         commentTO.setText(text);
-        List<LocationTO> locationTOs = locations;
+        List<LocationTO> locations = testDB.getLocations();
+        List<LocationTO> locationTOs = locations.subList(0, 1);
         LocationTO locationTO = locationTOs.get(0);
-        List<CommentTO> commentTOs = new ArrayList<>();
+        List<CommentTO> commentTOs = locationTO.getComments();
         commentTOs.add(commentTO);
         locationTO.setComments(commentTOs);
-        locationTOs.add(locationTO);
-        locations = locationTOs;
+        locations.set(0, locationTO);
+        testDB.setLocations(locations);
         returnCodeResponse.setReturnCode(0);
         returnCodeResponse.setMessage("Erfolgreich kommentiert");
         return returnCodeResponse;
@@ -210,6 +180,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
 
     @Override
     public LocationTO getLocationDetails(int locationId) {
+        List<LocationTO> locations = testDB.getLocations();
         LocationTO locationTO = locations.get(0);
         locationTO.setReturnCode(0);
         locationTO.setMessage("Erfolgreich abgerufen");
@@ -238,6 +209,9 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         passwordHash.update("test".getBytes());
         String passwordHex= new BigInteger(1,passwordHash.digest()).toString(16);
         userTO.setPassword(passwordHex);
+        List<LocationTO> locations = testDB.getLocations();
+        List<CommentTO> comments = testDB.getComments();
+        List<RatingTO> ratings = testDB.getRatings();
         userTO.setLocations(locations);
         userTO.setComments(comments);
         userTO.setRatings(ratings);
@@ -247,6 +221,24 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
     @Override
     public ReturnCodeResponse deleteUser(int sessionId, String password) {
         return null;
+    }
+
+    @Override
+    public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image) {
+        List<LocationTO> locations = testDB.getLocations();
+        LocationTO locationTO = locations.get(0);
+        List<byte[]> images = new ArrayList<>();
+        if(locationTO.getImages() != null) {
+            images = locationTO.getImages();
+        }
+        images.add(image);
+        locationTO.setImages(images);
+        locations.set(0, locationTO);
+        testDB.setLocations(locations);
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        returnCodeResponse.setMessage("Upload erfolgreich");
+        returnCodeResponse.setReturnCode(0);
+        return returnCodeResponse;
     }
 
 }

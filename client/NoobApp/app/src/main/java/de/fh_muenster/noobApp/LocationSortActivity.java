@@ -19,8 +19,8 @@ import android.widget.Toast;
 import de.fh_muenster.noobApp.R;
 
 /**
- * @author marius
  * In dieser Activity können die angezeigten Locations einer Stadt und Kategorie sortiert und gefiltert werden
+ * @author marius
  */
 public class LocationSortActivity extends ActionBarActivity {
 
