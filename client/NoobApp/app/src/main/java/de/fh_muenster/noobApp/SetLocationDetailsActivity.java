@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -21,18 +22,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fh_muenster.exceptions.BadConnectionException;
+
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationTO;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 
 public class SetLocationDetailsActivity extends ActionBarActivity {
-    private int PICK_IMAGE_REQUEST = 1;
+    private final int PICK_IMAGE_REQUEST = 1;
+    private final int CAMERA_REQUEST = 2;
     private EditText locationame;
     private EditText beschreibung;
     private EditText strasse;
@@ -55,6 +58,8 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         //Akutelle Location holen von der Applikation Klasse
         myApp = (NoobApplication) getApplication();
         locationTO=myApp.getLocation();
+        //Anfangswert des Bytearrays ist gleich der Location die bearbeitet wird
+        byteArray=locationTO.getImage();
         //ButtonsFestlegen
         categoryList=myApp.getCategories();
         editlocation=(Button) findViewById(R.id.button15);
@@ -71,6 +76,8 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         nummer.setHint(locationTO.getNumber());
         plz.setHint(String.valueOf(locationTO.getPlz()));
         ort.setHint(locationTO.getCity());
+        bitmap=BitmapFactory.decodeByteArray(locationTO.getImage(), 0, locationTO.getImage().length);
+        ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
         //Befüllt Spinner mit dem Array from Kategories vom Server(categoryList)
         if(!categoryList.isEmpty()) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -79,9 +86,9 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
             Spinner spinner = (Spinner) findViewById(R.id.spinner2);
             spinner.setAdapter(adapter);
             //krallt sich die SpinnerPosition von der ausgewählten Kategory
-            int spinnerPostion = adapter.getPosition(locationTO.getCategory());
+            int spinnerPosition = adapter.getPosition(locationTO.getCategory());
             //Setzt den Spinner auf die Kategorie
-            spinner.setSelection(spinnerPostion);
+            spinner.setSelection(spinnerPosition);
 
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -120,11 +127,15 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
                 if(!ort.getText().toString().equals("")) {
                     locationTO.setCity(ort.getText().toString());
                 }
-                if(locationame.getText().toString().isEmpty()&&beschreibung.getText().toString().isEmpty()&&strasse.getText().toString().isEmpty()&&nummer.getText().toString().isEmpty()) {
+                if(byteArray!=locationTO.getImage()){
+                    myApp.setByteArray(byteArray);
+                }
+                //Marius muss myApp Byte Array befüllen
+                if(locationame.getText().toString().isEmpty()&&beschreibung.getText().toString().isEmpty()&&strasse.getText().toString().isEmpty()&&nummer.getText().toString().isEmpty()&&byteArray==locationTO.getImage()) {
                     Toast.makeText(view.getContext(), "Es wurde keine Werte geändert", Toast.LENGTH_SHORT).show();
                 }
 
-                if(!locationame.getText().toString().isEmpty()||!beschreibung.getText().toString().isEmpty()||!strasse.getText().toString().isEmpty()||!nummer.getText().toString().isEmpty()||!plz.getText().toString().isEmpty()||!ort.getText().toString().isEmpty()){
+                if(!locationame.getText().toString().isEmpty()||!beschreibung.getText().toString().isEmpty()||!strasse.getText().toString().isEmpty()||!nummer.getText().toString().isEmpty()||!plz.getText().toString().isEmpty()||!ort.getText().toString().isEmpty()||byteArray!=locationTO.getImage()){
                     myApp.setLocation(locationTO);
                     SetLocationDetails setLocation = new SetLocationDetails(view.getContext());
                     setLocation.execute();
@@ -139,8 +150,23 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
+            try {
+                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
+                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                bitmap = (Bitmap) data.getExtras().get("data");
+                ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
+                bitmapToByte();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
             Uri uri = data.getData();
             try {
                 //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
@@ -151,16 +177,23 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
                 }
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
+                bitmapToByte();
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
 
+    public void bitmapToByte() {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap=Bitmap.createScaledBitmap(bitmap,200,200,true);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byteArray = stream.toByteArray();
     }
     public void startKamera(View view) {
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i, PICK_IMAGE_REQUEST);
+        startActivityForResult(i, CAMERA_REQUEST);
     }
     public void pickPhoto(View view) {
         Intent intent = new Intent();
@@ -170,6 +203,15 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
 // Always show the chooser (if there are multiple options available)
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
+    public void deletePicture(View view){
+        if(((ImageView) findViewById(R.id.imageView4)).getDrawable()!=null)
+            ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(null);
+        if (bitmap != null) {
+            bitmap.recycle();
+            bitmap = null;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -191,6 +233,7 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public class SetLocationDetails extends AsyncTask<String, String, ReturnCodeResponse> {
         private int returnCode;
         private int sessionId;
@@ -209,7 +252,7 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             locationTO = myApp.getLocation();
             try {
-                //setLocation = onlineService.setLocationDetails(sessionId, locationTO);
+                setLocation = onlineService.setLocationDetails(sessionId,locationTO.getId(),locationTO.getName(),locationTO.getCategory(),locationTO.getDescription(),locationTO.getStreet(),locationTO.getNumber(),locationTO.getPlz(),locationTO.getCity(),locationTO.getImage());
                 returnCode = setLocation.getReturnCode();
                 message = setLocation.getMessage();
                 return setLocation;

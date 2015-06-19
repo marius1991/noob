@@ -117,7 +117,7 @@ public class NoobApplication extends Application {
     }
 
     public void setTestmode(boolean testmode) {
-        this.testmode = testmode;
+        this.testmode = testmode;}
 
     public byte[] getByteArray() {
         return byteArray;

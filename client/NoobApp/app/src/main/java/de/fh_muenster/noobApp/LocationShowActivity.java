@@ -149,8 +149,8 @@ public class LocationShowActivity extends ActionBarActivity {
      * @param view
      */
     public void clickFuncChange(View view) {
-//        Intent i = new Intent(LocationShowActivity.this, SetLocationDetailsActivity.class);
-//        startActivity(i);
+        Intent i = new Intent(LocationShowActivity.this, SetLocationDetailsActivity.class);
+        startActivity(i);
     }
 
     /**
