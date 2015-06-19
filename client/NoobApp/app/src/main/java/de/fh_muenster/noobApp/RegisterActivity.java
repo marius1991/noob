@@ -17,7 +17,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 
@@ -165,11 +164,9 @@ public class RegisterActivity extends ActionBarActivity {
             String benutzername=params[1];
             String passwort=params[2];
             String passwortwdh=params[3];
-
             userRegister = onlineService.register(benutzername,email,passwort,passwortwdh);
             message=userRegister.getMessage();
             returnCode=userRegister.getReturnCode();
-
             return userRegister;
         }
 

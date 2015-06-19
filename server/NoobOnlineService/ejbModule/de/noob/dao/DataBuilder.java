@@ -4,6 +4,7 @@
 package de.noob.dao;
 
 
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -33,15 +34,14 @@ public class DataBuilder {
 	private void init() {
 		
 		//TestUser anlegen
-		User testUser = new User("testuser", "testuser@test.de", "12345678");
+		User testUser = new User("testuser", "testuser@test.de", "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f");
 		em.persist(testUser);
-	
 		logger.info("User angelegt: " + testUser.getName());
 		
 		
 		//Blaues Haus
 		Location blauesHaus = new Location("Blaues Haus", "Bar", "Das “Blaue Haus” ist eine der ältesten Studentenkneipen Münsters.",
-				"Kreuzstrasse", "16" ,
+				"Kreuzstrasse", "16", 
 				48143, 
 				"Münster",
 				testUser);

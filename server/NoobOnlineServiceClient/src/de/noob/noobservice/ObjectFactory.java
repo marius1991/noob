@@ -27,11 +27,10 @@ public class ObjectFactory {
     private final static QName _GiveRating_QNAME = new QName("http://noobservice.noob.de/", "giveRating");
     private final static QName _CommentOnLocation_QNAME = new QName("http://noobservice.noob.de/", "commentOnLocation");
     private final static QName _LoginResponse_QNAME = new QName("http://noobservice.noob.de/", "loginResponse");
-    private final static QName _ListAllLocationsResponse_QNAME = new QName("http://noobservice.noob.de/", "listAllLocationsResponse");
     private final static QName _GetLocationDetailsResponse_QNAME = new QName("http://noobservice.noob.de/", "getLocationDetailsResponse");
+    private final static QName _AddImageToLocation_QNAME = new QName("http://noobservice.noob.de/", "addImageToLocation");
     private final static QName _ListLocationsWithCategoryResponse_QNAME = new QName("http://noobservice.noob.de/", "listLocationsWithCategoryResponse");
     private final static QName _Logout_QNAME = new QName("http://noobservice.noob.de/", "logout");
-    private final static QName _CreateLocationWithImageResponse_QNAME = new QName("http://noobservice.noob.de/", "createLocationWithImageResponse");
     private final static QName _Register_QNAME = new QName("http://noobservice.noob.de/", "register");
     private final static QName _ListLocationsWithCategory_QNAME = new QName("http://noobservice.noob.de/", "listLocationsWithCategory");
     private final static QName _ListLocationsWithNameResponse_QNAME = new QName("http://noobservice.noob.de/", "listLocationsWithNameResponse");
@@ -46,13 +45,12 @@ public class ObjectFactory {
     private final static QName _ListCities_QNAME = new QName("http://noobservice.noob.de/", "listCities");
     private final static QName _SetUserDetails_QNAME = new QName("http://noobservice.noob.de/", "setUserDetails");
     private final static QName _ListCitiesResponse_QNAME = new QName("http://noobservice.noob.de/", "listCitiesResponse");
-    private final static QName _ListAllLocations_QNAME = new QName("http://noobservice.noob.de/", "listAllLocations");
     private final static QName _ListCategoriesResponse_QNAME = new QName("http://noobservice.noob.de/", "listCategoriesResponse");
     private final static QName _GiveRatingResponse_QNAME = new QName("http://noobservice.noob.de/", "giveRatingResponse");
     private final static QName _ListLocationsWithName_QNAME = new QName("http://noobservice.noob.de/", "listLocationsWithName");
     private final static QName _DeleteUserResponse_QNAME = new QName("http://noobservice.noob.de/", "deleteUserResponse");
-    private final static QName _CreateLocationWithImage_QNAME = new QName("http://noobservice.noob.de/", "createLocationWithImage");
     private final static QName _SetLocationDetailsResponse_QNAME = new QName("http://noobservice.noob.de/", "setLocationDetailsResponse");
+    private final static QName _AddImageToLocationResponse_QNAME = new QName("http://noobservice.noob.de/", "addImageToLocationResponse");
     private final static QName _Login_QNAME = new QName("http://noobservice.noob.de/", "login");
     private final static QName _GetUserDetailsResponse_QNAME = new QName("http://noobservice.noob.de/", "getUserDetailsResponse");
     private final static QName _SetLocationDetails_QNAME = new QName("http://noobservice.noob.de/", "setLocationDetails");
@@ -80,14 +78,6 @@ public class ObjectFactory {
      */
     public GetUserDetails createGetUserDetails() {
         return new GetUserDetails();
-    }
-
-    /**
-     * Create an instance of {@link ListAllLocations }
-     * 
-     */
-    public ListAllLocations createListAllLocations() {
-        return new ListAllLocations();
     }
 
     /**
@@ -147,14 +137,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateLocationWithImage }
-     * 
-     */
-    public CreateLocationWithImage createCreateLocationWithImage() {
-        return new CreateLocationWithImage();
-    }
-
-    /**
      * Create an instance of {@link GetUserDetailsResponse }
      * 
      */
@@ -179,6 +161,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AddImageToLocationResponse }
+     * 
+     */
+    public AddImageToLocationResponse createAddImageToLocationResponse() {
+        return new AddImageToLocationResponse();
+    }
+
+    /**
      * Create an instance of {@link RegisterResponse }
      * 
      */
@@ -200,14 +190,6 @@ public class ObjectFactory {
      */
     public LogoutResponse createLogoutResponse() {
         return new LogoutResponse();
-    }
-
-    /**
-     * Create an instance of {@link ListAllLocationsResponse }
-     * 
-     */
-    public ListAllLocationsResponse createListAllLocationsResponse() {
-        return new ListAllLocationsResponse();
     }
 
     /**
@@ -243,6 +225,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link AddImageToLocation }
+     * 
+     */
+    public AddImageToLocation createAddImageToLocation() {
+        return new AddImageToLocation();
+    }
+
+    /**
      * Create an instance of {@link ListLocationsWithCategoryResponse }
      * 
      */
@@ -256,14 +246,6 @@ public class ObjectFactory {
      */
     public Register createRegister() {
         return new Register();
-    }
-
-    /**
-     * Create an instance of {@link CreateLocationWithImageResponse }
-     * 
-     */
-    public CreateLocationWithImageResponse createCreateLocationWithImageResponse() {
-        return new CreateLocationWithImageResponse();
     }
 
     /**
@@ -438,21 +420,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ListAllLocationsResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "listAllLocationsResponse")
-    public JAXBElement<ListAllLocationsResponse> createListAllLocationsResponse(ListAllLocationsResponse value) {
-        return new JAXBElement<ListAllLocationsResponse>(_ListAllLocationsResponse_QNAME, ListAllLocationsResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetLocationDetailsResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "getLocationDetailsResponse")
     public JAXBElement<GetLocationDetailsResponse> createGetLocationDetailsResponse(GetLocationDetailsResponse value) {
         return new JAXBElement<GetLocationDetailsResponse>(_GetLocationDetailsResponse_QNAME, GetLocationDetailsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddImageToLocation }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "addImageToLocation")
+    public JAXBElement<AddImageToLocation> createAddImageToLocation(AddImageToLocation value) {
+        return new JAXBElement<AddImageToLocation>(_AddImageToLocation_QNAME, AddImageToLocation.class, null, value);
     }
 
     /**
@@ -471,15 +453,6 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "logout")
     public JAXBElement<Logout> createLogout(Logout value) {
         return new JAXBElement<Logout>(_Logout_QNAME, Logout.class, null, value);
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CreateLocationWithImageResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "createLocationWithImageResponse")
-    public JAXBElement<CreateLocationWithImageResponse> createCreateLocationWithImageResponse(CreateLocationWithImageResponse value) {
-        return new JAXBElement<CreateLocationWithImageResponse>(_CreateLocationWithImageResponse_QNAME, CreateLocationWithImageResponse.class, null, value);
     }
 
     /**
@@ -609,15 +582,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ListAllLocations }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "listAllLocations")
-    public JAXBElement<ListAllLocations> createListAllLocations(ListAllLocations value) {
-        return new JAXBElement<ListAllLocations>(_ListAllLocations_QNAME, ListAllLocations.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ListCategoriesResponse }{@code >}}
      * 
      */
@@ -654,21 +618,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link CreateLocationWithImage }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "createLocationWithImage")
-    public JAXBElement<CreateLocationWithImage> createCreateLocationWithImage(CreateLocationWithImage value) {
-        return new JAXBElement<CreateLocationWithImage>(_CreateLocationWithImage_QNAME, CreateLocationWithImage.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link SetLocationDetailsResponse }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "setLocationDetailsResponse")
     public JAXBElement<SetLocationDetailsResponse> createSetLocationDetailsResponse(SetLocationDetailsResponse value) {
         return new JAXBElement<SetLocationDetailsResponse>(_SetLocationDetailsResponse_QNAME, SetLocationDetailsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link AddImageToLocationResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://noobservice.noob.de/", name = "addImageToLocationResponse")
+    public JAXBElement<AddImageToLocationResponse> createAddImageToLocationResponse(AddImageToLocationResponse value) {
+        return new JAXBElement<AddImageToLocationResponse>(_AddImageToLocationResponse_QNAME, AddImageToLocationResponse.class, null, value);
     }
 
     /**

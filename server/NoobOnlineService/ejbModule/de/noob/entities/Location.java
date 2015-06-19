@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.jboss.logging.Logger;
-
 
 /**
  * 
@@ -15,9 +13,8 @@ import org.jboss.logging.Logger;
  */
 @Entity
 public class Location implements Serializable {
-
 	private static final long serialVersionUID = 2566351654426224522L;
-	private static final Logger logger = Logger.getLogger(Location.class);
+	
 	@Id
 	@GeneratedValue
 	private int id;
@@ -38,16 +35,18 @@ public class Location implements Serializable {
 	
 	private double averageRating;
 	
-	@OneToMany (mappedBy="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Comment> comments;
+	
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Image> images;
 	
 	@ManyToOne
 	private User owner;
 	
-	private byte[] image;
 	
 	public Location() {
 	}
@@ -74,7 +73,6 @@ public class Location implements Serializable {
 		this.plz = plz;
 		this.city = city;
 		this.owner = owner;
-		this.image = image;
 	}	
 
 	public int getId() {
@@ -173,12 +171,21 @@ public class Location implements Serializable {
 		this.owner = owner;
 	}
 	
-	public byte[] getImage() {
-		return image;
-	}
 	
-	public void setImage(byte[] image) {
-		this.image = image;
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+
+	public void addImage(byte[] imageBytes, User user) {
+		Image image = new Image(); 
+		image.setData(imageBytes);
+		image.setLocation(this);
+		image.setOwner(user);
+		images.add(image);
 	}
 
 	public void addRating(User user, int value) {
@@ -203,7 +210,6 @@ public class Location implements Serializable {
 			}
 			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
 			if (newRating == true) {
-				logger.info("User hat noch kein Rating abgegebeb");
 				this.ratings.add(new Rating(user,value,this));
 			}
 			
