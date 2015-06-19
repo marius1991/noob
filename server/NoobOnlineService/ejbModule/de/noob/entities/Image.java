@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 /**
  * 
- * @author philipp
+ * @author Philipp Ringele
  *
  */
 @Entity

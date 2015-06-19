@@ -13,6 +13,11 @@ import de.noob.noobservice.ReturnCodeResponse;
 import de.noob.noobservice.UserLoginResponse;
 import de.noob.noobservice.UserTO;
 
+/**
+ * Client um den Server zu testen.
+ * @author Philipp Ringele
+ *
+ */
 public class ServerTest {
 	
 	private NoobOnlineServiceBean remoteSystem;

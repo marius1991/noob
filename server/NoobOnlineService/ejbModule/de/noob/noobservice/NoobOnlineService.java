@@ -9,7 +9,7 @@ import de.noob.dto.UserLoginResponse;
 import de.noob.dto.UserTO;
 
 /**
- * @author philipp
+ * @author Philipp Ringele
  *
  */
 public interface NoobOnlineService {
@@ -110,35 +110,73 @@ public interface NoobOnlineService {
 	 * @param plz
 	 * @param city
 	 * @param image
-	 * @return
+	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt. 
 	 */
 	public ReturnCodeResponse createLocation(int sessionId, String name,
 	String category, String description, String street, String number,
 	int plz, String city, byte[] image);
-
+	
+	/**
+	 * Mit dieser Methode koennen die Werte aller Location-Attribute einer existierenden Location abgerufen werden.
+	 * @param locationId
+	 * @return Eine LocationTO-Instanz, die die Attribute einer Location enthaelt.
+	 */
 	public LocationTO getLocationDetails(int locationId);
-
+	
+	/**
+	 * Mit dieser Methode lassen sich die Werte aller Attribute, (außer list<Image>images) einer existierenden Location veraendern. Alle Parameter sind
+	 * Pflicht, da sonst die entsprechenden Attribute mit null überschrieben werden.
+	 * @param sessionId
+	 * @param locationId
+	 * @param name
+	 * @param category
+	 * @param description
+	 * @param street
+	 * @param number
+	 * @param plz
+	 * @param city
+	 * @param image
+	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 */
 	public ReturnCodeResponse setLocationDetails(int sessionId, int locationId,
 	String name, String category, String description, String street,
-	String number, int plz, String city, byte[] image);
+	String number, int plz, String city);
 
 	/**
+	 * Mit dieser Methode koennen die Werte aller User-Attribute eines existierenden Users abgerufen werden.
 	 * @param sessionId
-	 * @return
+	 * @return Eine UserTO-Instanz, die alle Attribute eines Users enthaelt.
 	 */
 	public UserTO getUserDetails(int sessionId);
 
+	/**
+	 * Mit dieser Methode lassen sich die Werte aller Attribute eines existierenden Users veraendern. Alle Parameter sind
+	 * Pflicht, da sonst die entsprechenden Attribute mit null überschrieben werden.
+	 * @param sessionId
+	 * @param name
+	 * @param password
+	 * @param passwordConfirmation
+	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 */
 	public ReturnCodeResponse setUserDetails(int sessionId, String name,
 	String password, String passwordConfirmation);
 
 	/**
-	 * 
+	 * Mit dieser Methode laesst sich ein gerade eingeloggte User loeschen.
 	 * @param sessionId
 	 * @param password
-	 * @return
+	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse deleteUser(int sessionId, String password);
 	
+	/**
+	 * Mit dieser Methode kann man einer Location ein Bild hinzufuegen. Eine Location kann maximal
+	 * 10 Bilder besitzen.
+	 * @param sessionId
+	 * @param locationId
+	 * @param image
+	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 */
 	public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image);
 
 }
