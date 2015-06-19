@@ -18,8 +18,8 @@ import de.fh_muenster.noob.LocationTO;
 import de.fh_muenster.noobApp.R;
 
 /**
- * @author marius
  * Diese Activity zeigt die Suchergebnisse an, nachdem nach einer Location gesucht wurde.
+ * @author marius
  */
 public class LocationSearchActivity extends ActionBarActivity {
 

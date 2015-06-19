@@ -307,23 +307,6 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                     locationTO.setCity(soapObject.getProperty("city").toString());
                     locationTO.setOwnerId(soapObject.getProperty("ownerId").toString());
                     locationTO.setOwnerName(soapObject.getProperty("ownerName").toString());
-                    try {
-                        String image = soapObject.getProperty("image").toString();
-                        byte[] imagebytes = Base64.decode(image);
-                        locationTO.setImage(imagebytes);
-                    }
-                    catch (java.lang.RuntimeException e) {
-                        Log.d(TAG, e.getMessage());
-                        if (e.getMessage().equals("illegal property: image")) {
-                            locationTO.setImage(null);
-                        }
-                        else {
-                            throw new java.lang.RuntimeException();
-                        }
-                    }
-                    if(soapObject.hasProperty("city")) {
-                        Log.d(TAG, "Has Cities");
-                    }
                     List<RatingTO> ratings = new ArrayList<>();
                     if (soapObject.hasProperty("ratings")) {
                         Log.d(TAG, "Has Ratings");
@@ -423,23 +406,6 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                     locationTO.setCity(soapObject.getProperty("city").toString());
                     locationTO.setOwnerId(soapObject.getProperty("ownerId").toString());
                     locationTO.setOwnerName(soapObject.getProperty("ownerName").toString());
-                    try {
-                        String image = soapObject.getProperty("image").toString();
-                        byte[] imagebytes = Base64.decode(image);
-                        locationTO.setImage(imagebytes);
-                    }
-                    catch (java.lang.RuntimeException e) {
-                        Log.d(TAG, e.getMessage());
-                        if (e.getMessage().equals("illegal property: image")) {
-                            locationTO.setImage(null);
-                        }
-                        else {
-                            throw new java.lang.RuntimeException();
-                        }
-                    }
-                    if (soapObject.hasProperty("city")) {
-                        Log.d(TAG, "Has Cities");
-                    }
                     List<RatingTO> ratings = new ArrayList<>();
                     if (soapObject.hasProperty("ratings")) {
                         Log.d(TAG, "Has Ratings");
@@ -621,15 +587,28 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
             locationTO.setCity(response.getProperty("city").toString());
             locationTO.setOwnerId(response.getProperty("ownerId").toString());
             locationTO.setOwnerName(response.getProperty("ownerName").toString());
+            List<byte[]> images = new ArrayList<>();
             try {
-                String image = response.getProperty("image").toString();
-                byte[] imagebytes = Base64.decode(image);
-                locationTO.setImage(imagebytes);
+                if (response.hasProperty("images")) {
+                    Log.d(TAG, "HAS IMAGES");
+                    int propertyCount = response.getPropertyCount();
+                    for (int j = 0; j < propertyCount; j++) {
+                        PropertyInfo info1 = new PropertyInfo();
+                        response.getPropertyInfo(j, info1);
+                        Object obj1 = info1.getValue();
+                        if (obj1 != null && info1.name.equals("images")) {
+                            SoapPrimitive imageObject = (SoapPrimitive) obj1;
+                            Log.d(TAG, "IMAGES: " + imageObject.toString());
+                            byte[] imagebytes = Base64.decode(imageObject.toString());
+                            images.add(imagebytes);
+                        }
+                    }
+                }
             }
             catch (java.lang.RuntimeException e) {
                 Log.d(TAG, e.getMessage());
                 if (e.getMessage().equals("illegal property: image")) {
-                    locationTO.setImage(null);
+                    images = null;
                 }
                 else {
                     throw new java.lang.RuntimeException();
@@ -677,6 +656,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
                     }
                 }
             }
+            locationTO.setImages(images);
             locationTO.setComments(comments);
             locationTO.setRatings(ratings);
             locationTO.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
@@ -801,7 +781,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         SoapObject response;
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         try{
-            response=executeSoapAction(METHOD_NAME, sessionId, password);
+            response = executeSoapAction(METHOD_NAME, sessionId, password);
             returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
             returnCodeResponse.setMessage(response.getProperty("message").toString());
         }
@@ -813,5 +793,27 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         }
         return returnCodeResponse;
 
+    }
+
+    @Override
+    public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image) {
+        String METHOD_NAME = "addImageToLocation";
+        Log.d(TAG, "Add Image to Location:");
+        SoapObject response;
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        String bytestring = Base64.encode(image);
+        try {
+            response = executeSoapAction(METHOD_NAME, sessionId, locationId, bytestring);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+            returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+            returnCodeResponse.setMessage(response.getProperty("message").toString());
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        catch (NullPointerException e) {
+            returnCodeResponse.setReturnCode(10);
+        }
+        return returnCodeResponse;
     }
 }

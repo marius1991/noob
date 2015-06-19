@@ -28,9 +28,9 @@ import de.fh_muenster.noob.NoobOnlineService;
 
 /**
  * Created by marius on 02.06.15.
- * @author marius
  * In dieser Activity werden die Locationkategorien der ausgewählten Stadt angezeigt.
  * Außerdem kann nach Locations in der Stadt gesucht werden.
+ * @author marius
  */
 public class CategorySelectionActivity extends ActionBarActivity {
 
@@ -135,8 +135,8 @@ public class CategorySelectionActivity extends ActionBarActivity {
     }
 
     /**
-     * @author marius
      * In diesem AsycTask werden die Kategorien einer Stadt vom Server abgerufen.
+     * @author marius
      */
     class GetCategoriesFromServer extends AsyncTask<String, String, CategoryListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);
@@ -206,8 +206,8 @@ public class CategorySelectionActivity extends ActionBarActivity {
     }
 
     /**
-     * @author marius
      * In diesem AsyncTask wird nach einer Location gesucht.
+     * @author marius
      */
     class SearchLocationOnServer extends AsyncTask<String, String, LocationListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CategorySelectionActivity.this);

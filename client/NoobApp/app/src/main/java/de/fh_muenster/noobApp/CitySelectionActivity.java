@@ -26,8 +26,8 @@ import de.fh_muenster.noob.NoobOnlineService;
 
 /**
  * Created by marius on 02.06.15.
- * @author marius
  * In dieser Activity wird die Stadt ausgewählt
+ * @author marius
  */
 public class CitySelectionActivity extends ActionBarActivity {
 
@@ -136,8 +136,8 @@ public class CitySelectionActivity extends ActionBarActivity {
     }
 
     /**
-     * @author marius
      * In diesem AsyncTask wird die Liste der Städte vom Server abgerufen.
+     * @author marius
      */
     class GetCitiesFromServer extends AsyncTask<String, String, CityListResponse> {
         private ProgressDialog Dialog = new ProgressDialog(CitySelectionActivity.this);

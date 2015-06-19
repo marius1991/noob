@@ -11,9 +11,9 @@ import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
- * @author marius
  * Dieser AsyncTask realisiert das Abmelden.
  * Er wurde in eine eigene Klasse ausgelagert, damit er von allen Activites aus aufgerufen werden kann.
+ * @author marius
  */
 public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> {
     private static final String TAG = LogoutTask.class.getName();
@@ -50,8 +50,8 @@ public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> 
     @Override
     protected void onPostExecute (ReturnCodeResponse response) {
         if (response != null) {
-            Log.d(TAG, response.getMessage());
-            Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Returncode: " + response.getReturnCode());
+            Toast.makeText(context, "Erfolgreich abgemeldet", Toast.LENGTH_SHORT).show();
         }
         else {
             Log.d(TAG, "keine Verbindung zum Server");

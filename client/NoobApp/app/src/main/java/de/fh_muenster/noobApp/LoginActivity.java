@@ -115,7 +115,7 @@ public class LoginActivity extends ActionBarActivity {
     }
     */
     public void openRegisterActivity(View view){
-        Intent y= new Intent(LoginActivity.this,UserManagementAcitivtiy.class);
+        Intent y= new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(y);
     }
     private String hashPasswort(String password) {
@@ -132,10 +132,10 @@ public class LoginActivity extends ActionBarActivity {
     }
 
 
-    public void openNewLocation(View view){
-        Intent z= new Intent(LoginActivity.this,NewLocationActivity.class);
-        startActivity(z);
-    }
+//    public void openNewLocation(View view){
+//        Intent z= new Intent(LoginActivity.this,NewLocationActivity.class);
+//        startActivity(z);
+//    }
 
     public void testMode(View view) {
         NoobApplication myApp = (NoobApplication) getApplication();

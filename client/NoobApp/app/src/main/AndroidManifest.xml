@@ -4,19 +4,22 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera"></uses-feature>
 
     <!-- android:name=".NoobApplication" -->
     <application
         android:name=".NoobApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/noob_theme">
+        android:theme="@style/noob_theme" >
         <activity
             android:name=".LoginActivity"
             android:label="NoobApp" >
+
             <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,7 +34,7 @@
             android:parentActivityName=".LoginActivity" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.NewLocationActivity"
+            android:name=".NewLocationActivity"
             android:label="Neue Location anlegen" >
         </activity>
         <activity
@@ -43,42 +46,46 @@
             android:label="@string/title_activity_city_selection" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.CategorySelectionActivity"
+            android:name=".CategorySelectionActivity"
             android:label="@string/title_activity_category_selection"
-            android:parentActivityName="de.fh_muenster.noobApp.CitySelectionActivity" >
+            android:parentActivityName=".CitySelectionActivity" >
         </activity>
         <activity
             android:name=".LocationListActivity"
             android:label="@string/title_activity_category_list"
-            android:launchMode = "singleTask"
-            android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
+            android:launchMode="singleTask"
+            android:parentActivityName=".CategorySelectionActivity" >
         </activity>
         <activity
             android:name=".LocationShowActivity"
             android:label="@string/title_activity_location_show"
-            android:parentActivityName="de.fh_muenster.noobApp.LocationListActivity" >
+            android:parentActivityName=".LocationListActivity" >
         </activity>
         <activity
             android:name=".LocationSortActivity"
             android:label="@string/title_activity_location_sort"
-            android:parentActivityName="de.fh_muenster.noobApp.LocationListActivity" >
+            android:parentActivityName=".LocationListActivity" >
         </activity>
         <activity
             android:name=".LocationSearchActivity"
             android:label="@string/title_activity_location_search"
-            android:parentActivityName="de.fh_muenster.noobApp.CategorySelectionActivity" >
+            android:parentActivityName=".CategorySelectionActivity" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.LocationCommentActivity"
-            android:label="@string/title_activity_location_comment" 
-			android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
+            android:name=".LocationCommentActivity"
+            android:label="@string/title_activity_location_comment"
+            android:parentActivityName=".LocationShowActivity" >
         </activity>
         <activity
-            android:name="de.fh_muenster.noobApp.SetLocationDetailsActivity"
+            android:name=".SetLocationDetailsActivity"
             android:label="@string/title_activity_set_location_details"
-            android:parentActivityName="de.fh_muenster.noobApp.LocationShowActivity" >
+            android:parentActivityName=".LocationShowActivity" >
         </activity>
-
+        <activity
+            android:name=".LocationAddImage"
+            android:label="@string/title_activity_location_add_image"
+            android:parentActivityName=".LocationShowActivity" >
+        </activity>
     </application>
 
 </manifest>
