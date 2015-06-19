@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="noob_white">#fffff3e3</color>
+    <color name="noob_blue">#01a6ff</color>
+    <color name="noob_blue_dark">#ff037ecd</color>
+    <color name="noob_white_spinner">#fff0e4d4</color>
+    <color name="noob_blue_button_small">#9303a7ff</color>
+</resources>

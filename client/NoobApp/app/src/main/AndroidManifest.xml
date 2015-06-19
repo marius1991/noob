@@ -1,20 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.fh_muenster.noobapp" >
+    package="de.fh_muenster.noobApp" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera"></uses-feature>
+
+    <!-- android:name=".NoobApplication" -->
     <application
+        android:name=".NoobApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/noob_theme" >
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:name=".LoginActivity"
+            android:label="NoobApp" >
+
+            <!-- Customize your theme here. android:uiOptions="splitActionBarWhenNarrow" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Registrierung"
+            android:parentActivityName=".LoginActivity" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:label="Help Center"
+            android:parentActivityName=".LoginActivity" >
+        </activity>
+        <activity
+            android:name=".NewLocationActivity"
+            android:label="Neue Location anlegen" >
+        </activity>
+        <activity
+            android:name=".UserManagementAcitivtiy"
+            android:label="Kontoverwaltung" >
+        </activity>
+        <activity
+            android:name=".CitySelectionActivity"
+            android:label="@string/title_activity_city_selection" >
+        </activity>
+        <activity
+            android:name=".CategorySelectionActivity"
+            android:label="@string/title_activity_category_selection"
+            android:parentActivityName=".CitySelectionActivity" >
+        </activity>
+        <activity
+            android:name=".LocationListActivity"
+            android:label="@string/title_activity_category_list"
+            android:launchMode="singleTask"
+            android:parentActivityName=".CategorySelectionActivity" >
+        </activity>
+        <activity
+            android:name=".LocationShowActivity"
+            android:label="@string/title_activity_location_show"
+            android:parentActivityName=".LocationListActivity" >
+        </activity>
+        <activity
+            android:name=".LocationSortActivity"
+            android:label="@string/title_activity_location_sort"
+            android:parentActivityName=".LocationListActivity" >
+        </activity>
+        <activity
+            android:name=".LocationSearchActivity"
+            android:label="@string/title_activity_location_search"
+            android:parentActivityName=".CategorySelectionActivity" >
+        </activity>
+        <activity
+            android:name=".LocationCommentActivity"
+            android:label="@string/title_activity_location_comment"
+            android:parentActivityName=".LocationShowActivity" >
+        </activity>
+        <activity
+            android:name=".SetLocationDetailsActivity"
+            android:label="@string/title_activity_set_location_details"
+            android:parentActivityName=".LocationShowActivity" >
+        </activity>
+        <activity
+            android:name=".LocationAddImage"
+            android:label="@string/title_activity_location_add_image"
+            android:parentActivityName=".LocationShowActivity" >
         </activity>
     </application>
 

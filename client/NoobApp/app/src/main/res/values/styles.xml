@@ -1,8 +1,69 @@
 <resources>
-
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="noob_theme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/noob_theme.actionbar</item>
+        <item name="android:buttonStyle">@style/noob_button</item>-->
+        <item name="android:windowBackground">@color/noob_white</item>
+        <item name="colorControlNormal">#c5c5c5</item>
+        <item name="colorControlActivated">@color/noob_blue</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:dropDownSpinnerStyle">@style/noob_spinner</item>
+        <item name="android:seekBarStyle">@style/noob_seekbar</item>
+        <item name="android:ratingBarStyle">@style/noob_ratingbar</item>
+    </style>
+
+
+    <style name="noob_theme.actionbar" parent="Widget.AppCompat.ActionBar">
+        <item name="background">@color/noob_blue</item>
+        <item name="titleTextStyle">@style/noob_theme.actionbar.titletext</item>
+        <item name="android:actionMenuTextAppearance">@color/noob_blue</item>
+        <item name="logo">@drawable/icon</item>
+        <!--<item name="displayOptions">useLogo|showHome|showTitle</item>-->
+    </style>
+
+
+    <!-- ActionBar title text -->
+    <style name="noob_theme.actionbar.titletext" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/noob_white</item>
+    </style>
+
+
+    <style name="noob_button" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/noob_white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@drawable/buttonshape</item>
+    </style>
+
+    <style name="noob_button_small" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/noob_white</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/buttonshapesmall</item>
+    </style>
+
+    <style name="Textcolor">
+        <item name="android:textColor">@color/noob_blue</item>
+    </style>
+
+    <style name="PopupMenu" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/noob_blue_dark</item>
+    </style>
+
+    <style name="noob_spinner" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/apptheme_spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/apptheme_list_selector_holo_light</item>
+        <item name="android:popupBackground">@color/noob_white_spinner</item>
+    </style>
+
+    <style name="noob_seekbar" parent="android:Widget.Holo.Light.SeekBar">
+        <item name="android:progressDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/apptheme_scrubber_progress_horizontal_holo_light</item>
+        <item name="android:thumb">@drawable/apptheme_scrubber_control_selector_holo_light</item>
+    </style>
+
+    <style name="noob_ratingbar" parent="android:Widget.Holo.Light.RatingBar">
+        <item name="android:progressDrawable">@drawable/apptheme_ratingbar_full_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/apptheme_ratingbar_full_holo_light</item>
     </style>
 
 </resources>
