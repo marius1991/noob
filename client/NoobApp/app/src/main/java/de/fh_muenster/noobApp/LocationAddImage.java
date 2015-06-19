@@ -58,7 +58,7 @@ public class LocationAddImage extends ActionBarActivity {
                 startActivityForResult(cameraIntent, 1888);
             }
         });
-        if(bitmap != null) {
+        if(bitmap == null) {
             Button rotate = (Button) findViewById(R.id.button21);
             rotate.setVisibility(View.INVISIBLE);
         }
