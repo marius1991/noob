@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.jboss.logging.Logger;
-
 
 /**
  * 
@@ -15,9 +13,8 @@ import org.jboss.logging.Logger;
  */
 @Entity
 public class Location implements Serializable {
-
 	private static final long serialVersionUID = 2566351654426224522L;
-	private static final Logger logger = Logger.getLogger(Location.class);
+	
 	@Id
 	@GeneratedValue
 	private int id;
@@ -44,14 +41,11 @@ public class Location implements Serializable {
 	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Comment> comments;
 	
-	@ManyToOne
-	private User owner;
-	
 	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Image> images;
 	
-	//@Lob
-	//private byte[] image;
+	@ManyToOne
+	private User owner;
 	
 	
 	public Location() {
@@ -216,7 +210,6 @@ public class Location implements Serializable {
 			}
 			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
 			if (newRating == true) {
-				logger.info("User hat noch kein Rating abgegebeb");
 				this.ratings.add(new Rating(user,value,this));
 			}
 			

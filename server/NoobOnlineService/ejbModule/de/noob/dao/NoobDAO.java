@@ -15,7 +15,7 @@ import de.noob.entities.User;
 
 /**
  * Enthält sämtliche Logik für Datenbankzugriffe.
- * @author philipp, Tim
+ * @author Philipp Ringele, Tim Hembrock
  *
  */
 @Stateless
@@ -37,7 +37,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserById(int id) {
-		logger.info("SELECT u FROM USER u WHERE u.id = '" + id + "' ");
+		logger.info("DB-Query: SELECT u FROM USER u WHERE u.id = '" + id + "' ");
 		return (User) em.createQuery("SELCET u FROM USER u WHERE u.id = '" + id + "' ").getSingleResult();	
 	}
 
@@ -207,13 +207,6 @@ public class NoobDAO implements NoobDAOLocal {
 		em.remove(o);
 	}
 	
-	@Override
-	public void merge(Object o) {
-		logger.info("DB-Query: em.merge(o)");
-		em.merge(o);
-	}
-
-
 	@Override
 	public List<String> listCities() {
 		try {

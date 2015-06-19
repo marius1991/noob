@@ -20,7 +20,12 @@ import javax.mail.Message.RecipientType;
 
 import org.jboss.logging.Logger;
 
-
+/**
+ * Diese Bean holt die Mails aus der Queue "MailOutput" und erstellt eine MimeMessage.
+ * Die MimeMessage wird schliesslich zum GoogleMail SMTP-Server gesendet.
+ * @author Philipp Ringele
+ *
+ */
 @MessageDriven(
 		activationConfig = {
 				@ActivationConfigProperty(
@@ -36,9 +41,10 @@ public class MailRequestProcessor implements MessageListener {
 
 	private static final Logger logger = Logger.getLogger(MailRequestProcessor.class);
 	
-   /* @Resource(name = "java:/Mail")  
-    private Session mailSession;  */
-	
+	/**
+	 * Holt TextMessages aus der Queue ab und erstellt aus ihnen E-Mails,
+	 * die zum Gmail SMTP-Server gesendet werden.
+	 */
 	@Override
 	public void onMessage(Message message) {
 		try {
@@ -71,7 +77,8 @@ public class MailRequestProcessor implements MessageListener {
 		}
 		catch(JMSException e){
 			throw new EJBException(e);
-		} catch (MessagingException e) {
+		} 
+		catch (MessagingException e) {
 			e.printStackTrace();
 		}
 	}
