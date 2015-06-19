@@ -2,6 +2,7 @@ package de.fh_muenster.noobApp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import de.fh_muenster.exceptions.BadConnectionException;
+
 import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationListResponse;
 import de.fh_muenster.noob.ReturnCodeResponse;
@@ -32,7 +33,8 @@ import java.util.List;
 
 public class NewLocationActivity extends ActionBarActivity {
     //Standardwert der übergeben wird
-    private int PICK_IMAGE_REQUEST = 1;
+    private final int PICK_IMAGE_REQUEST = 1;
+    private final int CAMERA_REQUEST = 2;
     private EditText locationame;
     private EditText beschreibung;
     private EditText strasse;
@@ -47,11 +49,12 @@ public class NewLocationActivity extends ActionBarActivity {
     private String ortString;
     private Button neueLocation;
     private Bitmap bitmap;
+    private Bitmap bitmapnew;
     NoobApplication myApp;
     private byte[] byteArray;
     List<String> categoryList;
     private String selectedSpinnerElement;
-
+    private static final String TAG = NewLocationActivity.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +108,7 @@ public class NewLocationActivity extends ActionBarActivity {
                 } else if (plz.getText().toString().equals("")) {
                     plz.setError("Bitte PLZ eintragen");
                     plz.requestFocus();
-                }else if (plz.getText().toString().length() == 5) {
+                }else if (plz.getText().toString().length() == 4) {
                         plz.setError("PLZ muss 5 Zeichen lang sein");
                         plz.requestFocus();
                 } else if (ort.getText().toString().equals("")) {
@@ -119,7 +122,6 @@ public class NewLocationActivity extends ActionBarActivity {
                     ortString = ort.getText().toString();
                     nummerString = nummer.getText().toString();
                     bitmapToByte();
-                    myApp.setByteArray(byteArray);
                     NewLocationTask newLocation = new NewLocationTask();
                     newLocation.execute(locationameString, selectedSpinnerElement, beschreibungString, strasseString, nummerString, plZSring, ortString);
                 }
@@ -131,8 +133,8 @@ public class NewLocationActivity extends ActionBarActivity {
     }
 
     public void startKamera(View view) {
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i, PICK_IMAGE_REQUEST);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent,CAMERA_REQUEST);
     }
 
 
@@ -140,8 +142,22 @@ public class NewLocationActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
+            try {
+                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
+                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
+                if (bitmap != null) {
+                    bitmap.recycle();
+                    bitmap = null;
+                }
+                bitmap = (Bitmap) data.getExtras().get("data");
+                ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
             Uri uri = data.getData();
             try {
                 //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
@@ -153,17 +169,17 @@ public class NewLocationActivity extends ActionBarActivity {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     //Wandelt die BitMap in ein ByteArray für die Datenbank
     public void bitmapToByte() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmapnew=Bitmap.createScaledBitmap(bitmap,200,200,true);
+        bitmapnew.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byteArray = stream.toByteArray();
     }
 
@@ -190,8 +206,19 @@ public class NewLocationActivity extends ActionBarActivity {
             case R.id.action_maps:
                 openGoogleMaps();
                 return true;
+            case R.id.action_internet:
+                openInternet();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    public void deletePicture(View view){
+        if(((ImageView) findViewById(R.id.imageView4)).getDrawable()!=null)
+        ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(null);
+        if (bitmap != null) {
+            bitmap.recycle();
+            bitmap = null;
         }
     }
 
@@ -200,6 +227,13 @@ public class NewLocationActivity extends ActionBarActivity {
         Uri geoUri = Uri.parse(geoUriString);
         Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
         startActivity(mapCall);
+    }
+
+    public void openInternet(){
+        String url = "http://www.google.de";
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 
     //public void newLocation(View view) {
@@ -221,7 +255,10 @@ public class NewLocationActivity extends ActionBarActivity {
             sessionID = myApp.getSessionId();
             int plz = Integer.parseInt(params[5]);
             ReturnCodeResponse response;
-            response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6],myApp.getByteArray());
+            if(byteArray==null){
+                Log.d(TAG, "ByteArrayistLeer");
+            }
+            response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6],byteArray);
             return response;
         }
 
