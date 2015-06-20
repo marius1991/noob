@@ -174,7 +174,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
 
 
     @Override
-    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city) {
         return null;
     }
 

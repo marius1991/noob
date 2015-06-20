@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+/**
+ * Created by marco
+ * Diese Activity ist dafür zuständig dem User erste Hilfestellungen bereitzustellen
+ * @author marco
+ */
 public class HelpActivity extends ActionBarActivity {
 
     @Override

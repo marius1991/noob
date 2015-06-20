@@ -178,7 +178,7 @@ public class NewLocationActivity extends ActionBarActivity {
     //Wandelt die BitMap in ein ByteArray für die Datenbank
     public void bitmapToByte() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmapnew=Bitmap.createScaledBitmap(bitmap,200,200,true);
+        bitmapnew=Bitmap.createScaledBitmap(bitmap,400,400,true);
         bitmapnew.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byteArray = stream.toByteArray();
     }

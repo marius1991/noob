@@ -2,6 +2,9 @@ package de.fh_muenster.noobApp;
 
 import android.app.Application;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +15,7 @@ import de.fh_muenster.noob.UserTO;
 /**
  * Created by marius on 02.06.15.
  * Subklasse von Application --> Austausch von Daten unter den Activities
- * @author marius
+ * @author marius,marco
  */
 public class NoobApplication extends Application {
     private boolean testmode = false;
@@ -27,7 +30,6 @@ public class NoobApplication extends Application {
     private UserTO user;
     private List<LocationTO> locationSearchResults;
     private String search;
-    private byte[] byteArray;
 
     public String getUserId() {
         return userId;
@@ -119,12 +121,16 @@ public class NoobApplication extends Application {
     public void setTestmode(boolean testmode) {
         this.testmode = testmode;}
 
-    public byte[] getByteArray() {
-        return byteArray;
-    }
-
-    public void setByteArray(byte[] byteArray) {
-        this.byteArray = byteArray;
-
+    public String hashPasswort(String password) {
+        try {
+            String passwordnew="";
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(password.getBytes());
+            passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
+            return passwordnew;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

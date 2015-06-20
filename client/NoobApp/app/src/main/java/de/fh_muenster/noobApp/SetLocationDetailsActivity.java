@@ -34,8 +34,6 @@ import de.fh_muenster.noob.ReturnCodeResponse;
 
 
 public class SetLocationDetailsActivity extends ActionBarActivity {
-    private final int PICK_IMAGE_REQUEST = 1;
-    private final int CAMERA_REQUEST = 2;
     private EditText locationame;
     private EditText beschreibung;
     private EditText strasse;
@@ -43,11 +41,8 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
     private EditText plz;
     private EditText ort;
     private Button editlocation;
-    private Button locationLoeschen;
     private LocationTO locationTO;
     private NoobApplication myApp;
-    private Bitmap bitmap;
-    private byte[] byteArray;
     List<String> categoryList;
     private String selectedSpinnerElement;
     private static final String TAG = SetLocationDetailsActivity.class.getName();
@@ -59,7 +54,6 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         myApp = (NoobApplication) getApplication();
         locationTO=myApp.getLocation();
         //Anfangswert des Bytearrays ist gleich der Location die bearbeitet wird
-        byteArray=locationTO.getImage();
         //ButtonsFestlegen
         categoryList=myApp.getCategories();
         editlocation=(Button) findViewById(R.id.button15);
@@ -76,8 +70,6 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         nummer.setHint(locationTO.getNumber());
         plz.setHint(String.valueOf(locationTO.getPlz()));
         ort.setHint(locationTO.getCity());
-        bitmap=BitmapFactory.decodeByteArray(locationTO.getImage(), 0, locationTO.getImage().length);
-        ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
         //Befüllt Spinner mit dem Array from Kategories vom Server(categoryList)
         if(!categoryList.isEmpty()) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -127,15 +119,13 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
                 if(!ort.getText().toString().equals("")) {
                     locationTO.setCity(ort.getText().toString());
                 }
-                if(byteArray!=locationTO.getImage()){
-                    myApp.setByteArray(byteArray);
-                }
+
                 //Marius muss myApp Byte Array befüllen
-                if(locationame.getText().toString().isEmpty()&&beschreibung.getText().toString().isEmpty()&&strasse.getText().toString().isEmpty()&&nummer.getText().toString().isEmpty()&&byteArray==locationTO.getImage()) {
+                if(locationame.getText().toString().isEmpty()&&beschreibung.getText().toString().isEmpty()&&strasse.getText().toString().isEmpty()&&nummer.getText().toString().isEmpty()) {
                     Toast.makeText(view.getContext(), "Es wurde keine Werte geändert", Toast.LENGTH_SHORT).show();
                 }
 
-                if(!locationame.getText().toString().isEmpty()||!beschreibung.getText().toString().isEmpty()||!strasse.getText().toString().isEmpty()||!nummer.getText().toString().isEmpty()||!plz.getText().toString().isEmpty()||!ort.getText().toString().isEmpty()||byteArray!=locationTO.getImage()){
+                if(!locationame.getText().toString().isEmpty()||!beschreibung.getText().toString().isEmpty()||!strasse.getText().toString().isEmpty()||!nummer.getText().toString().isEmpty()||!plz.getText().toString().isEmpty()||!ort.getText().toString().isEmpty()){
                     myApp.setLocation(locationTO);
                     SetLocationDetails setLocation = new SetLocationDetails(view.getContext());
                     setLocation.execute();
@@ -148,69 +138,6 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
-            try {
-                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
-                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
-                if (bitmap != null) {
-                    bitmap.recycle();
-                    bitmap = null;
-                }
-                bitmap = (Bitmap) data.getExtras().get("data");
-                ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
-                bitmapToByte();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
-            Uri uri = data.getData();
-            try {
-                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
-                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
-                if (bitmap != null) {
-                    bitmap.recycle();
-                    bitmap = null;
-                }
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
-                bitmapToByte();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void bitmapToByte() {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap=Bitmap.createScaledBitmap(bitmap,200,200,true);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byteArray = stream.toByteArray();
-    }
-    public void startKamera(View view) {
-        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(i, CAMERA_REQUEST);
-    }
-    public void pickPhoto(View view) {
-        Intent intent = new Intent();
-// Show only images, no videos or anything else
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-// Always show the chooser (if there are multiple options available)
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
-    public void deletePicture(View view){
-        if(((ImageView) findViewById(R.id.imageView4)).getDrawable()!=null)
-            ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(null);
-        if (bitmap != null) {
-            bitmap.recycle();
-            bitmap = null;
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -252,7 +179,7 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             locationTO = myApp.getLocation();
             try {
-                setLocation = onlineService.setLocationDetails(sessionId,locationTO.getId(),locationTO.getName(),locationTO.getCategory(),locationTO.getDescription(),locationTO.getStreet(),locationTO.getNumber(),locationTO.getPlz(),locationTO.getCity(),locationTO.getImage());
+                setLocation = onlineService.setLocationDetails(sessionId,locationTO.getId(),locationTO.getName(),locationTO.getCategory(),locationTO.getDescription(),locationTO.getStreet(),locationTO.getNumber(),locationTO.getPlz(),locationTO.getCity());
                 returnCode = setLocation.getReturnCode();
                 message = setLocation.getMessage();
                 return setLocation;

@@ -20,7 +20,11 @@ import java.util.regex.Pattern;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 
-
+/**
+ * Created by marco
+ * Diese Activity ist für die Registrieung eines Users zuständig
+ * @author marco
+ */
 public class RegisterActivity extends ActionBarActivity {
 
     private EditText email;
@@ -32,14 +36,17 @@ public class RegisterActivity extends ActionBarActivity {
     private String passwordString="";
     private String passwordStringWdh="";
     private String benutzernameString="";
-    private String passwordStringHash;
+    private String passwordStringHash="";
+    private String passwordStringHashWdh="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // If your minSdkVersion is 11 or higher, instead use:
-        // getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Füllt die Variable "myApp" mit der globalen Applikation Klasse
+        final NoobApplication myApp = (NoobApplication) getApplication();
+
 
         email=(EditText) findViewById(R.id.editText5);
         password=(EditText) findViewById(R.id.editText7);
@@ -52,11 +59,12 @@ public class RegisterActivity extends ActionBarActivity {
             public void onClick(View view) {
                 emailString = email.getText().toString();
                 passwordString = password.getText().toString();
-                passwordString=hashPasswort(passwordString);
-                passwordStringWdh = hashPasswort(passwordwdh.getText().toString());
-                passwordStringHash=hashPasswort(passwordStringWdh);
-                benutzernameString =benutzername.getText().toString();
-
+                passwordStringWdh = passwordwdh.getText().toString();
+                passwordStringHash = myApp.hashPasswort(passwordString);
+                passwordStringHashWdh = myApp.hashPasswort(passwordStringWdh);
+                benutzernameString = benutzername.getText().toString();
+                //TODO Bei nichts drin wird alles NULL zum Server übergeben!!!!!!!!!!!!!
+                //setError Meldungen bearbeiten mit focus change
                  if(emailString.equals("")) {
                      email.setError("Bitte trage eine Email-Adresse ein");
                      email.requestFocus();
@@ -109,18 +117,6 @@ public class RegisterActivity extends ActionBarActivity {
             return true;
         }
         return false;
-    }
-    private String hashPasswort(String password) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(password.getBytes());
-            String passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
-            //String passwordnew = messageDigest.toString();
-            return passwordnew;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
 

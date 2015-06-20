@@ -36,8 +36,9 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
     private String benutzernameString="";
     private Button userLoeschen;
     private Button setUserDetails;
-    private String passwordStringHash;
+    private String passwordStringHashWdh;
     private UserTO userTO;
+    private String passwordStringHash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,57 +49,90 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
         userLoeschen = (Button) findViewById(R.id.button11);
         benutzername = (EditText) findViewById(R.id.editText13);
         setUserDetails=(Button) findViewById(R.id.button10);
+        NoobApplication myapp= (NoobApplication) getApplication();
+        userTO= myapp.getUser();
+        benutzername.setText(userTO.getName());
+
+
+        benutzername.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    benutzername.setError(null);
+                }
+
+            }
+        });
+
+
 
         setUserDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                NoobApplication myapp= (NoobApplication) getApplication();
+                userTO= myapp.getUser();
                 passwordString = password.getText().toString();
-                passwordString=hashPasswort(passwordString);
+                passwordStringHash = hashPasswort(passwordString);
                 passwordStringWdh = passwordwdh.getText().toString();
-                passwordStringHash=hashPasswort(passwordStringWdh);
-                benutzernameString =benutzername.getText().toString();
-                if (passwordString.equals("")){
-                    password.setError("Bitte trage ein Passwort ein");
-                    password.requestFocus();
-                }  else if (passwordStringWdh.equals("")) {
-                    passwordwdh.setError("Bitte Wiederhole dein Passwort");
-                    passwordwdh.requestFocus();
-                }  else if (benutzernameString.equals("")) {
+                passwordStringHashWdh = hashPasswort(passwordStringWdh);
+                benutzernameString = benutzername.getText().toString();
+                if (benutzernameString.equals("")) {
                     benutzername.setError("Bitte trage einen Benutzernamen ein");
                     benutzername.requestFocus();
-                }  else if (!validPassword(passwordString)) {
-                    password.setError("Passwort muss mindestens 8 Zeichen haben");
-                    password.requestFocus();
-                }  else if (!validPasswordWdh(passwordString, passwordStringWdh)) {
-                    passwordwdh.setError("Passwort stimmt nicht ueberein");
-                    passwordwdh.requestFocus();
                 }
-                SetUserDetails setUser = new SetUserDetails(view.getContext());
-                setUser.execute(benutzernameString,passwordString, passwordStringWdh);
-                //Für Get USer Details soll in der Action Bar ausgeführt werden
-                //NoobApplication myapp= (NoobApplication) getApplication();
-                //userTO= myapp.getUser();
-                //email.setText(userTO.getEmail());
-                //password.setText(userTO.getPassword());
-                //passwordwdh.setText(userTO.getPassword());
-                //benutzername.setText(userTO.getName());
-            }
 
+                if (benutzernameString.equals(userTO.getName()) && passwordString.isEmpty() && passwordStringWdh.isEmpty()) {
+                    benutzername.setError("Es wurden keine Daten geändert");
+                    benutzername.requestFocus();
+                } else {
+                    if (!passwordString.isEmpty() || !passwordStringWdh.isEmpty()) {
+                        boolean isCorrect=true;
+                        if (passwordStringWdh.equals("")) {
+                            passwordwdh.setError("Bitte Wiederhole dein Passwort");
+                            passwordwdh.requestFocus();
+                            isCorrect=false;
+                        }
+                        if (!validPassword(passwordString)) {
+                            password.setError("Passwort muss mindestens 8 Zeichen haben");
+                            password.requestFocus();
+                            isCorrect=false;
+                        }
+                        if (!validPasswordWdh(passwordString, passwordStringWdh)) {
+                            passwordwdh.setError("Passwort stimmt nicht überein");
+                            passwordwdh.requestFocus();
+                            isCorrect=false;
+                        }
+                        if(isCorrect) {
+                            SetUserDetails setUser = new SetUserDetails(view.getContext());
+                            setUser.execute(benutzernameString, passwordStringHash, passwordStringHashWdh);
+                            GetUserDetails userDetails = new GetUserDetails(getApplicationContext(), (NoobApplication) getApplication());
+                            userDetails.execute();
+                            password.setText("");
+                            passwordwdh.setText("");
+                        }
+                    } else {
+                        SetUserDetails setUserOld = new SetUserDetails(view.getContext());
+                        setUserOld.execute(benutzernameString, userTO.getPassword(), userTO.getPassword());
+                        GetUserDetails userDetails = new GetUserDetails(getApplicationContext(),(NoobApplication) getApplication());
+                        userDetails.execute();
+                    }
+                }
+            }
         });
 
         userLoeschen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(view.getContext())
-                        .setMessage("Wollen Sie ihren Account wirklich loescchen?")
+                        .setMessage("Wollen Sie Ihren Account wirklich löschen?")
                         .setCancelable(false)
                         .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 DeleteAccount accountLoeschen = new DeleteAccount();
                                 password = (EditText) findViewById(R.id.editText30);
-                                String passwordString = password.getText().toString();
-                                accountLoeschen.execute(passwordString);
+                                String passwordStringHash = hashPasswort(password.getText().toString());
+
+                                accountLoeschen.execute(passwordStringHash);
                             }
                         })
                         .setNegativeButton("Nein", null)
@@ -114,6 +148,7 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
         }
         return false;
     }
+
 
     private boolean validPasswordWdh(String password, String passwordwdh){
         if(password.equals(passwordwdh)){
