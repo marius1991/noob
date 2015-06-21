@@ -9,12 +9,15 @@ import de.noob.entities.Location;
 import de.noob.entities.NoobSession;
 import de.noob.entities.User;
 
+/**
+ * 
+ * @author Philipp Ringele
+ *
+ */
 @Local
 public interface NoobDAOLocal {
 	
 	public User findUserByName(String name);
-	
-	public User findUserById(int id);
 	
 	public User findUserByEmail(String email);
 	
@@ -35,7 +38,5 @@ public interface NoobDAOLocal {
 	public void persist(Object o);
 	
 	public void remove(Object o);
-	
-	public void merge(Object o);
 	
 }

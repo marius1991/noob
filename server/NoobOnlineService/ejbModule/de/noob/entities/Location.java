@@ -5,19 +5,16 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import org.jboss.logging.Logger;
-
 
 /**
- * 
- * @author Tim
+ * Diese Klasse stellt eine Location in der Datenbank dar.
+ * @author Tim Hembrock
  *
  */
 @Entity
 public class Location implements Serializable {
-
 	private static final long serialVersionUID = 2566351654426224522L;
-	private static final Logger logger = Logger.getLogger(Location.class);
+	
 	@Id
 	@GeneratedValue
 	private int id;
@@ -30,6 +27,10 @@ public class Location implements Serializable {
 	
 	private String street;
 	
+	/**
+	 * Hausnummer einer Location.
+	 * Ist String wegen Nummernzusatz (Bsp.: 75a)
+	 */
 	private String number;
 	
 	private int plz;
@@ -38,16 +39,18 @@ public class Location implements Serializable {
 	
 	private double averageRating;
 	
-	@OneToMany (mappedBy="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Rating> ratings;
 	
-	@OneToMany (mappedBy ="location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private List<Comment> comments;
+	
+	@OneToMany (mappedBy = "location", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Image> images;
 	
 	@ManyToOne
 	private User owner;
 	
-	private byte[] image;
 	
 	public Location() {
 	}
@@ -62,20 +65,7 @@ public class Location implements Serializable {
 		this.plz = plz;
 		this.city = city;
 		this.owner = owner;
-	}	
-	
-	public Location(String name, String category, String description,
-			String street, String number, int plz, String city, User owner, byte[] image) {
-		this.name = name;
-		this.category = category;
-		this.description = description;
-		this.street = street;
-		this.number = number;
-		this.plz = plz;
-		this.city = city;
-		this.owner = owner;
-		this.image = image;
-	}	
+	}		
 
 	public int getId() {
 		return id;
@@ -173,22 +163,39 @@ public class Location implements Serializable {
 		this.owner = owner;
 	}
 	
-	public byte[] getImage() {
-		return image;
-	}
 	
-	public void setImage(byte[] image) {
-		this.image = image;
+	public List<Image> getImages() {
+		return images;
 	}
 
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+	
+	/**
+	 * Fügt der Location ein Image hinzu.
+	 * @param imageBytes
+	 * @param user
+	 */
+	public void addImage(byte[] imageBytes, User user) {
+		Image image = new Image(); 
+		image.setData(imageBytes);
+		image.setLocation(this);
+		image.setOwner(user);
+		images.add(image);
+	}
+	
+	/**
+	 * Fügt der Location ein Rating hinzu. Da jeder User nur einmal eine Location bewerten darf wird, immer
+	 * das alte Rating überschrieben, wenn vorhanden.
+	 * @param user
+	 * @param value
+	 */
 	public void addRating(User user, int value) {
-		
-		
 		//Prüfen ob die Liste ratings leer ist, wenn ja Rating hinzufügen
 		if (this.ratings.isEmpty()) {
 			this.ratings.add(new Rating(user,value,this));
 		}
-		
 		//falls die Liste nicht leer ist
 		else {
 			//Prüfen ob der User bereits ein Rating abgegeben hat. Dafür jedes Element 
@@ -203,7 +210,6 @@ public class Location implements Serializable {
 			}
 			//Falls der aktuelle User noch kein Rating abgegeben hat, neues Rating hinzufügen.
 			if (newRating == true) {
-				logger.info("User hat noch kein Rating abgegebeb");
 				this.ratings.add(new Rating(user,value,this));
 			}
 			
@@ -211,15 +217,22 @@ public class Location implements Serializable {
 		//Durchschnittsbewertung berechen
 		this.calcAverageRating();
 	}
-
+	
+	/**
+	 * Fügt der Location einen Kommentar hinzu.
+	 * @param user
+	 * @param text
+	 */
 	public void addComment(User user, String text) {
 		this.comments.add(new Comment(user, text, this));
 	}
 	
-	private void calcAverageRating() {
-		
+	/**
+	 * Berechnet das durchschnittliche Rating einer Location. Wird immer aufgerufen, wenn ein Rating der Location 
+	 * hinzugefügt wird.
+	 */
+	private void calcAverageRating() {	
 		double sum=0;
-		
 		for(int i=0; i<this.ratings.size();i++) {
 			sum = sum + ratings.get(i).getValue();
 		}

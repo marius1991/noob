@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="de.fh_muenster.noobApp.NewLocationActivity">
     <item android:id="@+id/action_maps"
-        android:title="ÖffneGoogleMaps"
+        android:title="Maps"
         android:icon="@drawable/google"
-        app:showAsAction="always|withText" />
+        app:showAsAction="ifRoom|withText" />
+    <item android:id="@+id/action_internet"
+        android:title="Internet"
+        android:icon="@drawable/web"
+        app:showAsAction="ifRoom|withText" />
 
 </menu>

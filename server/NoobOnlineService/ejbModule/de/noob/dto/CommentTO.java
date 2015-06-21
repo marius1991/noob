@@ -2,7 +2,12 @@ package de.noob.dto;
 
 import java.io.Serializable;
 
-
+/**
+ * Diese Klasse repräsentiert ein de.noob.entities.Comment nur mit Getter und Setter Methoden, sodass der
+ * Serialisierungsaufwand verringert ist wenn ein Comment zum Client gesendet wird.
+ * @author Philipp Ringele
+ *
+ */
 public class CommentTO implements Serializable {
 	
 	private static final long serialVersionUID = -6300158809866948939L;
@@ -11,30 +16,29 @@ public class CommentTO implements Serializable {
 	
 	private String text;
 	
-	//private List<CommentTO> comments;
-	
 	private int locationId;
 	
 	private String ownerId;
 	
-	private String date;
+	private String ownerName;
 	
-	//private int superCommentId;
+	private String date;
 
 	public CommentTO(int id,
 			String text,
-			//List<CommentTO> comments,
 			int locationId,
 			String ownerId,
-			String date) {
-			//int superCommentId			
+			String ownerName,
+			String date) {		
 		this.id = id;
 		this.text = text;
-		//this.comments = comments;
 		this.locationId = locationId;
 		this.ownerId = ownerId;
+		this.ownerName = ownerName;
 		this.date = date;
-		//this.superCommentId = superCommentId;
+	}
+	
+	public CommentTO() {
 	}
 
 	public int getId() {
@@ -52,14 +56,6 @@ public class CommentTO implements Serializable {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-//	public List<CommentTO> getComments() {
-//		return comments;
-//	}
-//
-//	public void setComments(List<CommentTO> comments) {
-//		this.comments = comments;
-//	}
 
 	public int getLocationId() {
 		return locationId;
@@ -85,11 +81,11 @@ public class CommentTO implements Serializable {
 		this.date = date;
 	}
 
-//	public int getSuperCommentId() {
-//		return superCommentId;
-//	}
-//
-//	public void setSuperCommentId(int superCommentId) {
-//		this.superCommentId = superCommentId;
-//	}
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
 }

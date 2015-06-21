@@ -1,7 +1,5 @@
-/**
- * 
- */
 package de.noob.dao;
+
 
 
 import javax.annotation.PostConstruct;
@@ -17,7 +15,8 @@ import de.noob.entities.User;
 
 
 /**
- * @author Tim
+ * Erzeugt beim Start des Servers Testdaten.
+ * @author Tim Hembrock
  *
  */
 @Startup
@@ -33,15 +32,14 @@ public class DataBuilder {
 	private void init() {
 		
 		//TestUser anlegen
-		User testUser = new User("testuser", "testuser@test.de", "12345678");
+		User testUser = new User("testuser", "testuser@test.de", "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f");
 		em.persist(testUser);
-	
 		logger.info("User angelegt: " + testUser.getName());
 		
 		
 		//Blaues Haus
 		Location blauesHaus = new Location("Blaues Haus", "Bar", "Das “Blaue Haus” ist eine der ältesten Studentenkneipen Münsters.",
-				"Kreuzstrasse", "16" ,
+				"Kreuzstrasse", "16", 
 				48143, 
 				"Münster",
 				testUser);
@@ -110,7 +108,7 @@ public class DataBuilder {
 		
 		
 		//Disko Veron
-		Location veron = new Location("Veron", "Discothek", "Die mit Ledersofas, floralen Tapeten und unzähligen LEDs edel gestylte Disco bietet Black- und House-Partys.",
+		Location veron = new Location("Veron", "Diskothek", "Die mit Ledersofas, floralen Tapeten und unzähligen LEDs edel gestylte Disco bietet Black- und House-Partys.",
 				"Albersloher Weg", "14", 
 				48155,
 				"Münster",

@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="arg5" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="arg6" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="arg7" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="arg8" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,7 +42,8 @@ import javax.xml.bind.annotation.XmlType;
     "arg4",
     "arg5",
     "arg6",
-    "arg7"
+    "arg7",
+    "arg8"
 })
 public class CreateLocation {
 
@@ -53,6 +55,7 @@ public class CreateLocation {
     protected String arg5;
     protected int arg6;
     protected String arg7;
+    protected byte[] arg8;
 
     /**
      * Ruft den Wert der arg0-Eigenschaft ab.
@@ -228,6 +231,28 @@ public class CreateLocation {
      */
     public void setArg7(String value) {
         this.arg7 = value;
+    }
+
+    /**
+     * Ruft den Wert der arg8-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     byte[]
+     */
+    public byte[] getArg8() {
+        return arg8;
+    }
+
+    /**
+     * Legt den Wert der arg8-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     byte[]
+     */
+    public void setArg8(byte[] value) {
+        this.arg8 = value;
     }
 
 }
