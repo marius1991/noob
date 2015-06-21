@@ -21,7 +21,7 @@ import javax.mail.Message.RecipientType;
 import org.jboss.logging.Logger;
 
 /**
- * Diese Bean holt die Mails aus der Queue "MailOutput" und erstellt eine MimeMessage.
+ * Diese Bean empfängt die Mails aus der Queue "MailOutput" und erstellt eine MimeMessage.
  * Die MimeMessage wird schliesslich zum GoogleMail SMTP-Server gesendet.
  * @author Philipp Ringele
  *

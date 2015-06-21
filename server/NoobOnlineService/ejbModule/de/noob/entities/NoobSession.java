@@ -9,8 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 /**
- * 
- * @author Tim, Philipp
+ * Stellt eine User-Session in der Datenbank dar,
+ * da nur eingeloggte User die App benutzen dürfen.
+ * @author Tim Hembrock, Philipp Ringele
  *
  */
 @Entity

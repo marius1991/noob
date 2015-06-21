@@ -6,8 +6,8 @@ import java.util.List;
 import javax.persistence.*;
 
 /**
- * 
- * @author Tim, Philipp
+ * Stellt einen User in der Datenbank dar.
+ * @author Tim Hembrock, Philipp Ringele
  *
  */
 @Entity
@@ -15,6 +15,10 @@ public class User implements Serializable {
 	
 	private static final long serialVersionUID = 6341269371900561214L;
 	
+	/**
+	 * Die ID eines Users ist seine E-Mailadresse.
+	 * Mit dieser muss sich der User auch einloggen.
+	 */
 	@Id
 	private String email;
 	

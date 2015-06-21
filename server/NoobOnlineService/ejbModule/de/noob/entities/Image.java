@@ -9,7 +9,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 /**
- * 
+ * Diese Klasse stellt ein Image in der Datenbank dar. Die eigentlichen Bild-Daten werden als byte[] gespeichert.
  * @author Philipp Ringele
  *
  */

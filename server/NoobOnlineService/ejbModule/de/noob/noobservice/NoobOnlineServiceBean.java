@@ -25,8 +25,8 @@ import de.noob.entities.User;
 import de.noob.util.DtoAssembler;
 
 /**
- * Diese Bean implemetiert das Interface zwischen Client und Server, alle enthaltenen Methoden sind auf
- * dem Client verfügbar.
+ * Diese Bean implemetiert das Interface zwischen Client und Server, alle enthaltenen Methoden können 
+ * über den WebService mittels SOAP aufgerufen werden.
  * @author Philipp Ringele
  *
  */
@@ -62,6 +62,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 	public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
 		logger.info("register() aufgerufen.");		
 		ReturnCodeResponse re = new ReturnCodeResponse();
+		//Schaue nach ob username und email noch frei sind.
 		if (dao.findUserByName(username) == null && dao.findUserByEmail(email) == null) {
 			if(password.equals(passwordConfirmation)) {
 				User user = new User(username, email, password);
@@ -97,7 +98,6 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		logger.info("Passwort: " + password);
 		UserLoginResponse re = new UserLoginResponse();
 		NoobSession session;
-		
 		User user = dao.findUserByEmail(email);
 		if (user != null) {
 			if (user.getPassword().equals(password)) {				
@@ -109,7 +109,6 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 				re.setSessionId(session.getId());
 				
 				logger.info(user.getName() +" erfolgreich eingeloggt.");
-				logger.info(re.getSessionId());
 			}
 			else {
 				re.setReturnCode(1);
@@ -135,13 +134,6 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		NoobSession session = dao.findSessionById(sessionId);		
 		if(session != null) {
 			dao.remove(session);
-			NoobSession oldSession = dao.findSessionById(sessionId);
-			if(oldSession == null) {
-				logger.info("Session gelöscht.");
-			}
-			else {
-				logger.info("Session existiert noch.");
-			}
 			re.setReturnCode(0);
 			re.setMessage("Erfolgreich ausgeloggt.");
 			logger.info("Erfolgreich ausgeloggt.");
@@ -231,7 +223,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 								logger.info("Ratings vorhanden.");
 							}
 						}
-
+						//Zu Testzwecken!
 						if(locations.get(0).getComments() != null) {
 							if(locations.get(0).getComments().isEmpty()) {
 								logger.info("Comments sind leer!");
@@ -239,7 +231,8 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 							else {
 								logger.info("Comments vorhanden.");
 							}
-						}		
+						}	
+						//Zu Testzwecken!
 						if(locations.get(0).getImages() != null) {
 							if(locations.get(0).getImages().isEmpty()) {
 								logger.info("Images sind leer!");
@@ -448,8 +441,9 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		return re;
 	}
 
+
 	/* (non-Javadoc)
-	 * @see de.noob.noobservice.NoobOnlineService#setLocationDetails(int, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, java.lang.String, byte[])
+	 * @see de.noob.noobservice.NoobOnlineService#setLocationDetails(int, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, int, java.lang.String)
 	 */
 	@Override
 	public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city) {

@@ -8,7 +8,8 @@ import java.util.Date;
 import javax.persistence.*;
 
 /**
- * @author Tim, Philipp
+ * Diese Klasse stellt ein Kommentar in der Datenbank dar.
+ * @author Tim Hembrock, Philipp Ringele
  */
 @Entity
 public class Comment implements Serializable {

@@ -135,7 +135,6 @@ public interface NoobOnlineService {
 	 * @param number
 	 * @param plz
 	 * @param city
-	 * @param image
 	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse setLocationDetails(int sessionId, int locationId,

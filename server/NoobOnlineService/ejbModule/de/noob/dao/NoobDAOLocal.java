@@ -19,8 +19,6 @@ public interface NoobDAOLocal {
 	
 	public User findUserByName(String name);
 	
-	public User findUserById(int id);
-	
 	public User findUserByEmail(String email);
 	
 	public List<String> listCities();

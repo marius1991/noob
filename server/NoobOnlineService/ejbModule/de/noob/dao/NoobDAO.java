@@ -25,22 +25,6 @@ public class NoobDAO implements NoobDAOLocal {
 	
 	@PersistenceContext
 	private EntityManager em;
-
-	/**
-	 * User über die id finden.
-	 * Da Id nicht der Primärschlüssel ist, muss hier ein Query benutzt werden.
-	 * 
-	 * @param id Eindeutige ID des Users
-	 * 
-	 * @return User Objekt
-	 *
-	 */
-	@Override
-	public User findUserById(int id) {
-		logger.info("DB-Query: SELECT u FROM USER u WHERE u.id = '" + id + "' ");
-		return (User) em.createQuery("SELCET u FROM USER u WHERE u.id = '" + id + "' ").getSingleResult();	
-	}
-
 	
 	/**
 	 * User über den Namen finden.
@@ -57,9 +41,9 @@ public class NoobDAO implements NoobDAOLocal {
 			return (User) em.createQuery("SELECT u FROM User u WHERE u.name LIKE '" + name + "' ").getSingleResult();
 		}
 		catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage());
+			return null;
 		}
-		return null;
 	}
 
 
@@ -82,6 +66,7 @@ public class NoobDAO implements NoobDAOLocal {
 			return user;
 		}
 		catch (Exception e) {
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -103,7 +88,7 @@ public class NoobDAO implements NoobDAOLocal {
 			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND lower(l.name) = lower(:name)", Location.class).setParameter("stadt",city).setParameter("name",name).getResultList();
 		}
 		catch(Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage());
 			return null;
 		}
 	}
@@ -137,9 +122,10 @@ public class NoobDAO implements NoobDAOLocal {
 			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND l.category = :category", Location.class).setParameter("stadt",city).setParameter("category",category).getResultList();
 		}
 		catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage());
+			return null;
 		}
-		return null;
+	
 	}
 
 	/**
@@ -156,9 +142,10 @@ public class NoobDAO implements NoobDAOLocal {
 			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt", Location.class).setParameter("stadt",city).getResultList();
 		}
 		catch(Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage());
+			return null;
 		}
-		return null;
+		
 	}
 
 	/**
@@ -194,19 +181,30 @@ public class NoobDAO implements NoobDAOLocal {
 		return em.find(NoobSession.class, sessionId);
 	}
 
-	
+	/**
+	 * Persistiert ein Entity-Objekt.
+	 * @param o
+	 */
 	@Override
 	public void persist(Object o) {
 		logger.info("DB-Query: em.persist(o);");
 		em.persist(o);
 	}
-
+	
+	/**
+	 * Entfernt ein Entity-Objekt.
+	 * @param o
+	 */
 	@Override
 	public void remove(Object o) {
 		logger.info("DB-Query: em.remove(o);");
 		em.remove(o);
 	}
 	
+	/**
+	 * Gibt alle Cities, die in der Datenbank enthalten zurueck.
+	 * @return Liste mit allen Cities in der Datenbank.
+	 */
 	@Override
 	public List<String> listCities() {
 		try {
@@ -214,7 +212,7 @@ public class NoobDAO implements NoobDAOLocal {
 			return em.createQuery("SELECT DISTINCT l.city FROM Location l ORDER BY l.city ASC", String.class).getResultList();			
 		}
 		catch(Exception e){
-			logger.info(e.getMessage());
+			logger.error(e.getMessage());
 			return null;
 		}
 	}

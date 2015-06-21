@@ -105,9 +105,9 @@ public class DtoAssembler {
 	}
 	
 	/**
-	 * Mit dieser Methode kann man ein, 
+	 * Mit dieser Methode kann man ein Comment-Objekt in ein CommentTO umwandeln.
 	 * @param comment
-	 * @return
+	 * @return Eine CommentTO-Instanz
 	 */
 	public CommentTO makeDTO(Comment comment) {
 		CommentTO dto = new CommentTO(comment.getId(), 
@@ -120,8 +120,9 @@ public class DtoAssembler {
 	}
 
 	/**
+	 * Wandelt eine Liste mit User-Objekten in eine Liste mit UserTOs um.
 	 * @param users
-	 * @return
+	 * @return Eine Liste mit UserTOs.
 	 */
 	public List<UserTO> makeUsersDTO(List<User> users) {
 		List<UserTO> toList = new ArrayList<UserTO>();
@@ -132,8 +133,9 @@ public class DtoAssembler {
 	}
 
 	/**
+	 * Wandelt eine Liste mit Location-Objekten in eine Liste mit LocationTOs um.
 	 * @param locations
-	 * @return
+	 * @return Eine Liste mit LocationTOs.
 	 */
 	public List<LocationTO> makeLocationsDTO(List<Location> locations) {
 		List<LocationTO> toList = new ArrayList<LocationTO>();
@@ -144,8 +146,9 @@ public class DtoAssembler {
 	}
 
 	/**
+	 * Wandelt eine Liste mit Rating-Objekten in eine Liste mit RatingTOs um.
 	 * @param ratings
-	 * @return
+	 * @return Eine Liste mit RatingTOs.
 	 */
 	public List<RatingTO> makeRatingsDTO(List<Rating> ratings) {
 		List<RatingTO> toList = new ArrayList<RatingTO>();
@@ -156,8 +159,9 @@ public class DtoAssembler {
 	}
 
 	/**
+	 * Wandelt eine Liste mit Comment-Objekten in eine Liste mit CommentTOs um.
 	 * @param comments
-	 * @return
+	 * @return Eine Liste mit CommentTOs.
 	 */
 	public List<CommentTO> makeCommentsDTO(List<Comment> comments) {
 		List<CommentTO> toList = new ArrayList<CommentTO>();
@@ -166,5 +170,4 @@ public class DtoAssembler {
 		}	
 		return toList;
 	}
-
 }
