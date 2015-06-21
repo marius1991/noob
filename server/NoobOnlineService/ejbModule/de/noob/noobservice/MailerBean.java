@@ -12,6 +12,12 @@ import javax.jms.TextMessage;
 
 import de.noob.entities.User;
 
+/**
+ * Diese Bean sendet E-Mails als TextMessage in die MailOutput-Queue.
+ * Eine MessageDrivenBean empfängt diese TextMessage und sendet die Mail an den SMTP-Server.
+ * @author Philipp Ringele
+ *
+ */
 @Stateless
 @LocalBean
 public class MailerBean {
@@ -21,7 +27,11 @@ public class MailerBean {
 	
 	@Resource(mappedName = "java:/queue/MailOutput")
 	private Queue outputQueue;
-
+	
+	/**
+	 * Sendet eine E-Mail mit Willkommenstext als TextMessage in die MailOutput-Queue.
+	 * @param user an den die Mail gesendet werden soll.
+	 */
 	public void sendWelcomeMail(User user) {
 		try(JMSContext context = connectionFactory.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
 			TextMessage message = context.createTextMessage();
@@ -39,6 +49,10 @@ public class MailerBean {
 		}
 	}
 	
+	/**
+	 * Sendet eine E-Mail mit Abschiedstext als TextMessage in die MailOutput-Queue.
+	 * @param user an den die Mail gesendet werden soll.
+	 */
 	public void sendLeaveMail(User user) {
 		try(JMSContext context = connectionFactory.createContext(JMSContext.AUTO_ACKNOWLEDGE)) {
 			TextMessage message = context.createTextMessage();

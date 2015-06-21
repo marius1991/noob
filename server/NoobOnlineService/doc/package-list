@@ -1,5 +1,7 @@
 de.noob.dao
 de.noob.dto
 de.noob.entities
+de.noob.mail
 de.noob.noobservice
+de.noob.test
 de.noob.util

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package de.noob.dao;
 
 
@@ -18,7 +15,8 @@ import de.noob.entities.User;
 
 
 /**
- * @author Tim
+ * Erzeugt beim Start des Servers Testdaten.
+ * @author Tim Hembrock
  *
  */
 @Startup
@@ -110,7 +108,7 @@ public class DataBuilder {
 		
 		
 		//Disko Veron
-		Location veron = new Location("Veron", "Discothek", "Die mit Ledersofas, floralen Tapeten und unzähligen LEDs edel gestylte Disco bietet Black- und House-Partys.",
+		Location veron = new Location("Veron", "Diskothek", "Die mit Ledersofas, floralen Tapeten und unzähligen LEDs edel gestylte Disco bietet Black- und House-Partys.",
 				"Albersloher Weg", "14", 
 				48155,
 				"Münster",

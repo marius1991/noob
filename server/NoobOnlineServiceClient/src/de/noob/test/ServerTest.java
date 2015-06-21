@@ -2,10 +2,12 @@ package de.noob.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Random;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import de.noob.noobservice.CityListResponse;
+import de.noob.noobservice.LocationListResponse;
 import de.noob.noobservice.LocationTO;
 import de.noob.noobservice.NoobOnlineServiceBean;
 import de.noob.noobservice.NoobOnlineServiceBeanService;
@@ -29,7 +31,7 @@ public class ServerTest {
 	}
 	
 	@Test
-	public void registerLoginLogoutDeleteScenario() {
+	public void registerLoginLogoutDeleteTests() {
 		//================RegisterTests====================================
 		//Passwörter falsch
 		ReturnCodeResponse registerRe1 = remoteSystem.register("philipp", "p@p.de", "12345678", "123456789");
@@ -79,25 +81,26 @@ public class ServerTest {
 	}	
 	
 	@Test
-	public void locationScenarios() {
+	public void locationTests() {
+		//=====================Registrierung und Login====================
 		//Alles ok
 		ReturnCodeResponse registerRe = remoteSystem.register("philipp", "p@p.de", "12345678", "12345678");
 		assertEquals(registerRe.getMessage(), 0, registerRe.getReturnCode());
 		//Alles ok
 		UserLoginResponse loginRe = remoteSystem.login("p@p.de", "12345678");
 		assertEquals(loginRe.getMessage(), 0, loginRe.getReturnCode());
-		//======================createLocationTests========================
+		//======================createLocation()Tests========================
 		//Alles ok
 		ReturnCodeResponse clRe = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg", null);
 		assertEquals(clRe.getMessage(), 0, clRe.getReturnCode());
-		//Sind neue Locations am User gespeichert?
+		//Sind neue Locations dem User zugeordnet?
 		UserTO user = remoteSystem.getUserDetails(loginRe.getSessionId());
 		assertEquals(user.getMessage(), "p@p.de", user.getEmail());
 		assertEquals("Hat ein User auch Locations?", "Körners", user.getLocations().get(0).getName());
 		//Dieselbe Location nochmal erstellen, sollte abgewiesen werden.
 		ReturnCodeResponse clRe2 = remoteSystem.createLocation(loginRe.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg", null);
 		assertEquals(clRe2.getMessage(), 2, clRe2.getReturnCode());
-		//========================commentOnLocationTests=========================
+		//========================commentOnLocation()Tests=========================
 		ReturnCodeResponse comment = remoteSystem.commentOnLocation(loginRe.getSessionId(), user.getLocations().get(0).getId(), "Beste Stammtischkneipe im Sauerland!!!");
 		assertEquals(comment.getMessage(), 0, comment.getReturnCode());		
 		//User aktualisieren und Kommentartext vergleichen
@@ -118,10 +121,39 @@ public class ServerTest {
 		//wieder einloggen
 		UserLoginResponse login = remoteSystem.login("p@p.de", "12345678");
 		assertEquals(login.getMessage(), 0, login.getReturnCode());
-		//=============================giveRatingTests==================================
+		//=============================addImage()Tests====================================
+		byte[] image = new byte[20];
+		new Random().nextBytes(image);
+		//Können maximal 10 Bilder zu einer Location hochgeladen werden?
+		for(int i = 0; i < 11; i++) {
+			ReturnCodeResponse addImageRe = remoteSystem.addImageToLocation(login.getSessionId(), user.getLocations().get(0).getId(), image);
+			if(i < 10) {
+				assertEquals(addImageRe.getMessage(), 0, addImageRe.getReturnCode());
+			}
+			else {
+				//Beim elften mal sollte es abgewiesen werden
+				assertEquals(addImageRe.getMessage(), 3, addImageRe.getReturnCode());
+			}
+		}
+		//Sind an der Location auch nur 10 Bilder gespeichert?
+		LocationTO locationWithImages = remoteSystem.getLocationDetails(user.getLocations().get(0).getId());
+		assertEquals(locationWithImages.getMessage(), 10, locationWithImages.getImages().size());
+		//=============================giveRating()Tests==================================
 		ReturnCodeResponse rating = remoteSystem.giveRating(login.getSessionId(), user.getLocations().get(0).getId(), 5);
 		assertEquals(rating.getMessage(), 0, rating.getReturnCode());
-		
+		//Rating gespeichert und User zugeordnet?
+		UserTO userWithRating = remoteSystem.getUserDetails(login.getSessionId());
+		assertEquals(userWithRating.getMessage(), 0, rating.getReturnCode());
+		assertEquals(userWithRating.getMessage(), 5, userWithRating.getRatings().get(0).getValue());
+		//Rating auch Location zugeordnet?
+		LocationTO locationWithRating = remoteSystem.getLocationDetails(user.getLocations().get(0).getId());
+		assertEquals(locationWithRating.getMessage(), 0, locationWithRating.getReturnCode());
+		assertEquals(locationWithRating.getMessage(), 5, locationWithRating.getRatings().get(0).getValue());
+		//Bei erneutem Rating durch selben User, wird das Alte überschrieben?
+		remoteSystem.giveRating(login.getSessionId(), user.getLocations().get(0).getId(), 10);
+		UserTO userWithRating2 = remoteSystem.getUserDetails(login.getSessionId());
+		assertEquals(userWithRating2.getMessage(), 10, userWithRating2.getRatings().get(0).getValue());
+		assertEquals(userWithRating2.getMessage(), 1, userWithRating2.getRatings().size());
 		//=============================User wieder löschen====================
 		ReturnCodeResponse deleteRe = remoteSystem.deleteUser(login.getSessionId(), "12345678");
 		assertEquals(deleteRe.getMessage(), 0, deleteRe.getReturnCode());
@@ -130,13 +162,42 @@ public class ServerTest {
 		assertEquals(login2.getMessage(), 2, login2.getReturnCode());
 	}
 	
-	
+	@Test
 	public void listLocationScenarios() {
-		CityListResponse cityRe = remoteSystem.listCities();
-		assertEquals("ReturnCode muss 0 sein.", 0, cityRe.getReturnCode());
-		//assert
+		//=====================Registrierung und Login====================
+		//Alles ok
+		ReturnCodeResponse registerRe = remoteSystem.register("philipp", "p@p.de", "12345678", "12345678");
+		assertEquals(registerRe.getMessage(), 0, registerRe.getReturnCode());
+		//Alles ok
+		UserLoginResponse login = remoteSystem.login("p@p.de", "12345678");
+		assertEquals(login.getMessage(), 0, login.getReturnCode());
+		//=====================listLocationsWithName()Tests=================
+		//Zuerst neue Location anlegen
+		ReturnCodeResponse clRe = remoteSystem.createLocation(login.getSessionId(), "Körners", "Kneipe", "Dorfschänke in Arnsberg-Bruchhausen", "Bruchhausenerstr.", "75", 59759, "Arnsberg", null);
+		assertEquals(clRe.getMessage(), 0, clRe.getReturnCode());
+		//Wird Location gefunden?
+		LocationListResponse listRe = remoteSystem.listLocationsWithName("Körners", "Arnsberg");
+		assertEquals(listRe.getMessage(), "Körners", listRe.getLocations().get(0).getName());
+		//Wird sie auch gefunden bei Nichtbeachtung von Groß- und Kleinschreibung?
+		LocationListResponse listRe1 = remoteSystem.listLocationsWithName("kÖrNeRs", "Arnsberg");
+		assertEquals(listRe1.getMessage(), "Körners", listRe1.getLocations().get(0).getName());
+		//Wird sie gefunden wenn man nach Kategorien filtert?
+		LocationListResponse listRe2 = remoteSystem.listLocationsWithCategory("Kneipe", "Arnsberg");
+		boolean contains = false;
+		for(LocationTO location: listRe2.getLocations()) {
+			if(location.getName().equals("Körners")) {
+				contains = true;
+			}
+		}
+		assertTrue(contains);
+		//=============================User wieder löschen====================
+		ReturnCodeResponse deleteRe = remoteSystem.deleteUser(login.getSessionId(), "12345678");
+		assertEquals(deleteRe.getMessage(), 0, deleteRe.getReturnCode());
+		//erneuter Login muss abgewiesen werden
+		UserLoginResponse login2 = remoteSystem.login("p@p.de", "12345678");
+		assertEquals(login2.getMessage(), 2, login2.getReturnCode());
 	}
-	
+
 }
 
 

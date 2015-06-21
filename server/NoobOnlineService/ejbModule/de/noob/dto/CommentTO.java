@@ -2,7 +2,12 @@ package de.noob.dto;
 
 import java.io.Serializable;
 
-
+/**
+ * Diese Klasse repräsentiert ein de.noob.entities.Comment nur mit Getter und Setter Methoden, sodass der
+ * Serialisierungsaufwand verringert ist wenn ein Comment zum Client gesendet wird.
+ * @author Philipp Ringele
+ *
+ */
 public class CommentTO implements Serializable {
 	
 	private static final long serialVersionUID = -6300158809866948939L;
@@ -31,6 +36,9 @@ public class CommentTO implements Serializable {
 		this.ownerId = ownerId;
 		this.ownerName = ownerName;
 		this.date = date;
+	}
+	
+	public CommentTO() {
 	}
 
 	public int getId() {

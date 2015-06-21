@@ -3,8 +3,9 @@ package de.noob.dto;
 import java.util.List;
 
 /**
- * 
- * @author philipp
+ * Diese Klasse repräsentiert eine de.noob.entities.Location, nur mit Getter und Settter Methoden, sodass
+ * der Serialisierungsaufwand verringert ist wenn eine Location zum Client gesendet wird.
+ * @author Philipp Ringele
  *
  */
 public class LocationTO extends ReturnCodeResponse {
@@ -36,7 +37,7 @@ public class LocationTO extends ReturnCodeResponse {
 	private List<RatingTO> ratings;
 	
 	private List<CommentTO> comments;
-	
+	//Images werden direkt als byte[] übergeben, was die Entgegennahme auf dem Client vereinfacht.
 	private List<byte[]> images;
 
 	

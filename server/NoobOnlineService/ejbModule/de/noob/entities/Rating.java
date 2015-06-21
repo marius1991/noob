@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 
 /**
- * 
- * @author Tim
+ * Stellt ein Rating in der Datenbank dar.
+ * @author Tim Hembrock
  *
  */
 @Entity

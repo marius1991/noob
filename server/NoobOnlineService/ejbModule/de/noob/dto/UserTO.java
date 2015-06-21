@@ -2,7 +2,12 @@ package de.noob.dto;
 
 import java.util.List;
 
-
+/**
+ * Diese Klasse repräsentiert einen de.noob.entities.User, nur mit Getter und Setter Methoden, sodass der
+ * Serialisierungsaufwand verringert ist wenn ein User zum Client gesendet wird.
+ * @author Philipp Ringele
+ *
+ */
 public class UserTO extends ReturnCodeResponse {
 
 	private static final long serialVersionUID = 6907767619451988547L;
@@ -18,6 +23,8 @@ public class UserTO extends ReturnCodeResponse {
 	private List<RatingTO> ratings;
 	
 	private List<CommentTO> comments;
+	
+	//images eines Users sind nicht enthalten, da diese nur im Zusammenhang einer Location auf dem Client benötigt werden.
 	
 	public UserTO(String name, String password, String email,
 			List<LocationTO> locations, List<RatingTO> ratings,
