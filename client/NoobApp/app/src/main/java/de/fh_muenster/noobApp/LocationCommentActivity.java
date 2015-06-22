@@ -1,13 +1,12 @@
 package de.fh_muenster.noobApp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,15 +14,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.fh_muenster.noob.CommentTO;
 import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
- * In dieser Activity kann ein Kommentar zu einer Location geschrieben werden
+ * In dieser Activity kann ein Kommentar zu einer Location geschrieben werden.
  * @author marius
  */
 public class LocationCommentActivity extends ActionBarActivity {
@@ -75,6 +70,17 @@ public class LocationCommentActivity extends ActionBarActivity {
     }
 
     /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Konto verwalten' geklickt wird.
+     * Es wir die Activity für die Kontoverwaltung gestartet.
+     * @param item
+     */
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(LocationCommentActivity.this, UserManagementAcitivtiy.class);
+        startActivity(i);
+    }
+
+    /**
      * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
      * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
      * Dann wird ein LogoutTask gestartet.
@@ -83,9 +89,9 @@ public class LocationCommentActivity extends ActionBarActivity {
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
@@ -94,7 +100,7 @@ public class LocationCommentActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
     }
 
@@ -118,7 +124,7 @@ public class LocationCommentActivity extends ActionBarActivity {
         /**
          * Startet einen neuen Thread, in dem der Kommentar zum Server geschickt wird.
          * @param params
-         * @return
+         * @return ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
          */
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
@@ -137,13 +143,13 @@ public class LocationCommentActivity extends ActionBarActivity {
 
         /**
          * Der Returncode des Servers wird entgegengenommen
-         * @param response
+         * @param response ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
          */
         @Override
         protected void onPostExecute (ReturnCodeResponse response) {
             Dialog.dismiss();
             if (response.getReturnCode() == 10) {
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(LocationCommentActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();

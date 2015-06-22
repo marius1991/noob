@@ -1,27 +1,22 @@
 package de.fh_muenster.noobApp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -32,17 +27,19 @@ import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
- * Mit diese Klasse können Fotos vom Handy geladen und zum Server gesendet werden.
+ * Mit dieser Klasse können Fotos vom Handy geladen und zum Server gesendet werden.
  * @author marius
  */
-public class LocationAddImage extends ActionBarActivity {
-    private static final String TAG = LocationAddImage.class.getName();
+public class LocationAddImageActivity extends ActionBarActivity {
+    private static final String TAG = LocationAddImageActivity.class.getName();
     private byte[] byteArray;
     private ImageView imageView;
     private Bitmap bitmap;
+    private Button rotate;
 
     /**
-     * Diese Methode wird aufgerufen wenn die Activity aufgerufen wird.
+     * Diese Methode wird aufgerufen wenn die Activity gestartet wird. Der Kamerabutton wird mit einem
+     * OnClickListener belegt
      * @param savedInstanceState
      */
     @Override
@@ -58,9 +55,18 @@ public class LocationAddImage extends ActionBarActivity {
                 startActivityForResult(cameraIntent, 1888);
             }
         });
-        if(bitmap == null) {
-            Button rotate = (Button) findViewById(R.id.button21);
-            rotate.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn auf die Activity gewechselt wird. Auch wenn sie vorher
+     * nur pausiert wurde. Der Button zum Drehen wird angezeigt.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        rotate = (Button) findViewById(R.id.button21);
+        if(bitmap != null) {
+            rotate.setVisibility(View.VISIBLE);
         }
     }
 
@@ -87,7 +93,8 @@ public class LocationAddImage extends ActionBarActivity {
     }
 
     /**
-     * Diese Methode wird aufgerufen, wenn auf auf den Button "Auswählen" geklickt wird.
+     * Diese Methode wird aufgerufen, wenn auf auf den Button "Auswählen" geklickt wird. Die
+     * Galerie des Smartphones wird geöffnet.
      * @param view
      */
     public void clickFuncImageFromFile (View view) {
@@ -97,6 +104,10 @@ public class LocationAddImage extends ActionBarActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
     }
 
+    /**
+     * Mit dieser Methode kann das Bild um 90° gedreht werden.
+     * @param view
+     */
     public void clickFuncRotate (View view) {
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
@@ -105,10 +116,11 @@ public class LocationAddImage extends ActionBarActivity {
         rotatedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byteArray = stream.toByteArray();
         imageView.setImageBitmap(rotatedBitmap);
+        rotate.setVisibility(View.INVISIBLE);
     }
 
     /**
-     * Diese Methode wird aufgerufen, wenn auf den Button "Hochladen" geklcikt wird.
+     * Diese Methode wird aufgerufen, wenn auf den Button "Hochladen" geklickt wird. Der AsyncTask wird gestartet
      * @param view
      */
     public void clickFuncUpload (View view) {
@@ -117,13 +129,37 @@ public class LocationAddImage extends ActionBarActivity {
             new ImageUpload().execute(byteArray);
         }
         else {
-            Toast.makeText(getApplicationContext(), "Maximale Anzahl an Bildern erreicht!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.activity_location_add_image_maxanzahl, Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
-     * Diese Methode nimmt die Images aus dem Speicher entgegen, überprüft ihre Größe und speichert sie
-     * als Bitmap.
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
+     * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
+     * Dann wird ein LogoutTask gestartet.
+     * @param item
+     */
+    public void clickFuncLogout(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
+        new AlertDialog.Builder(this)
+                .setMessage(R.string.menu_ausloggen_frage)
+                .setCancelable(false)
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        NoobApplication myApp = (NoobApplication) getApplication();
+                        new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
+                .show();
+    }
+
+    /**
+     * Diese Methode nimmt die Images aus dem Speicher entgegen, überprüft ihre Größe, verkleinert sie, wenn nötig
+     * und speichert sie als Bitmap.
      * @param requestCode
      * @param resultCode
      * @param data
@@ -144,9 +180,9 @@ public class LocationAddImage extends ActionBarActivity {
                 Log.d(TAG, "Imagesize: " + imageHeight + " x " + imageWidth);
                 Log.d(TAG, "ImageType: " + imageType);
                 int inSampleSize = 1;
-                if (imageHeight > 500) {
+                if (imageHeight > 400) {
                     final int halfHeight = imageHeight / 2;
-                    while ((halfHeight / inSampleSize) > 500) {
+                    while ((halfHeight / inSampleSize) > 400) {
                         inSampleSize *= 2;
                     }
                 }
@@ -158,6 +194,7 @@ public class LocationAddImage extends ActionBarActivity {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byteArray = stream.toByteArray();
+                rotate.setVisibility(View.INVISIBLE);
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -170,7 +207,7 @@ public class LocationAddImage extends ActionBarActivity {
      * @author marius
      */
     public class ImageUpload extends AsyncTask<byte[], String, ReturnCodeResponse> {
-        private ProgressDialog Dialog = new ProgressDialog(LocationAddImage.this);
+        private ProgressDialog Dialog = new ProgressDialog(LocationAddImageActivity.this);
 
         /**
          * Während des Bilderuploads wird ein Dialog angezeigt.
@@ -185,7 +222,7 @@ public class LocationAddImage extends ActionBarActivity {
         /**
          * Startet den Thread für den Bilderupload.
          * @param params
-         * @return
+         * @return ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
          */
         @Override
         protected ReturnCodeResponse doInBackground(byte[]... params) {
@@ -209,21 +246,21 @@ public class LocationAddImage extends ActionBarActivity {
 
         /**
          * Nimmt den Returncode entgegen.
-         * @param response
+         * @param response ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
          */
         @Override
         protected void onPostExecute (ReturnCodeResponse response) {
             Dialog.dismiss();
             if (response.getReturnCode() == 10) {
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
             if (response.getReturnCode() == 11) {
-                Toast.makeText(getApplicationContext(), "Kein Bild ausgewählt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.activity_location_add_image_keinbild, Toast.LENGTH_SHORT).show();
             }
             else {
                 Log.d(TAG, "BILDUPLOAD: " + response.getMessage());
-                Toast.makeText(getApplicationContext(), "Bildupload erfolgreich", Toast.LENGTH_SHORT).show();
-                LocationAddImage.this.finish();
+                Toast.makeText(getApplicationContext(), response.getMessage(), Toast.LENGTH_SHORT).show();
+                LocationAddImageActivity.this.finish();
             }
         }
     }
