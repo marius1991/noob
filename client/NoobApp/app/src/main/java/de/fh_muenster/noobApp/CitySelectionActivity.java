@@ -74,21 +74,21 @@ public class CitySelectionActivity extends ActionBarActivity {
 
     /**
      * Diese Methode wird aufgerufen, wenn von der Activity aus der Zurück-Button auf dem
-     * Smartphone gedrückt wird. Es wird ein LogoutTask gestartet wenn ein Dialog bestätigt wird.
+     * Smartphone gedrückt wird. Es wird ein LogoutTask gestartet, wenn ein Dialog bestätigt wird.
      */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
                         CitySelectionActivity.this.finish();
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
     }
 
@@ -106,6 +106,17 @@ public class CitySelectionActivity extends ActionBarActivity {
     }
 
     /**
+     * Diese Methode wird aufgerufen, wenn im Menü auf den Eintrag "Neue Location" geklickt wird.
+     * Die Activity zum Anlegen der Location wird geöffnet.
+     * @param item
+     */
+    public void clickFuncNewLocation(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
+        Intent i = new Intent(CitySelectionActivity.this, NewLocationActivity.class);
+        startActivity(i);
+    }
+
+    /**
      * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
      * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
      * Dann wird ein LogoutTask gestartet.
@@ -114,9 +125,9 @@ public class CitySelectionActivity extends ActionBarActivity {
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
@@ -125,10 +136,15 @@ public class CitySelectionActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
     }
 
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Konto verwalten' geklickt wird.
+     * Es wir die Activity für die Kontoverwaltung gestartet.
+     * @param item
+     */
     public void clickFuncUserDetails(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
         Intent i = new Intent(CitySelectionActivity.this, UserManagementAcitivtiy.class);
@@ -155,7 +171,7 @@ public class CitySelectionActivity extends ActionBarActivity {
         /**
          * Startet einen neuen Thread, der die Städteliste abholen soll.
          * @param params
-         * @return
+         * @return CityListResponse (Enthält die Städteliste)
          */
         @Override
         protected CityListResponse doInBackground(String... params) {
@@ -173,7 +189,7 @@ public class CitySelectionActivity extends ActionBarActivity {
 
         /**
          * Nimmt die Städtliste entgegen und füllt das Spinner Objekt.
-         * @param response
+         * @param response CityListResponse (Enthält die Städteliste)
          */
         @Override
         protected void onPostExecute (CityListResponse response) {
@@ -184,7 +200,7 @@ public class CitySelectionActivity extends ActionBarActivity {
                     valueList = response.getCities();
                 } else {
                     Log.d(TAG, "keine Stadt vorhanden");
-                    Toast.makeText(getApplicationContext(), "keine Stadt vorhanden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.keine_ergebnisse, Toast.LENGTH_SHORT).show();
                 }
                 ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
                 Spinner sp = (Spinner) findViewById(R.id.spinner);
@@ -204,7 +220,7 @@ public class CitySelectionActivity extends ActionBarActivity {
             }
             else {
                 Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
         }
     }

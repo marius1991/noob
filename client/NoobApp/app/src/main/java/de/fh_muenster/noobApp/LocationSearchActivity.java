@@ -3,8 +3,8 @@ package de.fh_muenster.noobApp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +12,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import de.fh_muenster.noob.LocationTO;
-import de.fh_muenster.noobApp.R;
 
 /**
  * Diese Activity zeigt die Suchergebnisse an, nachdem nach einer Location gesucht wurde.
@@ -90,9 +88,9 @@ public class LocationSearchActivity extends ActionBarActivity {
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
@@ -101,7 +99,29 @@ public class LocationSearchActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
+    }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn im Menü auf den Eintrag "Neue Location" geklickt wird.
+     * Die Activity zum Anlegen der Location wird geöffnet.
+     * @param item
+     */
+    public void clickFuncNewLocation(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
+        Intent i = new Intent(LocationSearchActivity.this, NewLocationActivity.class);
+        startActivity(i);
+    }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Konto verwalten' geklickt wird.
+     * Es wir die Activity für die Kontoverwaltung gestartet.
+     * @param item
+     */
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(LocationSearchActivity.this, UserManagementAcitivtiy.class);
+        startActivity(i);
     }
 }

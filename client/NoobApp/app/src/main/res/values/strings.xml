@@ -18,6 +18,9 @@
     <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf dem "Register Button und geben Sie Ihre Daten im Formular ein.</string>
     <string name="helpquestion2">Wir versichern, dass wir Ihre Daten nicht an Dritte Personen weitergeben und ihr Passwort verschlüsselt auf unseren Server speichern</string>
     <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
+    <string name="keine_verbindung">Keine Verbindung zum Server</string>
+    <string name="keine_ergebnisse">Keine Ergebnisse</string>
+    <string name="erfolg">Erfolgreich abgemeldet</string>
 
     <!-- Strings für die CitySelectionActivity -->
     <string name="title_activity_city_selection">Städteauswahl</string>
@@ -58,6 +61,7 @@
     <string name="activity_location_sort_nachRating2">nach Rating (abwärts)</string>
     <string name="activity_location_sort_minRating">Min. Rating</string>
     <string name="activity_location_sort_anwenden">Anwenden</string>
+    <string name="activity_location_sort_sortnach">Sortieren nach: </string>
 
     <!-- Strings für die LocationSearchActivity -->
     <string name="title_activity_location_search">LocationSearchActivity</string>
@@ -74,6 +78,8 @@
     <string name="activity_location_add_image_upload">Hochladen</string>
     <string name="activity_location_add_image_vorschau">Vorschau:</string>
     <string name="activity_location_add_image_drehen">Drehen</string>
+    <string name="activity_location_add_image_maxanzahl">Maximale Anzahl an Bildern Erreicht</string>
+    <string name="activity_location_add_image_keinbild">Kein Bild ausgewählt</string>
 
     <string name="title_activity_set_location_details">SetLocationDetailsActivity</string>
 
@@ -82,5 +88,9 @@
     <string name="menu_kontoverw">Konto verwalten</string>
     <string name="menu_ausloggen">Ausloggen</string>
     <string name="menu_locBearb">Location bearbeiten</string>
+    <string name="menu_ausloggen_frage">Wollen Sie sich wirklich ausloggen?</string>
+    <string name="menu_ausloggen_ja">Ja</string>
+    <string name="menu_ausloggen_nein">Nein</string>
+
 
 </resources>

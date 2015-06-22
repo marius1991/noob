@@ -28,7 +28,7 @@ public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> 
     /**
      * Es wird ein Thread gestartet, in dem der Logout-Befehl an den Server gesendet wird.
      * @param params
-     * @return
+     * @return ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
      */
     @Override
     protected ReturnCodeResponse doInBackground(Integer... params) {
@@ -45,17 +45,17 @@ public class LogoutTask extends AsyncTask <Integer, String, ReturnCodeResponse> 
 
     /**
      * Der Returncode vom Server wird entgegen genommen.
-     * @param response
+     * @param response ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
      */
     @Override
     protected void onPostExecute (ReturnCodeResponse response) {
         if (response != null) {
             Log.d(TAG, "Returncode: " + response.getReturnCode());
-            Toast.makeText(context, "Erfolgreich abgemeldet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.erfolg, Toast.LENGTH_SHORT).show();
         }
         else {
             Log.d(TAG, "keine Verbindung zum Server");
-            Toast.makeText(context, "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
         }
     }
 }

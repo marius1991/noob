@@ -90,6 +90,28 @@ public class LocationListActivity extends ActionBarActivity {
     }
 
     /**
+     * Diese Methode wird aufgerufen, wenn im Menü auf den Eintrag "Neue Location" geklickt wird.
+     * Die Activity zum Anlegen der Location wird geöffnet.
+     * @param item
+     */
+    public void clickFuncNewLocation(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Neue Location' ausgewählt");
+        Intent i = new Intent(LocationListActivity.this, NewLocationActivity.class);
+        startActivity(i);
+    }
+
+    /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Konto verwalten' geklickt wird.
+     * Es wir die Activity für die Kontoverwaltung gestartet.
+     * @param item
+     */
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(LocationListActivity.this, UserManagementAcitivtiy.class);
+        startActivity(i);
+    }
+
+    /**
      * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
      * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
      * Dann wird ein LogoutTask gestartet.
@@ -98,9 +120,9 @@ public class LocationListActivity extends ActionBarActivity {
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
@@ -109,7 +131,7 @@ public class LocationListActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
     }
 
@@ -133,7 +155,7 @@ public class LocationListActivity extends ActionBarActivity {
         /**
          * Startet den Thread zum Abrufen der Locationliste vom Server.
          * @param params
-         * @return
+         * @return LocationListResponse (Enthält eine Liste mit Locations)
          */
         @Override
         protected LocationListResponse doInBackground(String... params) {
@@ -152,7 +174,7 @@ public class LocationListActivity extends ActionBarActivity {
         /**
          * Nimmt die Locationliste entgegen und füllt damit die Liste. Außerdem wird überprüft,ob ein
          * Filter oder eine Sortierung gesetzt wurde.
-         * @param response
+         * @param response LocationListResponse (Enthält eine Liste mit Locations)
          */
         @Override
         protected void onPostExecute (LocationListResponse response) {
@@ -160,7 +182,7 @@ public class LocationListActivity extends ActionBarActivity {
             final List<LocationTO> valueListLocation;
             if(response.getReturnCode() == 10) {
                 Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
             else {
                 NoobApplication myApp = (NoobApplication) getApplication();
@@ -190,11 +212,11 @@ public class LocationListActivity extends ActionBarActivity {
                     }
                     if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachRating1)) || myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachRating2))) {
                         if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachRating1))) {
-                            Log.d(TAG, "Sortieren nach: " + getString(R.string.activity_location_sort_nachRating1));
+                            Log.d(TAG, R.string.activity_location_sort_sortnach + getString(R.string.activity_location_sort_nachRating1));
                             Collections.sort(valueListLocation);
                         }
                         if (myApp.getSortBy().equals(getString(R.string.activity_location_sort_nachRating2))) {
-                            Log.d(TAG, "Sortieren nach: " + getString(R.string.activity_location_sort_nachRating2));
+                            Log.d(TAG, R.string.activity_location_sort_sortnach + getString(R.string.activity_location_sort_nachRating2));
                             Collections.sort(valueListLocation, Collections.reverseOrder());
                         }
                         valueList.clear();
