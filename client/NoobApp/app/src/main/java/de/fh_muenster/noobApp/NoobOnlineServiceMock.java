@@ -1,5 +1,10 @@
 package de.fh_muenster.noobApp;
 
+import android.location.Location;
+import android.util.Log;
+
+import org.kobjects.base64.Base64;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +28,7 @@ import de.fh_muenster.noob.UserTO;
  */
 public class NoobOnlineServiceMock implements NoobOnlineService {
     TestDB testDB = TestDB.getInstance();
+    private static final String TAG = NoobOnlineServiceMock.class.getName();
 
     @Override
     public ReturnCodeResponse register(String username, String email, String password, String passwordConfirmation) {
@@ -184,6 +190,10 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         LocationTO locationTO = locations.get(0);
         locationTO.setReturnCode(0);
         locationTO.setMessage("Erfolgreich abgerufen");
+        if(locationTO.getImages() == null) {
+            List<byte[]> images = new ArrayList<>();
+            locationTO.setImages(images);
+        }
         return locationTO;
     }
 
@@ -238,6 +248,7 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         returnCodeResponse.setMessage("Upload erfolgreich");
         returnCodeResponse.setReturnCode(0);
+        Log.d(TAG, Base64.encode(image));
         return returnCodeResponse;
     }
 

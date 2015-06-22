@@ -1,45 +1,31 @@
 package de.fh_muenster.noobApp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kobjects.base64.Base64;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -90,7 +76,6 @@ public class LocationShowActivity extends ActionBarActivity {
         TextView textViewRating = (TextView) findViewById(R.id.textView12);
         textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
 
-//        new Test().execute();
     }
 
     /**
@@ -158,6 +143,17 @@ public class LocationShowActivity extends ActionBarActivity {
     }
 
     /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Konto verwalten' geklickt wird.
+     * Es wir die Activity für die Kontoverwaltung gestartet.
+     * @param item
+     */
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(LocationShowActivity.this, UserManagementAcitivtiy.class);
+        startActivity(i);
+    }
+
+    /**
      * Diese Methode wird aufgerufen, wenn auf den Link "Maps" gedrückt wird.
      * Sie öffnet Google Maps und sucht nach der Adresse der Location
      * @param view
@@ -179,9 +175,9 @@ public class LocationShowActivity extends ActionBarActivity {
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
@@ -190,12 +186,12 @@ public class LocationShowActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
     }
 
     public void clickFuncUpload(View view) {
-        Intent i = new Intent(LocationShowActivity.this, LocationAddImage.class);
+        Intent i = new Intent(LocationShowActivity.this, LocationAddImageActivity.class);
         startActivity(i);
     }
 
@@ -229,6 +225,7 @@ public class LocationShowActivity extends ActionBarActivity {
         ImageView imageView = (ImageView) findViewById(R.id.imageView3);
         if (myApp.getLocation().getImages() != null) {
             if (!myApp.getLocation().getImages().isEmpty()) {
+                Log.d(TAG, Base64.encode(myApp.getLocation().getImages().get(0)));
                 imagesbytes = myApp.getLocation().getImages();
                 for (int i = 0; i < imagesbytes.size(); i++) {
                     Log.d(TAG, "IMAGE: " + Base64.encode(imagesbytes.get(i)));
@@ -242,8 +239,8 @@ public class LocationShowActivity extends ActionBarActivity {
                             AnimateandSlideShow();
                         }
                     };
-                    int delay = 1000; // delay for 1 sec.
-                    int period = 7500; // repeat every 2 sec.
+                    int delay = 1;
+                    int period = 5000;
                     Timer timer = new Timer();
                     timer.scheduleAtFixedRate(new TimerTask() {
                         public void run() {
@@ -269,7 +266,7 @@ public class LocationShowActivity extends ActionBarActivity {
         /**
          * Es wird ein neuer Thread gestartet, in dem das Rating zum Server geschickt wird.
          * @param params
-         * @return
+         * @return ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
          */
         @Override
         protected ReturnCodeResponse doInBackground(Integer... params) {
@@ -288,13 +285,13 @@ public class LocationShowActivity extends ActionBarActivity {
 
         /**
          * Nimmt den Returncode des Servers entgegen.
-         * @param response
+         * @param response ReturnCodeRespone (Enthält Fehler- bzw. Erfolgmeldungen)
          */
         @Override
         protected  void onPostExecute(ReturnCodeResponse response) {
             if (response.getReturnCode() == 10) {
-                Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Keine Verbidung zum Server");
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -319,7 +316,7 @@ public class LocationShowActivity extends ActionBarActivity {
         /**
          * Es wird ein Thread gestartet, in dem die Location vom Server abgerufen werden.
          * @param params
-         * @return
+         * @return LocationTO (Enthält Locationinformationen)
          */
         @Override
         protected LocationTO doInBackground(Integer... params) {
@@ -338,13 +335,13 @@ public class LocationShowActivity extends ActionBarActivity {
         /**
          * Die Location wird vom Server entgegengenommen und bei Erfolg werden die aktuellen
          * Ratings und Kommentare angezeigt.
-         * @param locationTO
+         * @param locationTO LocationTO (Enthält Locationinformationen)
          */
         @Override
         protected void onPostExecute (LocationTO locationTO) {
             Dialog.dismiss();
             if (locationTO.getReturnCode() == 10) {
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
             else {
                 NoobApplication myApp = (NoobApplication) getApplication();
