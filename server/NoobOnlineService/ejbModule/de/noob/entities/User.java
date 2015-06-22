@@ -14,16 +14,13 @@ import javax.persistence.*;
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 6341269371900561214L;
-
-	@GeneratedValue
-	private int id;
+	
+	@Id
+	private String email;
 	
 	private String name;
 	
 	private String password;
-	
-	@Id
-	private String email;
 	
 	@OneToMany (mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Location> locations;
@@ -34,8 +31,8 @@ public class User implements Serializable {
 	@OneToMany (mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> comments;
 	
-	//@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	//private NoobSession session;
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Image> images;
 	
 	public User() {
 	}
@@ -46,10 +43,6 @@ public class User implements Serializable {
 		this.password=password;
 		this.email=email;
 		
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getName() {
@@ -99,4 +92,14 @@ public class User implements Serializable {
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+	
+	
 }

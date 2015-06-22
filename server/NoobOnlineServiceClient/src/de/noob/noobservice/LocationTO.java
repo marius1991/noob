@@ -25,9 +25,11 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="comments" type="{http://noobservice.noob.de/}commentTO" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="images" type="{http://www.w3.org/2001/XMLSchema}base64Binary" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="number" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="ownerName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="plz" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ratings" type="{http://noobservice.noob.de/}ratingTO" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="street" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -47,9 +49,11 @@ import javax.xml.bind.annotation.XmlType;
     "comments",
     "description",
     "id",
+    "images",
     "name",
     "number",
     "ownerId",
+    "ownerName",
     "plz",
     "ratings",
     "street"
@@ -65,9 +69,12 @@ public class LocationTO
     protected List<CommentTO> comments;
     protected String description;
     protected int id;
+    @XmlElement(nillable = true)
+    protected List<byte[]> images;
     protected String name;
     protected String number;
     protected String ownerId;
+    protected String ownerName;
     protected int plz;
     @XmlElement(nillable = true)
     protected List<RatingTO> ratings;
@@ -207,6 +214,34 @@ public class LocationTO
     }
 
     /**
+     * Gets the value of the images property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the images property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getImages().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * byte[]
+     * 
+     */
+    public List<byte[]> getImages() {
+        if (images == null) {
+            images = new ArrayList<byte[]>();
+        }
+        return this.images;
+    }
+
+    /**
      * Ruft den Wert der name-Eigenschaft ab.
      * 
      * @return
@@ -276,6 +311,30 @@ public class LocationTO
      */
     public void setOwnerId(String value) {
         this.ownerId = value;
+    }
+
+    /**
+     * Ruft den Wert der ownerName-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * Legt den Wert der ownerName-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOwnerName(String value) {
+        this.ownerName = value;
     }
 
     /**

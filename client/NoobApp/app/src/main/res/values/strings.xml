@@ -2,7 +2,7 @@
     <string name="app_name">NoobApp</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="map_location">geo:0,0?q=Muenster</string>
+    <string name="map_location">geo:0,0</string>
     <string name="hilfe">Hilfe</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_register">Register</string>

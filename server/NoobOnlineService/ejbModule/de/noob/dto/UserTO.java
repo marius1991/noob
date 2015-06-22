@@ -6,8 +6,6 @@ import java.util.List;
 public class UserTO extends ReturnCodeResponse {
 
 	private static final long serialVersionUID = 6907767619451988547L;
-	
-	private int id;	
 
 	private String name;
 	
@@ -21,10 +19,9 @@ public class UserTO extends ReturnCodeResponse {
 	
 	private List<CommentTO> comments;
 	
-	public UserTO(int id, String name, String password, String email,
+	public UserTO(String name, String password, String email,
 			List<LocationTO> locations, List<RatingTO> ratings,
 			List<CommentTO> comments) {
-		this.id = id;
 		this.name = name;
 		this.password = password;
 		this.email = email;
@@ -34,14 +31,6 @@ public class UserTO extends ReturnCodeResponse {
 	}
 	
 	public UserTO() {
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {

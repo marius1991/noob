@@ -9,6 +9,11 @@ import de.noob.entities.Location;
 import de.noob.entities.NoobSession;
 import de.noob.entities.User;
 
+/**
+ * 
+ * @author Philipp Ringele
+ *
+ */
 @Local
 public interface NoobDAOLocal {
 	
@@ -35,7 +40,5 @@ public interface NoobDAOLocal {
 	public void persist(Object o);
 	
 	public void remove(Object o);
-	
-	public void merge(Object o);
 	
 }

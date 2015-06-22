@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="locationId" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="ownerId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="ownerName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="text" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
     "id",
     "locationId",
     "ownerId",
+    "ownerName",
     "text"
 })
 public class CommentTO {
@@ -43,6 +45,7 @@ public class CommentTO {
     protected int id;
     protected int locationId;
     protected String ownerId;
+    protected String ownerName;
     protected String text;
 
     /**
@@ -123,6 +126,30 @@ public class CommentTO {
      */
     public void setOwnerId(String value) {
         this.ownerId = value;
+    }
+
+    /**
+     * Ruft den Wert der ownerName-Eigenschaft ab.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * Legt den Wert der ownerName-Eigenschaft fest.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOwnerName(String value) {
+        this.ownerName = value;
     }
 
     /**

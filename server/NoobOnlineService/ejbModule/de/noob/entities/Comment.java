@@ -7,7 +7,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
-/*
+/**
  * @author Tim, Philipp
  */
 @Entity
@@ -22,21 +22,13 @@ public class Comment implements Serializable {
 	@Column(length  = 1000)
 	private String text;
 	
-	//@OneToMany (mappedBy = "superComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	//private List<Comment> comments;
-	
 	@ManyToOne
 	private Location location;
 	
 	@ManyToOne
 	private User owner;
 	
-	private String date;
-	
-	//@ManyToOne
-	//private Comment superComment;
-	
-	
+	private String date;	
 	
 	public Comment() {
 	}
@@ -45,9 +37,8 @@ public class Comment implements Serializable {
 		this.setOwner(user);
 		this.setText(text);
 		this.setLocation(location);
-		Format format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		Format format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		this.date = format.format(new Date());
-		//this.setSuperComment(comment);
 	}
 	
 
@@ -66,14 +57,6 @@ public class Comment implements Serializable {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-//	public List<Comment> getComments() {
-//		return comments;
-//	}
-
-//	public void setComments(List<Comment> comments) {
-//		this.comments = comments;
-//	}
 
 	public Location getLocation() {
 		return location;
@@ -97,19 +80,5 @@ public class Comment implements Serializable {
 
 	public void setDate(String date) {
 		this.date = date;
-	}
-	
-
-//	public Comment getSuperComment() {
-//		return superComment;
-//	}
-//
-//	public void setSuperComment(Comment superComment) {
-//		this.superComment = superComment;
-//	}
-//
-//	public void addComment(User user, String text) {
-//		this.comments.add(new Comment(user, text, null, this));	
-//	}
-	
+	}	
 }

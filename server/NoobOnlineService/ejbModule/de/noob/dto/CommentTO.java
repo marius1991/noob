@@ -11,30 +11,26 @@ public class CommentTO implements Serializable {
 	
 	private String text;
 	
-	//private List<CommentTO> comments;
-	
 	private int locationId;
 	
 	private String ownerId;
 	
-	private String date;
+	private String ownerName;
 	
-	//private int superCommentId;
+	private String date;
 
 	public CommentTO(int id,
 			String text,
-			//List<CommentTO> comments,
 			int locationId,
 			String ownerId,
-			String date) {
-			//int superCommentId			
+			String ownerName,
+			String date) {		
 		this.id = id;
 		this.text = text;
-		//this.comments = comments;
 		this.locationId = locationId;
 		this.ownerId = ownerId;
+		this.ownerName = ownerName;
 		this.date = date;
-		//this.superCommentId = superCommentId;
 	}
 
 	public int getId() {
@@ -52,14 +48,6 @@ public class CommentTO implements Serializable {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-//	public List<CommentTO> getComments() {
-//		return comments;
-//	}
-//
-//	public void setComments(List<CommentTO> comments) {
-//		this.comments = comments;
-//	}
 
 	public int getLocationId() {
 		return locationId;
@@ -85,11 +73,11 @@ public class CommentTO implements Serializable {
 		this.date = date;
 	}
 
-//	public int getSuperCommentId() {
-//		return superCommentId;
-//	}
-//
-//	public void setSuperCommentId(int superCommentId) {
-//		this.superCommentId = superCommentId;
-//	}
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
 }

@@ -10,26 +10,26 @@ import de.noob.dto.LocationTO;
 import de.noob.dto.RatingTO;
 import de.noob.dto.UserTO;
 import de.noob.entities.Comment;
+import de.noob.entities.Image;
 import de.noob.entities.Location;
 import de.noob.entities.Rating;
 import de.noob.entities.User;
 
 /**
  * Dto Assembler stellt Methoden bereit mit denen man aus Entities DTOs erzeugen kann.
- * @author philipp
+ * @author Philipp Ringele
  *
  */
 @Stateless
 public class DtoAssembler {
 	
 	/**
-	 * Mit dieser Methode kann man aus einem User-Objekt ein UserTO-Objekt erzeugen. 
+	 * Mit dieser Methode kann man ein User-Objekt in ein UserTO umwandeln.
 	 * @param user
-	 * @return
+	 * @return Eine UserTO-Instanz
 	 */
 	public UserTO makeDTO(User user) {
-		UserTO dto = new UserTO(user.getId(), 
-				user.getName(), 
+		UserTO dto = new UserTO(user.getName(), 
 				user.getPassword(), 
 				user.getEmail(),
 				this.makeLocationsDTO(user.getLocations()), 
@@ -39,11 +39,16 @@ public class DtoAssembler {
 	}
 	
 	/**
-	 * 
+	 * Mit dieser Methode kann man ein Location-Objekt in ein LocationTO umwandeln.
 	 * @param location
-	 * @return
+	 * @return Eine LocationTO-Instanz.
 	 */
 	public LocationTO makeDTO(Location location) {
+		List<byte[]> images = new ArrayList<byte[]>();
+		for(Image image: location.getImages()) {
+			images.add(image.getData());
+		}
+		
 		LocationTO dto = new LocationTO(location.getId(), 
 				location.getName(), 
 				location.getCategory(),
@@ -55,14 +60,41 @@ public class DtoAssembler {
 				location.getAverageRating(), 
 				makeRatingsDTO(location.getRatings()), 
 				makeCommentsDTO(location.getComments()), 
-				location.getOwner().getEmail());
+				location.getOwner().getEmail(),
+				location.getOwner().getName(),
+				images);
 		return dto;
 	}
+	/**
+	 * Mit dieser Methode kann man ein Location-Objekt in ein LocationTO umwandeln, allerdings enthaelt dieses
+	 * LocationTO nicht die Bilder, die im Location-Objekt gespeichert sind. 
+	 * @param location
+	 * @return Eine LocationTO-Instanz ohne images.
+	 */
+	public LocationTO makeDTOWithoutImages(Location location) {		
+		LocationTO dto = new LocationTO(location.getId(), 
+				location.getName(), 
+				location.getCategory(),
+				location.getDescription(), 
+				location.getStreet(), 
+				location.getNumber(), 
+				location.getPlz(), 
+				location.getCity(),  
+				location.getAverageRating(), 
+				makeRatingsDTO(location.getRatings()), 
+				makeCommentsDTO(location.getComments()), 
+				location.getOwner().getEmail(),
+				location.getOwner().getName(),
+				null);
+		return dto;
+	}
+	
+
 
 	/**
-	 * 
+	 * Mit dieser Methode kann man ein Rating-Objekt in ein RatingTO umwandeln.
 	 * @param rating
-	 * @return
+	 * @return Eine RatingTO-Instanz.
 	 */
 	public RatingTO makeDTO(Rating rating) {
 		RatingTO dto = new RatingTO(rating.getId(),
@@ -73,16 +105,16 @@ public class DtoAssembler {
 	}
 	
 	/**
-	 * 
+	 * Mit dieser Methode kann man ein, 
 	 * @param comment
 	 * @return
 	 */
 	public CommentTO makeDTO(Comment comment) {
 		CommentTO dto = new CommentTO(comment.getId(), 
 				comment.getText(), 
-				//makeCommentsDTO(comment.getComments()),
 				comment.getLocation().getId(), 
 				comment.getOwner().getEmail(),
+				comment.getOwner().getName(),
 				comment.getDate());
 		return dto;
 	}
@@ -106,7 +138,7 @@ public class DtoAssembler {
 	public List<LocationTO> makeLocationsDTO(List<Location> locations) {
 		List<LocationTO> toList = new ArrayList<LocationTO>();
 		for(Location location: locations) {
-			toList.add(makeDTO(location));
+			toList.add(makeDTOWithoutImages(location));
 		}
 		return toList;		  
 	}
