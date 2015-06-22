@@ -686,14 +686,13 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
      * @return
      */
     @Override
-    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city) {
         String METHOD_NAME = "setLocationDetails";
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         Log.d(TAG, "Set Locationdetails:");
-        String bytestring = Base64.encode(image);
         SoapObject response;
         try {
-            response = executeSoapAction(METHOD_NAME, sessionId, locationId, name, category, description, street, number, plz, city, bytestring);
+            response = executeSoapAction(METHOD_NAME, sessionId, locationId, name, category, description, street, number, plz, city);
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
             returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
