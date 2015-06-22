@@ -8,18 +8,45 @@
     <string name="map_location">geo:0,0</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_register">Register</string>
-    <string name="title_activity_new_location">NewLocation</string>
+
+
     <string name="action_aktualisieren">Aktualisieren</string>
-    <string name="title_activity_maintenance">Maintenance</string>
+
+    <!-- Strings für die NewLocationActivity und SetLocation-->
+    <string name="title_activity_new_location">NewLocation</string>
+    <string name="new_location_name">Location-Name</string>
+    <string name="new_location_bild">Bild aus Datei</string>
+    <string name="new_location_ort">Ort</string>
+    <string name="new_location_plz">Postleitzahl</string>
+    <string name="new_location_street">Straßennamen</string>
+    <string name="new_location_nr">Hausnummer</string>
+    <string name="new_location_anlegen">Location anlegen</string>
+    <string name="new_location_camera">Bild von Kamera</string>
+    <string name="new_location_delete">Bild löschen</string>
+    <string name="new_location_category">Kategorie auswählen:</string>
+    <string name="new_location_desc">Beschreibung:</string>
+    <string name="set_location">Location bearbeiten</string>
+
+    <!-- Strings für die UserManagementActivity-->
     <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
+    <string name="management_Passwort">Neues Passwort</string>
+    <string name="management_PasswortNEU">Neues Passwort wiederholung</string>
+    <string name="management_Bestätigen">Änderungen bestätigen</string>
+    <string name="management_Löschen">Konto Löschen</string>
+    <string name="management_Text">Altes Passwort eintragen um Account löschen zu können</string>
+
+    <!-- Strings für die RegisterActivity-->
+    <string name="title_activity_register">Register</string>
+    <string name="email">Email-Adresse</string>
+    <string name="benutzername">Benutzername</string>
+    <string name="passwortwdh">PasswortWdh.</string>
 
     <!-- Strings für die LoginActivity-->
     <string name="title_activity_login">LoginActivity</string>
     <string name="username">Email</string>
-    <string name="password">Password</string>
+    <string name="password">Passwort</string>
     <string name="register"><u>Registrieren</u></string>
-    <string name="login">Login</string>
+    <string name="login">Anmelden</string>
     <string name="testmode">Testmode</string>
 
     <!-- Strings für die HelpActivity -->
@@ -31,7 +58,6 @@
     <string name="helpquestionNr1">Kann ich die App benutzen ohne mich anmelden zu müssen?</string>
     <string name="helpquestionNr2">Werden meine Daten persistiert?</string>
     <string name="helpquestionNr3">Kann ich Bilder einer von Mir erstellten Location bearbeiten oder löschen?</string>
-
 
     <!-- Strings für die CitySelectionActivity -->
     <string name="title_activity_city_selection">Städteauswahl</string>

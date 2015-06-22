@@ -1,5 +1,6 @@
 package de.fh_muenster.noobApp;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +33,11 @@ import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationTO;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
-
+/**
+ * Created by marco
+ * Diese Activity ist für die Bearbeitung einer Location zuständig
+ * @author marco
+ */
 public class SetLocationDetailsActivity extends ActionBarActivity {
     private EditText locationame;
     private EditText beschreibung;
@@ -50,12 +55,15 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_location_details);
+
         //Akutelle Location holen von der Applikation Klasse
         myApp = (NoobApplication) getApplication();
         locationTO=myApp.getLocation();
-        //Anfangswert des Bytearrays ist gleich der Location die bearbeitet wird
-        //ButtonsFestlegen
+
+        //Speichert die aktuellen Kategorien in die Variable "categoryList"
         categoryList=myApp.getCategories();
+
+        //Füllt die Variablen mit den View-Elementen aus der SetLocationDetailsActitvity
         editlocation=(Button) findViewById(R.id.button15);
         locationame = (EditText) findViewById(R.id.editText9);
         beschreibung= (EditText) findViewById(R.id.editText10);
@@ -63,27 +71,38 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         nummer= (EditText) findViewById(R.id.editText21);
         plz= (EditText) findViewById(R.id.editText11);
         ort= (EditText) findViewById(R.id.editText);
-        //Hier eventuell noch überprüfen ob locationTO nicht leer ist
+
+        //Setze Hint Elemente mit den akutelen Weten aus der locationTO
         locationame.setHint(locationTO.getName());
         beschreibung.setHint(locationTO.getDescription());
         strasse.setHint(locationTO.getStreet());
         nummer.setHint(locationTO.getNumber());
         plz.setHint(String.valueOf(locationTO.getPlz()));
         ort.setHint(locationTO.getCity());
-        //Befüllt Spinner mit dem Array from Kategories vom Server(categoryList)
+
+
+        //Übergebe dem Spinner die Kategorien
         if(!categoryList.isEmpty()) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, categoryList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Spinner spinner = (Spinner) findViewById(R.id.spinner2);
             spinner.setAdapter(adapter);
-            //krallt sich die SpinnerPosition von der ausgewählten Kategory
+
+
+            //Setzt den Spinner auf den Wert der bei ShowLocation angezeigt wird
             int spinnerPosition = adapter.getPosition(locationTO.getCategory());
-            //Setzt den Spinner auf die Kategorie
             spinner.setSelection(spinnerPosition);
 
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                /**
+                 * Speichert das SpinnerElemnt in einem String
+                 * @param parent
+                 * @param selectedItemView
+                 * @param position
+                 * @param id
+                 */
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
                     selectedSpinnerElement = parent.getItemAtPosition(position).toString();
@@ -97,8 +116,12 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
             });
         }
 
-        //ClickListener für setLocationDetails
         editlocation.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Diese Methode überprüft, ob die Felder geändert worden sind
+             * Ist dies der Fall wird Asynctask "SetLocationDetails" aufgerufen.
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 if(!locationame.getText().toString().equals("")) {
@@ -120,7 +143,6 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
                     locationTO.setCity(ort.getText().toString());
                 }
 
-                //Marius muss myApp Byte Array befüllen
                 if(locationame.getText().toString().isEmpty()&&beschreibung.getText().toString().isEmpty()&&strasse.getText().toString().isEmpty()&&nummer.getText().toString().isEmpty()) {
                     Toast.makeText(view.getContext(), "Es wurde keine Werte geändert", Toast.LENGTH_SHORT).show();
                 }
@@ -161,34 +183,52 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Asynctask um die geänderte Werte zu speichern
     public class SetLocationDetails extends AsyncTask<String, String, ReturnCodeResponse> {
-        private int returnCode;
         private int sessionId;
         private String message;
         private Context context;
+        private ProgressDialog Dialog = new ProgressDialog(SetLocationDetailsActivity.this);
+
         public SetLocationDetails(Context context){
             this.context=context;
         }
 
+        //Diese Methode zeigt während des NeueLocation anlegen Vorgangs ein Dialog an
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Geänderte Daten werde gespeichert...");
+            Dialog.show();
+        }
+
+        /**
+         * Diese Methode, führt einen Thread schickt die Werte von den geänderten Werten zum Server
+         * @param params
+         */
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
             NoobApplication myApp = (NoobApplication) getApplication();
-
             sessionId = myApp.getSessionId();
             ReturnCodeResponse setLocation = null;
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
             locationTO = myApp.getLocation();
-            try {
-                setLocation = onlineService.setLocationDetails(sessionId,locationTO.getId(),locationTO.getName(),locationTO.getCategory(),locationTO.getDescription(),locationTO.getStreet(),locationTO.getNumber(),locationTO.getPlz(),locationTO.getCity());
-                returnCode = setLocation.getReturnCode();
-                message = setLocation.getMessage();
-                return setLocation;
-            } catch (Exception e) {
-                 return null;
-            }
+            setLocation = onlineService.setLocationDetails(sessionId,locationTO.getId(),locationTO.getName(),locationTO.getCategory(),locationTO.getDescription(),locationTO.getStreet(),locationTO.getNumber(),locationTO.getPlz(),locationTO.getCity());
+            message = setLocation.getMessage();
+            return setLocation;
+
         }
 
+        /**
+         * Diese Methode wird ausgeführt nachdem doInBackground durchgelaufen ist.Überprüft den returnCode vom Server,
+         * ob alles geklappt hat
+         * @param returnCodeResponse
+         */
         protected void onPostExecute(ReturnCodeResponse returnCodeResponse){
+            Dialog.dismiss();
+            if (returnCodeResponse.getReturnCode() == 10) {
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
 

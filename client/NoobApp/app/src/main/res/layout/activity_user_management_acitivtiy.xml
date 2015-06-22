@@ -1,3 +1,6 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -11,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editText13"
-        android:hint="Benutzername"
+        android:hint="@string/benutzername"
         android:singleLine="true"
         android:maxLength="255"
         android:layout_centerHorizontal="true"
@@ -23,8 +26,8 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
-        android:hint="Neues Passwort"
-        android:text=""
+        android:hint="@string/management_Passwort"
+        android:maxLength="255"
         android:singleLine="true"
         android:id="@+id/editText14"
         android:layout_below="@+id/editText13"
@@ -36,9 +39,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Neues Passwort wiederholen"
+        android:hint="@string/management_PasswortNEU"
         android:ems="10"
         android:singleLine="true"
+        android:maxLength="255"
         android:id="@+id/editText15"
         android:layout_below="@+id/editText14"
         android:layout_alignParentLeft="true"
@@ -48,29 +52,29 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bestätigen"
+        android:text="@string/management_Bestätigen"
         android:id="@+id/button10"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/button11"
         android:layout_alignLeft="@+id/button11"
-        android:layout_alignStart="@+id/button11" />
+        android:layout_alignStart="@+id/button11"
+        android:layout_marginTop="30dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Konto löschen"
+        android:text="@string/management_Löschen"
         android:id="@+id/button11"
-        android:layout_above="@+id/button10"
+        android:layout_below="@+id/editText30"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="6dp" />
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Altes Passwort eintragen um Account zu löschen"
+        android:text="@string/management_Text"
         android:id="@+id/textView"
-        android:textSize="12dp"
-        android:layout_marginTop="32dp"
+        android:textSize="12sp"
         android:layout_below="@+id/editText15"
         android:layout_centerHorizontal="true" />
 
@@ -79,6 +83,8 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
+        android:singleLine="true"
+        android:maxLength="255"
         android:id="@+id/editText30"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
@@ -87,3 +93,4 @@
         android:layout_alignEnd="@+id/editText15" />
 
 </RelativeLayout>
+</ScrollView>

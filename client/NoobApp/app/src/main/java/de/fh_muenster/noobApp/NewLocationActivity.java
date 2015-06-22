@@ -1,5 +1,6 @@
 package de.fh_muenster.noobApp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,9 +31,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-
+/**
+ * Created by marco
+ * Diese Activity ist für die Registrieung eines Users zuständig
+ * @author marco
+ */
 public class NewLocationActivity extends ActionBarActivity {
-    //Standardwert der übergeben wird
     private final int PICK_IMAGE_REQUEST = 1;
     private final int CAMERA_REQUEST = 2;
     private EditText locationame;
@@ -50,37 +54,48 @@ public class NewLocationActivity extends ActionBarActivity {
     private Button neueLocation;
     private Bitmap bitmap;
     private Bitmap bitmapnew;
-    NoobApplication myApp;
     private byte[] byteArray;
     List<String> categoryList;
-    private String selectedSpinnerElement;
+    private String selectedSpinnerElementString;
     private static final String TAG = NewLocationActivity.class.getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_location2);
-        myApp = (NoobApplication) getApplication();
-        categoryList=myApp.getCategories();
+
+        //Füllt die Variable "myApp" mit der globalen Applikation Klasse
+        final NoobApplication myApp = (NoobApplication) getApplication();
+
+        //Speichert die aktuellen Kategorien in die Variable "categoryList"
+        categoryList = myApp.getCategories();
+
+        //Füllt die Variablen mit den View-Elementen aus der NewLocationActivity
         locationame = (EditText) findViewById(R.id.editText9);
         beschreibung = (EditText) findViewById(R.id.editText10);
         strasse = (EditText) findViewById(R.id.editText18);
         nummer = (EditText) findViewById(R.id.editText21);
         plz = (EditText) findViewById(R.id.editText11);
         ort = (EditText) findViewById(R.id.editText);
+        neueLocation = (Button) findViewById(R.id.button15);
+
+        //Füllt den Spinner mit den Kategorien, wenn ein Element ausgewählt worden ist wird dieser in einem string gespeichert
         if (!categoryList.isEmpty()) {
-            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    //android.R.layout.simple_spinner_item, categoryList);
             ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, categoryList);
-            //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             Spinner spinner = (Spinner) findViewById(R.id.spinner2);
             spinner.setAdapter(adapter);
 
-
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
+                /**
+                 * Überpürft ob ein Element ausgewhätl worden ist
+                 * @param parent
+                 * @param selectedItemView
+                 * @param position
+                 * @param id
+                 */
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View selectedItemView, int position, long id) {
-                    selectedSpinnerElement = parent.getItemAtPosition(position).toString();
+                    selectedSpinnerElementString = parent.getItemAtPosition(position).toString();
                 }
 
                 @Override
@@ -89,93 +104,211 @@ public class NewLocationActivity extends ActionBarActivity {
                 }
             });
         }
-        neueLocation = (Button) findViewById(R.id.button15);
+
+        beschreibung.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "beschreibung" der Focus verlassen worden ist && das Textfeld "beschreibung" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !beschreibung.getText().toString().isEmpty()) {
+                    beschreibung.setError(null);
+                }
+            }
+        });
+
+        locationame.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "locationame" der Focus verlassen worden ist && das Textfeld "locationame" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !locationame.getText().toString().isEmpty()) {
+                    locationame.setError(null);
+                }
+            }
+        });
+
+        strasse.setOnFocusChangeListener(new View.OnFocusChangeListener(
+                /**
+                 * Diese Methode überprüft, ob beim Textfeld "strasse" der Focus verlassen worden ist && das Textfeld "strasse" nicht leer ist
+                 * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+                 * @param v
+                 * @param hasFocus
+                 */
+        ) {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !strasse.getText().toString().isEmpty()) {
+                    strasse.setError(null);
+                }
+            }
+        });
+
+        nummer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "nummer" der Focus verlassen worden ist && das Textfeld "nummer" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !nummer.getText().toString().isEmpty()) {
+                    nummer.setError(null);
+                }
+            }
+        });
+
+        plz.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "plz" der Focus verlassen worden ist && das Textfeld "plz" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !plz.getText().toString().isEmpty()) {
+                    plz.setError(null);
+                }
+            }
+        });
+
+        ort.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "ort" der Focus verlassen worden ist && das Textfeld "ort" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus && !ort.getText().toString().isEmpty()) {
+                    ort.setError(null);
+                }
+            }
+        });
+
+
         neueLocation.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Diese Methode überprüft, ob die Felder anhand der Validierung und einfachen IF-Abfragen ob
+             * die Daten richtig eingegeben worden sind.
+             * Ist dies der Fall wird Asynctask "NewLocationTask" aufgerufen.
+             * @param view
+             */
             @Override
             public void onClick(View view) {
-                if (locationame.getText().toString().equals("")) {
+                boolean isCorrect = true;
+                if (locationame.getText().toString().isEmpty()) {
                     locationame.setError("Bitte Locationame Eintragen");
                     locationame.requestFocus();
-                } else if (beschreibung.getText().toString().equals("")) {
+                    isCorrect = false;
+                }
+                if (beschreibung.getText().toString().isEmpty()) {
                     beschreibung.setError("Bitte Beschreibung eintragen");
                     beschreibung.requestFocus();
-                } else if (strasse.getText().toString().equals("")) {
+                    isCorrect = false;
+                }
+                if (strasse.getText().toString().isEmpty()) {
                     strasse.setError("Bitte Strasse eintragen");
                     strasse.requestFocus();
-                } else if (nummer.getText().toString().equals("")) {
+                    isCorrect = false;
+                }
+                if (nummer.getText().toString().isEmpty()) {
                     nummer.setError("Bitte Nummer eintragen");
                     nummer.requestFocus();
-                } else if (plz.getText().toString().equals("")) {
+                }
+                if (plz.getText().toString().isEmpty()) {
                     plz.setError("Bitte PLZ eintragen");
                     plz.requestFocus();
-                }else if (plz.getText().toString().length() == 4) {
-                        plz.setError("PLZ muss 5 Zeichen lang sein");
-                        plz.requestFocus();
-                } else if (ort.getText().toString().equals("")) {
+                    isCorrect = false;
+                }
+                if (plz.getText().toString().length() != 4) {
+                    plz.setError("PLZ muss 5 Zeichen lang sein");
+                    plz.requestFocus();
+                    isCorrect = false;
+                }
+                if (ort.getText().toString().equals("")) {
                     ort.setError("Bitte Ort eintragen");
                     ort.requestFocus();
-                } else {
-                    locationameString = locationame.getText().toString();
-                    beschreibungString = beschreibung.getText().toString();
-                    strasseString = strasse.getText().toString();
-                    plZSring = plz.getText().toString();
-                    ortString = ort.getText().toString();
-                    nummerString = nummer.getText().toString();
-                    bitmapToByte();
-                    NewLocationTask newLocation = new NewLocationTask();
-                    newLocation.execute(locationameString, selectedSpinnerElement, beschreibungString, strasseString, nummerString, plZSring, ortString);
+                    isCorrect = false;
                 }
-
+                if (isCorrect && !locationame.getText().toString().isEmpty() && !beschreibung.getText().toString().isEmpty() && !strasse.getText().toString().isEmpty() && !nummer.getText().toString().isEmpty() && !plz.getText().toString().isEmpty() && !ort.getText().toString().isEmpty()) locationameString = locationame.getText().toString();
+                beschreibungString = beschreibung.getText().toString();
+                strasseString = strasse.getText().toString();
+                plZSring = plz.getText().toString();
+                ortString = ort.getText().toString();
+                nummerString = nummer.getText().toString();
+                locationameString = locationame.getText().toString();
+                bitmapToByte();
+                NewLocationTask newLocation = new NewLocationTask();
+                newLocation.execute(locationameString, selectedSpinnerElementString, beschreibungString, strasseString, nummerString, plZSring, ortString);
             }
-
 
         });
     }
 
+    /**
+     *Diese Methode startet die Kamera mithilfe des Intent
+     * @param view
+     */
     public void startKamera(View view) {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent,CAMERA_REQUEST);
     }
 
 
-    //Empfängt das Bild und prüft ihm resultcode ob ein bild gemacht worden ist
+
+    /**
+     * Diese Methode überprüft, ob die die Variable bitmap leer ist. Ist dies der Fall, wird das neue Bild in die Bitmap
+     * geschrieben und in der imageView gesetzt. Es wird unterschieden zwischen Bilder von der Kamera und von der Gallery, da
+     * die bitmap Zuweisung jeweils anders verläuft.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
-            try {
-                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
-                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
-                if (bitmap != null) {
-                    bitmap.recycle();
-                    bitmap = null;
+               if (bitmap != null) {
+                   bitmap.recycle();
+                   bitmap = null;
                 }
                 bitmap = (Bitmap) data.getExtras().get("data");
                 ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
+
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
             Uri uri = data.getData();
-            try {
-                //bitmap Factory muss 0 sein. Wenn man erst ein Bild von Kamera und dann ein Bild
-                //von der Gallery in die view lädt muss die bitmapfactory 0 sein!!
+
                 if (bitmap != null) {
                     bitmap.recycle();
                     bitmap = null;
                 }
+            try{
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(bitmap);
 
-            } catch (Exception e) {
+            }catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    //Wandelt die BitMap in ein ByteArray für die Datenbank
+    /**
+     * Diese Methode wandelt die bitmap in ein byteArray, um diese dann in der Datanbank abspeichern
+     * zu können
+     */
     public void bitmapToByte() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmapnew=Bitmap.createScaledBitmap(bitmap,400,400,true);
@@ -183,12 +316,14 @@ public class NewLocationActivity extends ActionBarActivity {
         byteArray = stream.toByteArray();
     }
 
+    /**
+     * Diese Methode startet die Gallery mihilfe eines Intent
+     * @param view
+     */
     public void pickPhoto(View view) {
         Intent intent = new Intent();
-// Show only images, no videos or anything else
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-// Always show the chooser (if there are multiple options available)
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
@@ -200,6 +335,10 @@ public class NewLocationActivity extends ActionBarActivity {
 
     }
 
+    /**
+     * Auswahl ActionBar GoogleMaps, OpenInternet
+     * @param item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -213,6 +352,11 @@ public class NewLocationActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * Diese Methode löscht das bild aus der ImageView und aus der Bitmap
+     * @param view
+     */
     public void deletePicture(View view){
         if(((ImageView) findViewById(R.id.imageView4)).getDrawable()!=null)
         ((ImageView) findViewById(R.id.imageView4)).setImageBitmap(null);
@@ -221,14 +365,14 @@ public class NewLocationActivity extends ActionBarActivity {
             bitmap = null;
         }
     }
-
+    //Diese Methode öffnet GoogleMAps mithilfe einens Intent. Latitude und Longitude sind jeweils 0
     public void openGoogleMaps() {
         String geoUriString = getResources().getString(R.string.map_location);
         Uri geoUri = Uri.parse(geoUriString);
         Intent mapCall = new Intent(Intent.ACTION_VIEW, geoUri);
         startActivity(mapCall);
     }
-
+    //Diese Methode öffnet den Browser mithilfe eines Intent. Startwert ist google
     public void openInternet(){
         String url = "http://www.google.de";
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -236,18 +380,26 @@ public class NewLocationActivity extends ActionBarActivity {
         startActivity(i);
     }
 
-    //public void newLocation(View view) {
-    //NoobApplication myApp = (NoobApplication) getApplication();
-    //EditText locName = (EditText)findViewById(R.id.editText9);
-    //EditText locCity = (EditText)findViewById(R.id.editText11);
-    //Test
-    //new NewLocationTask().execute(Integer.toString(myApp.getSessionId()), locName.getText().toString(), "Kneipe", "Tolle Kneipe", "Jüdefelder Str.", "15", Integer.toString(48150), locCity.getText().toString());
 
 
-    //Asynchron senden (Innere Klasse)
+    //Asynctask für Register
     class NewLocationTask extends AsyncTask<String, String, ReturnCodeResponse> {
         int sessionID = 0;
+        private ProgressDialog Dialog = new ProgressDialog(NewLocationActivity.this);
 
+
+        //Diese Methode zeigt während des NeueLocation anlegen Vorgangs ein Dialog an
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Location wird angelegt...");
+            Dialog.show();
+        }
+
+        /**
+         * Diese Methode, führt einen Thread schickt die Werte von der neu erstellen Location zum Server
+         * @param params
+         */
         @Override
         protected ReturnCodeResponse doInBackground(String... params) {
             NoobOnlineServiceImpl onlineService = new NoobOnlineServiceImpl();
@@ -262,13 +414,25 @@ public class NewLocationActivity extends ActionBarActivity {
             return response;
         }
 
+        /**
+         * Diese Methode wird ausgeführt nachdem doInBackground durchgelaufen ist.Überprüft den returnCode vom Server,
+         * ob alles geklappt hat
+         * @param response
+         */
         @Override
         protected void onPostExecute(ReturnCodeResponse response) {
-
+            Dialog.dismiss();
+            if (response.getReturnCode() == 10) {
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(NewLocationActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
-
 }
+
+
 
 
 

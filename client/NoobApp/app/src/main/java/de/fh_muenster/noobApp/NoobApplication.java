@@ -15,7 +15,7 @@ import de.fh_muenster.noob.UserTO;
 /**
  * Created by marius on 02.06.15.
  * Subklasse von Application --> Austausch von Daten unter den Activities
- * @author marius,marco
+ * @author marius
  */
 public class NoobApplication extends Application {
     private boolean testmode = false;
@@ -121,16 +121,4 @@ public class NoobApplication extends Application {
     public void setTestmode(boolean testmode) {
         this.testmode = testmode;}
 
-    public String hashPasswort(String password) {
-        try {
-            String passwordnew="";
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(password.getBytes());
-            passwordnew= new BigInteger(1,messageDigest.digest()).toString(16);
-            return passwordnew;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

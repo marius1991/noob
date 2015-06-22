@@ -34,18 +34,18 @@ public class LoginActivity extends ActionBarActivity {
     private static final String TAG = LoginActivity.class.getName();
     String emailString;
     String passwordString;
+    private Password passwordmeth;
 
-    /**
-     * Diese Methode wird aufgerufen, wenn die NoobApp gestartet wird. Sie lädt das Layout von der
-     * XML-Datei "activity_login"
-     * @param savedInstanceState
-     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Setze Layout Conent
         setContentView(R.layout.activity_login);
+
+        //Referenz Klasse Password, Validierung und hashing
+        passwordmeth= new Password();
 
         //Füllt die Variable "myApp" mit der globalen Applikation Klasse
         final NoobApplication myApp = (NoobApplication) getApplication();
@@ -56,8 +56,13 @@ public class LoginActivity extends ActionBarActivity {
         testMode = (Switch) findViewById(R.id.switch1);
         loginButton=(Button) findViewById(R.id.button2);
 
-        //Diese Methode überprüft ob der TestMode an oder aus ist
+
         testMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            /**
+             * Diese Methode überprüft ob der TestMode an oder aus ist
+             * @param buttonView
+             * @param isChecked
+             */
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     myApp.setTestmode(true);
@@ -70,11 +75,13 @@ public class LoginActivity extends ActionBarActivity {
             }
         });
 
-        /**
-         * Diese Methode überprüft, ob beim Textfeld "email" der Focus verlassen worden ist && das Textfeld "email" nicht leer ist
-         * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
-         */
         email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "email" der Focus verlassen worden ist && das Textfeld "email" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus&&!email.getText().toString().isEmpty()) {
@@ -84,11 +91,14 @@ public class LoginActivity extends ActionBarActivity {
             }
         });
 
-        /**
-         * Diese Methode überprüft, ob beim Textfeld "password" der Focus verlassen worden ist && das Textfeld "password" nicht leer ist
-         * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
-         */
+
         password.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            /**
+             * Diese Methode überprüft, ob beim Textfeld "password" der Focus verlassen worden ist && das Textfeld "password" nicht leer ist
+             * Ist dies der Fall, wird die Error-Meldung nicht mehr angezeigt
+             * @param v
+             * @param hasFocus
+             */
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus&&!password.getText().toString().isEmpty()) {
@@ -98,16 +108,17 @@ public class LoginActivity extends ActionBarActivity {
             }
         });
 
-        /**
-         * Diese Methode überprüft, ob die Felder Passwort und Email nicht leer sind. Ist dies der Fall wird
-         * der Asynctask "LoginTask" aufgerufen.
-         */
+
         loginButton.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Diese Methode überprüft, ob die Felder Passwort und Email nicht leer sind. Ist dies der Fall wird
+             * der Asynctask "LoginTask" aufgerufen.
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 emailString= email.getText().toString();
                 passwordString = password.getText().toString();
-                LoginTask loginTask = new LoginTask(view.getContext());
                 if(emailString.isEmpty()){
                     email.setError("Bitte tragen Sie eine E-Mail Adresse ein");
                     email.requestFocus();
@@ -118,7 +129,8 @@ public class LoginActivity extends ActionBarActivity {
                 }
                 if (!emailString.isEmpty() && !passwordString.isEmpty()) {
                     NoobApplication myApp = (NoobApplication) getApplication();
-                    passwordStringHash=myApp.hashPasswort(passwordString);
+                    passwordStringHash=passwordmeth.hashPasswort(passwordString);
+                    LoginTask loginTask = new LoginTask(view.getContext());
                     loginTask.execute(emailString, passwordStringHash);
                     myApp.setUserId(emailString);
                 }
@@ -137,7 +149,11 @@ public class LoginActivity extends ActionBarActivity {
 
     }
 
-    //Über das Fragezeichen wird die Help Activity gestartet
+
+    /**
+     * Über das Fragezeichen wird die Help Activity gestartet
+     * @param item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -155,7 +171,11 @@ public class LoginActivity extends ActionBarActivity {
         startActivity(i);
     }
 
-    //Diese Methode öffnet die RegisterView
+
+    /**
+     * Diese Methode öffnet die RegisterView
+     * @param view
+     */
     public void openRegisterActivity(View view){
         Intent y= new Intent(LoginActivity.this,RegisterActivity.class);
         startActivity(y);
@@ -182,7 +202,7 @@ public class LoginActivity extends ActionBarActivity {
         }
 
         /**
-         * Diese Methode, führt einen Thread im Hintergrund aus und schickt das gesetzte Passwort und die gesetzte Email zum Server
+         * Diese Methode, schickt das gesetzte Passwort und die gesetzte Email zum Server
          * ist der Testmode gesetzt wird die Methode im MockObject aufgerufen
          * @param params
          */
