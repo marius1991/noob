@@ -65,7 +65,7 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 		//Schaue nach ob username und email noch frei sind.
 		if (dao.findUserByName(username) == null && dao.findUserByEmail(email) == null) {
 			if(password.equals(passwordConfirmation)) {
-				User user = new User(username, email, password);
+				User user = new User(username.toLowerCase(), email.toLowerCase(), password);
 				dao.persist(user);
 				re.setReturnCode(0);
 				re.setMessage(username + " erfolgreich registriert.");
@@ -508,6 +508,44 @@ public class NoobOnlineServiceBean implements NoobOnlineService {
 			logger.info("Location existiert nicht!");
 		}
 		return re;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.noob.noobservice.NoobOnlineService#deleteLocation(int, int)
+	 */
+	@Override
+	public ReturnCodeResponse deleteLocation(int sessionId, int locationId) {
+		logger.info("deleteLocation() aufgerufen."); 
+		ReturnCodeResponse re = new ReturnCodeResponse();
+		NoobSession session = dao.findSessionById(sessionId);
+		if(session != null) {
+			User user = session.getUser();
+			Location location = dao.findLocationById(locationId);
+			if(location != null) {
+				if(location.getOwner().getEmail().equals(user.getEmail())) {
+					dao.remove(location);
+					re.setReturnCode(0);
+					re.setMessage("Location erfolgreich gelöscht.");
+					logger.info("Location erfolgreich gelöscht.");
+				}
+				else {
+					re.setReturnCode(3);
+					re.setMessage("Location gehört dem Benutzer nicht!");
+					logger.info("Location gehört dem Benutzer nicht!");
+				}
+			}
+			else {
+				re.setReturnCode(2);
+				re.setMessage("Location nicht vorhanden!");
+				logger.info("Location nicht vorhanden!");
+			}
+		}
+		else {
+			re.setReturnCode(1);
+			re.setMessage("Kein Benutzer angemeldet!");
+			logger.info("Kein Benutzer angemeldet!");
+		}
+		return re;		
 	}
 
 	/* (non-Javadoc)

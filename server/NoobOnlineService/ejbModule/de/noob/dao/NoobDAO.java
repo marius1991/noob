@@ -62,7 +62,7 @@ public class NoobDAO implements NoobDAOLocal {
 		logger.info("DB-Query: em.find(User.class, email);");
 		User user;
 		try {
-			user = em.find(User.class, email);
+			user = em.find(User.class, email.toLowerCase());
 			return user;
 		}
 		catch (Exception e) {

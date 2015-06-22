@@ -142,6 +142,15 @@ public interface NoobOnlineService {
 	String number, int plz, String city);
 
 	/**
+	 * Löscht eine Location aus der Datenbank.
+	 * @param sessionId
+	 * @param locationId
+	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 */
+	public ReturnCodeResponse deleteLocation(int sessionId, int locationId);
+
+
+	/**
 	 * Mit dieser Methode koennen die Werte aller User-Attribute eines existierenden Users abgerufen werden.
 	 * @param sessionId
 	 * @return Eine UserTO-Instanz, die alle Attribute eines Users enthaelt.

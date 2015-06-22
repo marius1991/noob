@@ -7,6 +7,8 @@ import javax.persistence.*;
 
 /**
  * Stellt einen User in der Datenbank dar.
+ * Die ID eines Users ist seine E-Mail Adresse.
+ * Diese kann mit getEmail() abgerufen werden.
  * @author Tim Hembrock, Philipp Ringele
  *
  */
