@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -183,8 +184,7 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
                                 DeleteAccount accountLoeschen = new DeleteAccount();
                                 password = (EditText) findViewById(R.id.editText30);
                                 String passwordStringHash = passwordmeth.hashPasswort(password.getText().toString());
-
-                                accountLoeschen.execute(passwordStringHash);
+                                    accountLoeschen.execute(passwordStringHash);
                             }
                         })
                         .setNegativeButton("Nein", null)
@@ -255,7 +255,11 @@ public class UserManagementAcitivtiy extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(UserManagementAcitivtiy.this, deleteUserResponse.getMessage(), Toast.LENGTH_LONG).show();
-
+                if(deleteUserResponse.getReturnCode() != 2) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
             }
         }
     }

@@ -26,11 +26,13 @@
     <string name="new_location_category">Kategorie auswählen:</string>
     <string name="new_location_desc">Beschreibung:</string>
     <string name="set_location">Location bearbeiten</string>
+    <string name="delete_location">Location löschen</string>
+
 
     <!-- Strings für die UserManagementActivity-->
     <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
     <string name="management_Passwort">Neues Passwort</string>
-    <string name="management_PasswortNEU">Neues Passwort wiederholung</string>
+    <string name="management_PasswortNEU">Neues Passwort (Wiederholung)</string>
     <string name="management_Bestätigen">Änderungen bestätigen</string>
     <string name="management_Löschen">Konto Löschen</string>
     <string name="management_Text">Altes Passwort eintragen um Account löschen zu können</string>
@@ -121,7 +123,7 @@
     <string name="activity_location_add_image_maxanzahl">Maximale Anzahl an Bildern Erreicht</string>
     <string name="activity_location_add_image_keinbild">Kein Bild ausgewählt</string>
 
-    <string name="title_activity_set_location_details">SetLocationDetailsActivity</string>
+    <string name="title_activity_set_location_details">Location bearbeiten</string>
 
     <!-- Strings für die Menüs -->
     <string name="menu_neueLoc">Neue Location</string>

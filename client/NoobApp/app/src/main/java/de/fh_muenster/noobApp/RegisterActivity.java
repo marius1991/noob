@@ -2,10 +2,9 @@ package de.fh_muenster.noobApp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 
@@ -170,7 +167,7 @@ public class RegisterActivity extends ActionBarActivity {
                      isCorrect=false;
                  }
                  if(!passwordmeth.validPasswordWdh(passwordString, passwordStringWdh)) {
-                     passwordwdh.setError("Passwort stimmt nicht ueberein");
+                     passwordwdh.setError("Passwort stimmt nicht überein");
                      passwordwdh.requestFocus();
                      isCorrect=false;
                  }
@@ -266,6 +263,7 @@ public class RegisterActivity extends ActionBarActivity {
             }
             else {
                 Toast.makeText(RegisterActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+                RegisterActivity.this.finish();
             }
         }
 

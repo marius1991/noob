@@ -1,6 +1,5 @@
 package de.fh_muenster.noobApp;
 
-import android.location.Location;
 import android.util.Log;
 
 import org.kobjects.base64.Base64;
@@ -8,7 +7,6 @@ import org.kobjects.base64.Base64;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -250,6 +248,11 @@ public class NoobOnlineServiceMock implements NoobOnlineService {
         returnCodeResponse.setReturnCode(0);
         Log.d(TAG, Base64.encode(image));
         return returnCodeResponse;
+    }
+
+    @Override
+    public ReturnCodeResponse deleteLocation(int sessionId, int locationId) {
+        return null;
     }
 
 }

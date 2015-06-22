@@ -59,23 +59,6 @@ public class LocationShowActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_show);
-
-        //Titel der Activity ersetzen
-        NoobApplication myApp = (NoobApplication) getApplication();
-        setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
-
-        //Adresse ersetzten
-        TextView textViewAddress = (TextView) findViewById(R.id.textView14);
-        textViewAddress.setText(myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity());
-
-        //Beschreibung ersetzen
-        TextView textViewDescription = (TextView) findViewById(R.id.textView15);
-        textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Erstellt von: " + myApp.getLocation().getOwnerName());
-
-        //Rating ersetzen
-        TextView textViewRating = (TextView) findViewById(R.id.textView12);
-        textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
-
     }
 
     /**
@@ -87,7 +70,26 @@ public class LocationShowActivity extends ActionBarActivity {
         super.onResume();
         NoobApplication myApp = (NoobApplication) getApplication();
         //Aktualisierte Location abrufen
-        new GetLocationDetailsFromServer().execute(myApp.getLocation().getId());
+        if(myApp.getLocation() != null) {
+            //Titel der Activity ersetzen
+            setTitle(myApp.getLocation().getName() + " in " + myApp.getCity());
+
+            //Adresse ersetzten
+            TextView textViewAddress = (TextView) findViewById(R.id.textView14);
+            textViewAddress.setText(myApp.getLocation().getStreet() + " " + myApp.getLocation().getNumber() + " " + myApp.getLocation().getPlz() + " " + myApp.getLocation().getCity());
+
+            //Beschreibung ersetzen
+            TextView textViewDescription = (TextView) findViewById(R.id.textView15);
+            textViewDescription.setText(myApp.getLocation().getDescription() + "\n" + "Erstellt von: " + myApp.getLocation().getOwnerName());
+
+            //Rating ersetzen
+            TextView textViewRating = (TextView) findViewById(R.id.textView12);
+            textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
+            new GetLocationDetailsFromServer().execute(myApp.getLocation().getId());
+        }
+        else {
+            LocationShowActivity.this.finish();
+        }
     }
 
     /**
@@ -97,8 +99,11 @@ public class LocationShowActivity extends ActionBarActivity {
     @Override
     protected  void onPause() {
         super.onPause();
-        if(newRating != 0) {
-            new SendRatingToServer().execute(Math.round(newRating));
+        NoobApplication myApp = (NoobApplication) getApplication();
+        if(myApp.getLocation() != null) {
+            if (newRating != 0) {
+                new SendRatingToServer().execute(Math.round(newRating));
+            }
         }
     }
 

@@ -1,19 +1,16 @@
 package de.fh_muenster.noobApp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,14 +19,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-
-import de.fh_muenster.noob.CategoryListResponse;
-import de.fh_muenster.noob.LocationListResponse;
-import de.fh_muenster.noob.ReturnCodeResponse;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
  * Created by marco
@@ -231,7 +225,7 @@ public class NewLocationActivity extends ActionBarActivity {
                     plz.requestFocus();
                     isCorrect = false;
                 }
-                if (plz.getText().toString().length() != 4) {
+                if (plz.getText().toString().length() != 5) {
                     plz.setError("PLZ muss 5 Zeichen lang sein");
                     plz.requestFocus();
                     isCorrect = false;
@@ -311,9 +305,11 @@ public class NewLocationActivity extends ActionBarActivity {
      */
     public void bitmapToByte() {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmapnew=Bitmap.createScaledBitmap(bitmap,400,400,true);
-        bitmapnew.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byteArray = stream.toByteArray();
+        if(bitmap != null) {
+            bitmapnew = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
+            bitmapnew.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byteArray = stream.toByteArray();
+        }
     }
 
     /**
@@ -385,16 +381,6 @@ public class NewLocationActivity extends ActionBarActivity {
     //Asynctask für Register
     class NewLocationTask extends AsyncTask<String, String, ReturnCodeResponse> {
         int sessionID = 0;
-        private ProgressDialog Dialog = new ProgressDialog(NewLocationActivity.this);
-
-
-        //Diese Methode zeigt während des NeueLocation anlegen Vorgangs ein Dialog an
-        @Override
-        protected void onPreExecute()
-        {
-            Dialog.setMessage("Location wird angelegt...");
-            Dialog.show();
-        }
 
         /**
          * Diese Methode, führt einen Thread schickt die Werte von der neu erstellen Location zum Server
@@ -409,8 +395,11 @@ public class NewLocationActivity extends ActionBarActivity {
             ReturnCodeResponse response;
             if(byteArray==null){
                 Log.d(TAG, "ByteArrayistLeer");
+                response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6], null);
             }
-            response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6],byteArray);
+            else {
+                response = onlineService.createLocation(sessionID, params[0], params[1], params[2], params[3], params[4], plz, params[6], byteArray);
+            }
             return response;
         }
 
@@ -421,12 +410,12 @@ public class NewLocationActivity extends ActionBarActivity {
          */
         @Override
         protected void onPostExecute(ReturnCodeResponse response) {
-            Dialog.dismiss();
             if (response.getReturnCode() == 10) {
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(NewLocationActivity.this, response.getMessage(), Toast.LENGTH_LONG).show();
+                NewLocationActivity.this.finish();
             }
         }
     }

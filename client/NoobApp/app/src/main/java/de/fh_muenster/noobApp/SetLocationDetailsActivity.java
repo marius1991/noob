@@ -1,16 +1,12 @@
 package de.fh_muenster.noobApp;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,18 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-
-import de.fh_muenster.noob.CategoryListResponse;
 import de.fh_muenster.noob.LocationTO;
+import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.ReturnCodeResponse;
 
 /**
@@ -62,6 +53,12 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
 
         //Speichert die aktuellen Kategorien in die Variable "categoryList"
         categoryList=myApp.getCategories();
+
+        //Löschen Button anzeigen falls der Benutzer der Besitzer der Location ist
+        Button deleteButton = (Button) findViewById(R.id.button16);
+        if(myApp.getUserId().equals(myApp.getLocation().getOwnerId())) {
+            deleteButton.setVisibility(View.VISIBLE);
+        }
 
         //Füllt die Variablen mit den View-Elementen aus der SetLocationDetailsActitvity
         editlocation=(Button) findViewById(R.id.button15);
@@ -183,6 +180,19 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void deleteLocation(View view) {
+        new AlertDialog.Builder(this)
+                .setMessage("Location wirklich löschen?")
+                .setCancelable(false)
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new DeleteLocation().execute();
+                    }
+                })
+                .setNegativeButton("Nein", null)
+                .show();
+    }
+
     //Asynctask um die geänderte Werte zu speichern
     public class SetLocationDetails extends AsyncTask<String, String, ReturnCodeResponse> {
         private int sessionId;
@@ -229,11 +239,52 @@ public class SetLocationDetailsActivity extends ActionBarActivity {
             if (returnCodeResponse.getReturnCode() == 10) {
                 Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
             }
+            else {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-
-
+                SetLocationDetailsActivity.this.finish();
+            }
         }
 
+    }
+
+    public class DeleteLocation extends AsyncTask<String, String, ReturnCodeResponse> {
+        private ProgressDialog Dialog = new ProgressDialog(SetLocationDetailsActivity.this);
+
+        @Override
+        protected void onPreExecute()
+        {
+            Dialog.setMessage("Location löschen...");
+            Dialog.show();
+        }
+
+
+        @Override
+        protected ReturnCodeResponse doInBackground(String... params) {
+            NoobApplication myApp = (NoobApplication) getApplication();
+            NoobOnlineService onlineService;
+            if(myApp.isTestmode()) {
+                onlineService = new NoobOnlineServiceMock();
+            }
+            else {
+                onlineService  = new NoobOnlineServiceImpl();
+            }
+            ReturnCodeResponse response = onlineService.deleteLocation(myApp.getSessionId(), myApp.getLocation().getId());
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(ReturnCodeResponse returnCodeResponse){
+            Dialog.dismiss();
+            NoobApplication myApp = (NoobApplication) getApplication();
+            if (returnCodeResponse.getReturnCode() == 10) {
+                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getApplicationContext(), returnCodeResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                myApp.setLocation(null);
+                SetLocationDetailsActivity.this.finish();
+            }
+        }
     }
 
 }

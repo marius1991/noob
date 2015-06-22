@@ -35,6 +35,12 @@
         <item name="android:background">@drawable/buttonshape</item>
     </style>
 
+    <style name="noob_button_red" parent="@android:style/Widget.Button">
+        <item name="android:textColor">@color/noob_white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@drawable/buttonshapered</item>
+    </style>
+
     <style name="noob_button_small" parent="@android:style/Widget.Button">
         <item name="android:textColor">@color/noob_white</item>
         <item name="android:textSize">15sp</item>

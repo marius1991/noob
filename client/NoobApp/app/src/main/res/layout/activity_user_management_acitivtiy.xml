@@ -66,6 +66,7 @@
         android:id="@+id/button11"
         android:layout_below="@+id/editText30"
         android:layout_centerHorizontal="true"
+        style="@style/noob_button_red"
         android:layout_marginTop="30dp" />
 
     <TextView
