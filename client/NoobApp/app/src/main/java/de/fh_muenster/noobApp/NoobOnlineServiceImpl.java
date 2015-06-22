@@ -23,7 +23,8 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     private static final String NAMESPACE = "http://noobservice.noob.de/";
 
     //private static final String URL = "http://10.0.2.2:8080/noob/NoobOnlineServiceBean";
-    private static final String URL = "http://10.70.16.58:8080/noob/NoobOnlineServiceBean";
+    //private static final String URL = "http://10.70.16.58:8080/noob/NoobOnlineServiceBean";
+    private static final String URL="http://10.60.70.14:8080/noob/NoobOnlineServiceBean";
 
     private static final String TAG = NoobOnlineServiceImpl.class.getName();
 
