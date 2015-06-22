@@ -53,7 +53,6 @@
     <string name="title_activity_help">HelpActivity</string>
     <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf das "Register" Feld und geben Sie Ihre Daten im Formular ein.</string>
     <string name="helpquestion2">Wir versichern, dass wir Ihre Daten nicht an Dritte Personen weitergeben und ihr Passwort verschlüsselt auf unseren Server speichern</string>
-    <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
     <string name="keine_verbindung">Keine Verbindung zum Server</string>
     <string name="keine_ergebnisse">Keine Ergebnisse</string>
     <string name="erfolg">Erfolgreich abgemeldet</string>
