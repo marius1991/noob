@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fh_muenster.noob.CategoryListResponse;
@@ -195,9 +196,16 @@ public class CategorySelectionActivity extends ActionBarActivity {
             }
             else {
                 NoobApplication myApp = (NoobApplication) getApplication();
-                myApp.setCategories(response.getCategories());
-                List<String> valueList;
-                valueList = response.getCategories();
+                List<String> valueList = new ArrayList<>();
+                if(response.getCategories() != null) {
+                    myApp.setCategories(response.getCategories());
+                    valueList = response.getCategories();
+                    Collections.sort(valueList);
+                }
+                else {
+                    Log.d(TAG, "keine Kategorie vorhanden");
+                    Toast.makeText(getApplicationContext(), R.string.keine_ergebnisse, Toast.LENGTH_SHORT).show();
+                }
                 ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
                 Spinner sp = (Spinner) findViewById(R.id.spinner);
                 sp.setAdapter(adapter);

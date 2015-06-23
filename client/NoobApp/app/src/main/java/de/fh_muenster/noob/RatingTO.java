@@ -2,6 +2,10 @@ package de.fh_muenster.noob;
 
 import java.io.Serializable;
 
+/**
+ * Objekte dieser Klasse enthalten alle Informationen einer Bewertung
+ * @author marius, philipp
+ */
 public class RatingTO implements Serializable {
 	
 	private static final long serialVersionUID = 795414601015492292L;

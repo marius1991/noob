@@ -2,7 +2,10 @@ package de.fh_muenster.noob;
 
 import java.util.List;
 
-
+/**
+ * Objetke dieser Klasse enthalten alle Informationen zu einem Benutzer
+ * @author marius, philipp
+ */
 public class UserTO extends ReturnCodeResponse {
 
 	private static final long serialVersionUID = 6907767619451988547L;

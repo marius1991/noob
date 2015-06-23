@@ -84,7 +84,7 @@ public class LocationShowActivity extends ActionBarActivity {
 
             //Rating ersetzen
             TextView textViewRating = (TextView) findViewById(R.id.textView12);
-            textViewRating.append(" | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
+            textViewRating.setText("Bewertung | Durchschnitt: " + myApp.getLocation().getAverageRating() + "/5.0 Sterne");
             new GetLocationDetailsFromServer().execute(myApp.getLocation().getId());
         }
         else {

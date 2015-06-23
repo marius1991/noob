@@ -3,8 +3,8 @@ package de.fh_muenster.noob;
 
 
 /**
+ * Interface des Servers
  * @author philipp
- *
  */
 public interface NoobOnlineService {
 

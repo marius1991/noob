@@ -3,13 +3,9 @@
     <!-- String AppName -->
     <string name="app_name">NoobApp</string>
 
-
     <!-- String für die GoogleMaps -->
     <string name="map_location">geo:0,0</string>
-
     <string name="action_settings">Settings</string>
-
-
     <string name="action_aktualisieren">Aktualisieren</string>
 
     <!-- Strings für die NewLocationActivity und SetLocation-->
@@ -48,6 +44,7 @@
     <string name="username">Email</string>
     <string name="password">Passwort</string>
     <string name="register"><u>Registrieren</u></string>
+    <string name="registerbutton">Registrieren</string>
     <string name="login">Anmelden</string>
     <string name="testmode">Testmode</string>
 
@@ -111,7 +108,8 @@
     <!-- Strings für die LocationCommentActivity -->
     <string name="title_activity_location_comment">LocationCommentActivity</string>
     <string name="activity_location_comment_kommentieren">Kommentieren</string>
-    <string name="activity_location_comment_hint">Verfassen Sie hier Ihre Bewertung</string>
+    <string name="activity_location_comment_hint">Verfassen Sie hier Ihre Bewertung</string>#
+    <string name="activity_location_comment_leer">Kommentarfeld ist leer</string>
 
     <!-- Strings für die LocationAddImageActivity-->
     <string name="title_activity_location_add_image">Bilder hochladen</string>
@@ -123,8 +121,6 @@
     <string name="activity_location_add_image_maxanzahl">Maximale Anzahl an Bildern Erreicht</string>
     <string name="activity_location_add_image_keinbild">Kein Bild ausgewählt</string>
 
-    <string name="title_activity_set_location_details">Location bearbeiten</string>
-
     <!-- Strings für die Menüs -->
     <string name="menu_neueLoc">Neue Location</string>
     <string name="menu_kontoverw">Konto verwalten</string>
@@ -134,5 +130,6 @@
     <string name="menu_ausloggen_ja">Ja</string>
     <string name="menu_ausloggen_nein">Nein</string>
 
+    <string name="title_activity_set_location_details">Location bearbeiten</string>
 
 </resources>

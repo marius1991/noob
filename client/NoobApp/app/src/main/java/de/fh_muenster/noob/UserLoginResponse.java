@@ -1,5 +1,9 @@
 package de.fh_muenster.noob;
 
+/**
+ * Objekte dieser Klasse werden vom Server nach dem Login versendet
+ * @author marius, philipp
+ */
 public class UserLoginResponse extends ReturnCodeResponse {
 
 	private static final long serialVersionUID = -3173158310918408228L;

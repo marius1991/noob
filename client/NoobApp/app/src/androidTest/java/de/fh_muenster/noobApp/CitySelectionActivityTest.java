@@ -11,7 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * Created by marius on 22.06.15.
+ * Testet die Grundlegenden Eigenschaften der CitySelectionActivity
+ * @author marius
  */
 public class CitySelectionActivityTest extends ActivityInstrumentationTestCase2<CitySelectionActivity> {
     private CitySelectionActivity citySelectionActivity;

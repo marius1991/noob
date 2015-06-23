@@ -3,9 +3,8 @@ package de.fh_muenster.noob;
 import java.util.List;
 
 /**
- * 
- * @author philipp
- *
+ * Objekte dieser Klasse enthalten alle Informationen über eine Location
+ * @author philipp, marius
  */
 public class LocationTO extends ReturnCodeResponse implements Comparable<LocationTO> {
 
@@ -163,9 +162,6 @@ public class LocationTO extends ReturnCodeResponse implements Comparable<Locatio
 
 	@Override
 	public int compareTo(LocationTO another) {
-		// compareTo should return < 0 if this is supposed to be
-		// less than other, > 0 if this is supposed to be greater than
-		// other and 0 if they are supposed to be equal
 		int result = 0;
 		if(this.averageRating < another.averageRating) {
 			result = -1;

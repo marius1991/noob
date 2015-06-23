@@ -1,7 +1,6 @@
 package de.fh_muenster.noobApp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,12 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fh_muenster.noob.CityListResponse;
@@ -34,6 +34,10 @@ public class CitySelectionActivity extends ActionBarActivity {
     private String selected;
     private static final String TAG = CitySelectionActivity.class.getName();
 
+    /**
+     * Diese Methode wird beim Start der Activity aufgerufen.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,7 +202,9 @@ public class CitySelectionActivity extends ActionBarActivity {
                 List<String> valueList = new ArrayList<>();
                 if (response.getCities() != null) {
                     valueList = response.getCities();
-                } else {
+                    Collections.sort(valueList);
+                }
+                else {
                     Log.d(TAG, "keine Stadt vorhanden");
                     Toast.makeText(getApplicationContext(), R.string.keine_ergebnisse, Toast.LENGTH_SHORT).show();
                 }

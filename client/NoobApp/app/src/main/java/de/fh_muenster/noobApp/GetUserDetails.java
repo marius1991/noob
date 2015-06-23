@@ -2,9 +2,6 @@ package de.fh_muenster.noobApp;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.UserTO;

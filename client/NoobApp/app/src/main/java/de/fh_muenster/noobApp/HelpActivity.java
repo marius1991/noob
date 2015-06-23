@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 /**
  * Created by marco
- * Diese Activity ist dafür zuständig dem User erste Hilfestellungen bereitzustellen
+ * Diese Activity ist dafÃ¼r zustÃ¤ndig dem User erste Hilfestellungen bereitzustellen
  * @author marco
  */
 public class HelpActivity extends ActionBarActivity {

@@ -70,14 +70,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/editText3"
             android:hint="@string/activity_category_selection_LocName"
-            android:maxLines="1"
             android:layout_below="@+id/textView9"
             android:layout_marginTop="33dp"
+            android:inputType="textPersonName"
             android:layout_alignLeft="@+id/textView9"
             android:layout_alignStart="@+id/textView9"
             android:layout_alignRight="@+id/textView9"
-            android:layout_alignEnd="@+id/textView9"
-            android:selectAllOnFocus="true" />
+            android:layout_alignEnd="@+id/textView9" />
 
         <Button
             android:layout_width="wrap_content"

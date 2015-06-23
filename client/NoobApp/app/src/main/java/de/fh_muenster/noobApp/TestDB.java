@@ -9,6 +9,8 @@ import de.fh_muenster.noob.RatingTO;
 
 /**
  * Created by marius on 19.06.15.
+ * Diese Klasse simuliert die Datenbank für den Testmodus
+ * @author marius
  */
 public class TestDB {
     private static TestDB testDB = new TestDB();

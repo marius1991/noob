@@ -66,7 +66,12 @@ public class LocationCommentActivity extends ActionBarActivity {
      * @param view
      */
     public void clickFuncCommentOnLocation(View view) {
-        new CommentOnLocation().execute(editText.getText().toString());
+        if(!editText.getText().toString().equals("")) {
+            new CommentOnLocation().execute(editText.getText().toString());
+        }
+        else {
+            Toast.makeText(LocationCommentActivity.this, R.string.activity_location_comment_leer, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
