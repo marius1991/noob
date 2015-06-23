@@ -14,6 +14,7 @@ import de.fh_muenster.noobApp.R;
 
 /**
  * Created by marco
+ * @author marco
  */
 public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private EditText email;
@@ -31,7 +32,7 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         super(LoginActivity.class);
     }
 
-
+    //Initialiseriung der Variablen
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -43,7 +44,7 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         loginButton = (Button) nLoginActivity.findViewById(R.id.button2);
     }
 
-
+    //Testen ob die Hints gesetzt worden sind
     public void testMyFirstTestTextView_labelText() {
         final String expectedEmail =
                 nLoginActivity.getString(R.string.username);
@@ -53,7 +54,7 @@ public class LoginTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         assertEquals(expectedEmail, emailE);
         assertEquals(expectPassword, passwort);
     }
-
+    //Testen ob der LoginButton clickable ist
     public void testClick() {
         nLoginActivity.runOnUiThread(new Runnable() {
 

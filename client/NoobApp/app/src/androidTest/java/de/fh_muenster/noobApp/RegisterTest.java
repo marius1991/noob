@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 /**
  * Created by marco
+ * @author marco
  */
 public class RegisterTest extends ActivityInstrumentationTestCase2<RegisterActivity> {
     private EditText email;
@@ -20,6 +21,7 @@ public class RegisterTest extends ActivityInstrumentationTestCase2<RegisterActiv
         super(RegisterActivity.class);
     }
 
+    //Initialisierung der Variablen
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -32,7 +34,7 @@ public class RegisterTest extends ActivityInstrumentationTestCase2<RegisterActiv
         registerButton = (Button) nRegisterActivity.findViewById(R.id.button6);
     }
 
-
+    //Hint überprüfen ob diese in der App gesetzt werden
     public void testMyFirstTestTextView_labelText() {
         final String expectedEmail ="Email-Adresse";
         final String expectPassword = "Passwort";
@@ -47,7 +49,7 @@ public class RegisterTest extends ActivityInstrumentationTestCase2<RegisterActiv
         assertEquals(expectUsername, benutzernamme1);
         assertEquals(expectPasswordW, passwortW);
     }
-
+    //Testen ob der registerButton clickable ist
     public void testClick() {
         nRegisterActivity.runOnUiThread(new Runnable() {
 
