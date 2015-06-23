@@ -29,8 +29,6 @@ public interface NoobDAOLocal {
 	
 	public List<Location> findLocationsByCategory(String category, String city);
 	
-	public List<Location> findLocationsByCity(String city);
-	
 	public NoobSession findSessionById(int sessionId);
 	
 	public Comment findCommentById(int commentId);

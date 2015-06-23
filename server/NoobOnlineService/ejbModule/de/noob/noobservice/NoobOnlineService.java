@@ -1,5 +1,7 @@
 package de.noob.noobservice;
 
+import javax.ejb.Remote;
+
 import de.noob.dto.CategoryListResponse;
 import de.noob.dto.CityListResponse;
 import de.noob.dto.LocationListResponse;
@@ -12,6 +14,7 @@ import de.noob.dto.UserTO;
  * @author Philipp Ringele
  *
  */
+@Remote
 public interface NoobOnlineService {
 
 	/**
@@ -20,7 +23,7 @@ public interface NoobOnlineService {
 	 * @param email
 	 * @param password
 	 * @param passwordConfirmation
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt. 
+	 * @return Eine  {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt. 
 	 */
 	public ReturnCodeResponse register(String username, String email,
 			String password, String passwordConfirmation);
@@ -30,27 +33,27 @@ public interface NoobOnlineService {
 	 * Mit dieser Methode kann ein User eingeloggt werden. Auf dem Server wird ein Session-Objekt fuer den User angelegt.
 	 * @param email
 	 * @param password
-	 * @return UserLoginResponse-Instanz, welche SessionID, ReturnCode und Message beinhaltet.
+	 * @return {@link de.noob.dto.UserLoginResponse}-Instanz, welche SessionID, ReturnCode und Message beinhaltet.
 	 */
 	public UserLoginResponse login(String email, String password);
 
 	/**
 	 * Mit dieser Methode kann ein User ausgeloggt werden, sodass sein Session-Objekt auf dem Server geloescht wird.
 	 * @param sessionId
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt. 
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt. 
 	 */
 	public ReturnCodeResponse logout(int sessionId);
 
 	/**
 	 * Mit dieser Methode koennen alle zulaessigen Kategorien vom Server abgerufen werden.
-	 * @return Eine CategoryListResponse-Instanz, welche eine java.util.List<String> mit allen Kategorien beinhaltet,
+	 * @return Eine {@link de.noob.dto.CategoryListResponse}-Instanz, welche eine java.util.List<String> mit allen Kategorien beinhaltet,
 	 * sowie ReturnCode und Message.
 	 */
 	public CategoryListResponse listCategories();
 	
 	/**
 	 * Mit dieser Methode koennen alle bisher vorhandenen Staedte vom Server abgerufen werden.
-	 * @return Eine CityListResponse-Instanz, welche eine java.util.List<String> mit allen gefundenen Staedten
+	 * @return Eine {@link de.noob.dto.CityListResponse}-Instanz, welche eine java.util.List<String> mit allen gefundenen Staedten
 	 * beinhaltet, sowie ReturnCode und Message.
 	 */
 	public CityListResponse listCities();
@@ -60,7 +63,7 @@ public interface NoobOnlineService {
 	 * in einer bestimmten Stadt liegen.
 	 * @param category
 	 * @param city
-	 * @return Eine LocationListResponse-Instanz, die eine java.util.List<Location> mit allen gefundenen Locations 
+	 * @return Eine {@link de.noob.dto.LocationListResponse}-Instanz, die eine java.util.List<Location> mit allen gefundenen Locations 
 	 * enthaelt.
 	 */
 	public LocationListResponse listLocationsWithCategory(String category,
@@ -71,7 +74,7 @@ public interface NoobOnlineService {
 	 * bestimmten Stadt liegen.
 	 * @param name
 	 * @param city
-	 * @return  Eine LocationListResponse-Instanz, die eine java.util.List<Location> mit allen gefundenen Locations 
+	 * @return  Eine {@link de.noob.dto.LocationListResponse}-Instanz, die eine java.util.List<Location> mit allen gefundenen Locations 
 	 * enthaelt.
 	 */
 	public LocationListResponse listLocationsWithName(String name, String city);
@@ -83,7 +86,7 @@ public interface NoobOnlineService {
 	 * @param sessionId
 	 * @param locationId
 	 * @param value Die Hoehe des Ratings von 1 bis 10. 
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt. 
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt. 
 	 */
 	public ReturnCodeResponse giveRating(int sessionId, int locationId,
 			int value);
@@ -93,7 +96,7 @@ public interface NoobOnlineService {
 	 * @param sessionId
 	 * @param locationId
 	 * @param text
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt. 
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt. 
 	 */
 	public ReturnCodeResponse commentOnLocation(int sessionId, int locationId,
 			String text);
@@ -110,7 +113,7 @@ public interface NoobOnlineService {
 	 * @param plz
 	 * @param city
 	 * @param image
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt. 
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt. 
 	 */
 	public ReturnCodeResponse createLocation(int sessionId, String name,
 	String category, String description, String street, String number,
@@ -119,7 +122,7 @@ public interface NoobOnlineService {
 	/**
 	 * Mit dieser Methode koennen die Werte aller Location-Attribute einer existierenden Location abgerufen werden.
 	 * @param locationId
-	 * @return Eine LocationTO-Instanz, die die Attribute einer Location enthaelt.
+	 * @return Eine {@link de.noob.dto.LocationTO}-Instanz, die die Attribute einer Location enthaelt.
 	 */
 	public LocationTO getLocationDetails(int locationId);
 	
@@ -135,7 +138,7 @@ public interface NoobOnlineService {
 	 * @param number
 	 * @param plz
 	 * @param city
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse setLocationDetails(int sessionId, int locationId,
 	String name, String category, String description, String street,
@@ -145,7 +148,7 @@ public interface NoobOnlineService {
 	 * Löscht eine Location aus der Datenbank.
 	 * @param sessionId
 	 * @param locationId
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse deleteLocation(int sessionId, int locationId);
 
@@ -153,7 +156,7 @@ public interface NoobOnlineService {
 	/**
 	 * Mit dieser Methode koennen die Werte aller User-Attribute eines existierenden Users abgerufen werden.
 	 * @param sessionId
-	 * @return Eine UserTO-Instanz, die alle Attribute eines Users enthaelt.
+	 * @return Eine {@link de.noob.dto.UserTO}-Instanz, die alle Attribute eines Users enthaelt.
 	 */
 	public UserTO getUserDetails(int sessionId);
 
@@ -164,7 +167,7 @@ public interface NoobOnlineService {
 	 * @param name
 	 * @param password
 	 * @param passwordConfirmation
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse setUserDetails(int sessionId, String name,
 	String password, String passwordConfirmation);
@@ -173,7 +176,7 @@ public interface NoobOnlineService {
 	 * Mit dieser Methode laesst sich ein gerade eingeloggte User loeschen.
 	 * @param sessionId
 	 * @param password
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse deleteUser(int sessionId, String password);
 	
@@ -183,7 +186,7 @@ public interface NoobOnlineService {
 	 * @param sessionId
 	 * @param locationId
 	 * @param image
-	 * @return Eine ReturnCodeResponse-Instanz, welche einen ReturnCode und eine Message enthaelt.
+	 * @return Eine {@link de.noob.dto.ReturnCodeResponse}-Instanz, welche einen ReturnCode und eine Message enthaelt.
 	 */
 	public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image);
 
