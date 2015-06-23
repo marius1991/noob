@@ -800,6 +800,14 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     }
 
+    /**
+     * Diese Methode fügt zu einer Location ein Bild hinzu.
+     * Es wird eine SoapAction ausgeführt und der Returncode zurückgegeben.
+     * @param sessionId
+     * @param locationId
+     * @param image
+     * @return
+     */
     @Override
     public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image) {
         String METHOD_NAME = "addImageToLocation";
@@ -822,6 +830,13 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         return returnCodeResponse;
     }
 
+    /**
+     * Diese Methode löscht eine Location des Benutzers.
+     * Es wird eine SoapAction ausgeführt und der Returncode zurückgegeben.
+     * @param sessionId
+     * @param locationId
+     * @return
+     */
     @Override
     public ReturnCodeResponse deleteLocation(int sessionId, int locationId) {
         String METHOD_NAME = "deleteLocation";
