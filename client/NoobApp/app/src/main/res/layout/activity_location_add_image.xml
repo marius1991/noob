@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="de.fh_muenster.noobApp.LocationAddImage" >
+    tools:context="de.fh_muenster.noobApp.LocationAddImageActivity" >
 
     <Button
         style="@style/noob_button_small"
@@ -31,12 +31,14 @@
         android:layout_centerHorizontal="true" />
 
     <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageView5"
-        android:layout_marginTop="15dp"
-        android:scaleType="centerCrop"
-        android:layout_width="400dp"
-        android:layout_height="200dp"
-        android:layout_below="@+id/textView16" />
+        android:layout_marginTop="16dp"
+        android:scaleType="centerInside"
+        android:contentDescription="Image"
+        android:layout_below="@+id/textView16"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -70,5 +72,6 @@
         android:layout_alignRight="@+id/imageView5"
         android:layout_alignEnd="@+id/imageView5"
         android:onClick="clickFuncRotate"/>
+
 </RelativeLayout>
 </ScrollView>

@@ -3,8 +3,8 @@ package de.fh_muenster.noob;
 
 
 /**
+ * Interface des Servers
  * @author philipp
- *
  */
 public interface NoobOnlineService {
 
@@ -103,10 +103,9 @@ public interface NoobOnlineService {
      * @param number
      * @param plz
      * @param city
-     * @param image
      * @return
      */
-    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image);
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city);
 
     /**
      *
@@ -137,6 +136,20 @@ public interface NoobOnlineService {
      */
     public ReturnCodeResponse deleteUser(int sessionId, String password);
 
+    /**
+     * @param sessionId
+     * @param locationId
+     * @param image
+     * @return
+     */
     public ReturnCodeResponse addImageToLocation(int sessionId, int locationId, byte[] image);
+
+    /**
+     *
+     * @param sessionId
+     * @param locationId
+     * @return
+     */
+    public ReturnCodeResponse deleteLocation(int sessionId, int locationId);
 
 }

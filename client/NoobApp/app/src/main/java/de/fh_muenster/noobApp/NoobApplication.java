@@ -2,6 +2,9 @@ package de.fh_muenster.noobApp;
 
 import android.app.Application;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,6 @@ public class NoobApplication extends Application {
     private UserTO user;
     private List<LocationTO> locationSearchResults;
     private String search;
-    private byte[] byteArray;
 
     public String getUserId() {
         return userId;
@@ -119,12 +121,4 @@ public class NoobApplication extends Application {
     public void setTestmode(boolean testmode) {
         this.testmode = testmode;}
 
-    public byte[] getByteArray() {
-        return byteArray;
-    }
-
-    public void setByteArray(byte[] byteArray) {
-        this.byteArray = byteArray;
-
-    }
 }

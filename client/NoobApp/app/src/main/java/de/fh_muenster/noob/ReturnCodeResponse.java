@@ -2,6 +2,12 @@ package de.fh_muenster.noob;
 
 import java.io.Serializable;
 
+/**
+ * Objekte dieser Klasse werden vom Server bei diversen Operationen zur App gesendet
+ * Sie enthalten Statusinformationen
+ * Alle anderen TOs erben von dieser Klasse
+ * @author marius, philipp
+ */
 public class ReturnCodeResponse implements Serializable {
 
 	private static final long serialVersionUID = 3397348747136795401L;

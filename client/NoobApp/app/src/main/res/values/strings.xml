@@ -1,23 +1,65 @@
 <resources>
+
+    <!-- String AppName -->
     <string name="app_name">NoobApp</string>
 
-    <string name="hello_world">Hello world!</string>
+    <!-- String für die GoogleMaps -->
     <string name="map_location">geo:0,0</string>
-    <string name="hilfe">Hilfe</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_register">Register</string>
-    <string name="title_activity_new_location">NewLocation</string>
     <string name="action_aktualisieren">Aktualisieren</string>
-    <string name="title_activity_maintenance">Maintenance</string>
 
+    <!-- Strings für die NewLocationActivity und SetLocation-->
+    <string name="title_activity_new_location">NewLocation</string>
+    <string name="new_location_name">Location-Name</string>
+    <string name="new_location_bild">Bild aus Datei</string>
+    <string name="new_location_ort">Ort</string>
+    <string name="new_location_plz">Postleitzahl</string>
+    <string name="new_location_street">Straßennamen</string>
+    <string name="new_location_nr">Hausnummer</string>
+    <string name="new_location_anlegen">Location anlegen</string>
+    <string name="new_location_camera">Bild von Kamera</string>
+    <string name="new_location_delete">Bild löschen</string>
+    <string name="new_location_category">Kategorie auswählen:</string>
+    <string name="new_location_desc">Beschreibung:</string>
+    <string name="set_location">Location bearbeiten</string>
+    <string name="delete_location">Location löschen</string>
+
+
+    <!-- Strings für die UserManagementActivity-->
+    <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
+    <string name="management_Passwort">Neues Passwort</string>
+    <string name="management_PasswortNEU">Neues Passwort (Wiederholung)</string>
+    <string name="management_Bestätigen">Änderungen bestätigen</string>
+    <string name="management_Löschen">Konto Löschen</string>
+    <string name="management_Text">Altes Passwort eintragen um Account löschen zu können</string>
+
+    <!-- Strings für die RegisterActivity-->
+    <string name="title_activity_register">Register</string>
+    <string name="email">Email-Adresse</string>
+    <string name="benutzername">Benutzername</string>
+    <string name="passwortwdh">PasswortWdh.</string>
+
+    <!-- Strings für die LoginActivity-->
     <string name="title_activity_login">LoginActivity</string>
     <string name="username">Email</string>
-    <string name="password">Password</string>
+    <string name="password">Passwort</string>
     <string name="register"><u>Registrieren</u></string>
+    <string name="registerbutton">Registrieren</string>
+    <string name="login">Anmelden</string>
+    <string name="testmode">Testmode</string>
+
+    <!-- Strings für die HelpActivity -->
     <string name="title_activity_help">HelpActivity</string>
-    <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf dem "Register Button und geben Sie Ihre Daten im Formular ein.</string>
+    <string name="helpquestion1">Unsere App kann man nur benutzen wenn man angemeldet ist. Drücken Sie dazu auf das "Register" Feld und geben Sie Ihre Daten im Formular ein.</string>
     <string name="helpquestion2">Wir versichern, dass wir Ihre Daten nicht an Dritte Personen weitergeben und ihr Passwort verschlüsselt auf unseren Server speichern</string>
-    <string name="title_activity_user_management_acitivtiy">UserManagementAcitivtiy</string>
+    <string name="keine_verbindung">Keine Verbindung zum Server</string>
+    <string name="keine_ergebnisse">Keine Ergebnisse</string>
+    <string name="erfolg">Erfolgreich abgemeldet</string>
+    <string name="helpquestion3">Es ist nur möglich Bilder zu der von Ihnen erstellten Locations hinzuzufügen.</string>
+    <string name="hilfe">Hilfe</string>
+    <string name="helpquestionNr1">Kann ich die App benutzen ohne mich anmelden zu müssen?</string>
+    <string name="helpquestionNr2">Werden meine Daten persistiert?</string>
+    <string name="helpquestionNr3">Kann ich Bilder einer von Mir erstellten Location bearbeiten oder löschen?</string>
 
     <!-- Strings für die CitySelectionActivity -->
     <string name="title_activity_city_selection">Städteauswahl</string>
@@ -58,6 +100,7 @@
     <string name="activity_location_sort_nachRating2">nach Rating (abwärts)</string>
     <string name="activity_location_sort_minRating">Min. Rating</string>
     <string name="activity_location_sort_anwenden">Anwenden</string>
+    <string name="activity_location_sort_sortnach">Sortieren nach: </string>
 
     <!-- Strings für die LocationSearchActivity -->
     <string name="title_activity_location_search">LocationSearchActivity</string>
@@ -65,7 +108,8 @@
     <!-- Strings für die LocationCommentActivity -->
     <string name="title_activity_location_comment">LocationCommentActivity</string>
     <string name="activity_location_comment_kommentieren">Kommentieren</string>
-    <string name="activity_location_comment_hint">Verfassen Sie hier Ihre Bewertung</string>
+    <string name="activity_location_comment_hint">Verfassen Sie hier Ihre Bewertung</string>#
+    <string name="activity_location_comment_leer">Kommentarfeld ist leer</string>
 
     <!-- Strings für die LocationAddImageActivity-->
     <string name="title_activity_location_add_image">Bilder hochladen</string>
@@ -74,13 +118,18 @@
     <string name="activity_location_add_image_upload">Hochladen</string>
     <string name="activity_location_add_image_vorschau">Vorschau:</string>
     <string name="activity_location_add_image_drehen">Drehen</string>
-
-    <string name="title_activity_set_location_details">SetLocationDetailsActivity</string>
+    <string name="activity_location_add_image_maxanzahl">Maximale Anzahl an Bildern Erreicht</string>
+    <string name="activity_location_add_image_keinbild">Kein Bild ausgewählt</string>
 
     <!-- Strings für die Menüs -->
     <string name="menu_neueLoc">Neue Location</string>
     <string name="menu_kontoverw">Konto verwalten</string>
     <string name="menu_ausloggen">Ausloggen</string>
     <string name="menu_locBearb">Location bearbeiten</string>
+    <string name="menu_ausloggen_frage">Wollen Sie sich wirklich ausloggen?</string>
+    <string name="menu_ausloggen_ja">Ja</string>
+    <string name="menu_ausloggen_nein">Nein</string>
+
+    <string name="title_activity_set_location_details">Location bearbeiten</string>
 
 </resources>

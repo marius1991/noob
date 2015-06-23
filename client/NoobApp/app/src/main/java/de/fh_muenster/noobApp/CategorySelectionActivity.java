@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fh_muenster.noob.CategoryListResponse;
@@ -39,7 +40,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
     private EditText editText;
 
     /**
-     * Diese Methode wird aufgerufen wenn die Activity erstellt wird. Der Name der Activity wird
+     * Diese Methode wird aufgerufen, wenn die Activity erstellt wird. Der Name der Activity wird
      * angepasst und der AsyncTask für den Kategorienabruf wird gestartet.
      * @param savedInstanceState
      */
@@ -111,6 +112,17 @@ public class CategorySelectionActivity extends ActionBarActivity {
     }
 
     /**
+     * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Konto verwalten' geklickt wird.
+     * Es wir die Activity für die Kontoverwaltung gestartet.
+     * @param item
+     */
+    public void clickFuncUserDetails(MenuItem item) {
+        Log.d(TAG, "Menüeintrag 'Benutzer bearbeiten' ausgewählt");
+        Intent i = new Intent(CategorySelectionActivity.this, UserManagementAcitivtiy.class);
+        startActivity(i);
+    }
+
+    /**
      * Diese Methode wird aufgerufen, wenn über das Menü der Eintrag 'Logout' gewählt wird.
      * Es erscheint eine Dialog, auf dem die Eingabe bestätigt werden muss.
      * Dann wird ein LogoutTask gestartet.
@@ -119,9 +131,9 @@ public class CategorySelectionActivity extends ActionBarActivity {
     public void clickFuncLogout(MenuItem item) {
         Log.d(TAG, "Menüeintrag 'Logout' ausgewählt");
         new AlertDialog.Builder(this)
-                .setMessage("Wollen Sie sich wirklich abmelden?")
+                .setMessage(R.string.menu_ausloggen_frage)
                 .setCancelable(false)
-                .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.menu_ausloggen_ja, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         NoobApplication myApp = (NoobApplication) getApplication();
                         new LogoutTask(getApplicationContext(), myApp).execute(myApp.getSessionId());
@@ -130,7 +142,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 })
-                .setNegativeButton("Nein", null)
+                .setNegativeButton(R.string.menu_ausloggen_nein, null)
                 .show();
     }
 
@@ -154,7 +166,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         /**
          * Startet einen neuen Thread, der die Kategorienliste abholen soll.
          * @param params
-         * @return
+         * @return CategoryListResponse (Enthält die Liste der Kategorien)
          */
         @Override
         protected CategoryListResponse doInBackground(String... params) {
@@ -173,7 +185,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
 
         /**
          * Nimmt die Kategorienliste entgegen und befüllt damit das Spinner Objekt.
-         * @param response
+         * @param response CategoryListResponse (Enthält die Liste der Kategorien)
          */
         @Override
         protected void onPostExecute (CategoryListResponse response) {
@@ -184,9 +196,16 @@ public class CategorySelectionActivity extends ActionBarActivity {
             }
             else {
                 NoobApplication myApp = (NoobApplication) getApplication();
-                myApp.setCategories(response.getCategories());
-                List<String> valueList;
-                valueList = response.getCategories();
+                List<String> valueList = new ArrayList<>();
+                if(response.getCategories() != null) {
+                    myApp.setCategories(response.getCategories());
+                    valueList = response.getCategories();
+                    Collections.sort(valueList);
+                }
+                else {
+                    Log.d(TAG, "keine Kategorie vorhanden");
+                    Toast.makeText(getApplicationContext(), R.string.keine_ergebnisse, Toast.LENGTH_SHORT).show();
+                }
                 ArrayAdapter adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, valueList);
                 Spinner sp = (Spinner) findViewById(R.id.spinner);
                 sp.setAdapter(adapter);
@@ -225,7 +244,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
         /**
          * Startet einen neuen Thread für die Abfrage der Locationliste vom Server.
          * @param params
-         * @return
+         * @return LocationListResponse (Enthält eine Liste mit Locations)
          */
         @Override
         protected LocationListResponse doInBackground(String... params) {
@@ -244,14 +263,14 @@ public class CategorySelectionActivity extends ActionBarActivity {
 
         /**
          * Nimmt die Locationliste entgegen und speichert sie.
-         * @param response
+         * @param response LocationListResponse (Enthält eine Liste mit Locations)
          */
         @Override
         protected void onPostExecute (LocationListResponse response){
             Dialog.dismiss();
             if(response.getReturnCode() == 10) {
                 Log.d(TAG, "keine Verbindung zum Server");
-                Toast.makeText(getApplicationContext(), "Keine Verbidung zum Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.keine_verbindung, Toast.LENGTH_SHORT).show();
             }
             else {
                 if(!response.getLocations().isEmpty()) {
@@ -266,7 +285,7 @@ public class CategorySelectionActivity extends ActionBarActivity {
                 }
                 else {
                     Log.d(TAG, "keine Suchergebnisse!");
-                    Toast.makeText(getApplicationContext(), "keine Suchergebnisse!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.keine_ergebnisse, Toast.LENGTH_SHORT).show();
                 }
             }
         }

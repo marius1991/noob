@@ -36,7 +36,7 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public User findUserByName(String name) {
-		logger.info("DB-Query: " + "SELECT u FROM USER u WHERE u.name = '" + name + "' ");
+		logger.info("DB-Query: " + "SELECT u FROM User u WHERE u.name = '" + name + "' ");
 		try {
 			return (User) em.createQuery("SELECT u FROM User u WHERE u.name LIKE '" + name + "' ").getSingleResult();
 		}
@@ -62,7 +62,7 @@ public class NoobDAO implements NoobDAOLocal {
 		logger.info("DB-Query: em.find(User.class, email);");
 		User user;
 		try {
-			user = em.find(User.class, email);
+			user = em.find(User.class, email.toLowerCase());
 			return user;
 		}
 		catch (Exception e) {
@@ -83,9 +83,9 @@ public class NoobDAO implements NoobDAOLocal {
 	 */
 	@Override
 	public List<Location> findLocationsByName(String name, String city) {
-		logger.info("DB-Query: " + "SELECT l FROM Location l WHERE l.city = :stadt AND lower(l.name) = lower(:name)");
+		logger.info("DB-Query: " + "SELECT l FROM Location l WHERE l.city = :stadt AND lower(trim(l.name)) = lower(trim(:name))");
 		try {
-			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND lower(l.name) = lower(:name)", Location.class).setParameter("stadt",city).setParameter("name",name).getResultList();
+			return em.createQuery("SELECT l FROM Location l WHERE l.city = :stadt AND lower(trim(l.name)) = lower(trim(:name))", Location.class).setParameter("stadt",city).setParameter("name",name).getResultList();
 		}
 		catch(Exception e) {
 			logger.error(e.getMessage());
@@ -128,25 +128,6 @@ public class NoobDAO implements NoobDAOLocal {
 	
 	}
 
-	/**
-	 * Durch den Aufruf wird eine Liste mit Locations zurückgegebe mit passender Stadt
-	 * 
-	 * @param city Stadt in der die Location zu finden ist
-	 * 
-	 * @return Liste von Locations
-	 */
-	@Override
-	public List<Location> findLocationsByCity(String city) {	
-		logger.info("DB-Query: " + "SELECT l FROM LOCATION l WHERE l.city = :stadt");
-		try {
-			return em.createQuery("SELECT l FROM LOCATION l WHERE l.city = :stadt", Location.class).setParameter("stadt",city).getResultList();
-		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			return null;
-		}
-		
-	}
 
 	/**
 	 * Kommentar über die ID finden.

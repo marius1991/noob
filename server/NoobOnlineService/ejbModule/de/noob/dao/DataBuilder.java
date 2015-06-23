@@ -57,6 +57,48 @@ public class DataBuilder {
 		logger.info("Location angelegt: " + cavete.getName());
 		
 		
+		//Rote Liebe
+		Location roteLiebe = new Location("Rote Liebe", "Bar","Bar in Münster","Kreuzstrasse","14",
+				48143,"Münster",
+				testUser);
+		em.persist(roteLiebe);
+		logger.info("Location angelegt: " + roteLiebe.getName());
+		
+		
+		//Himmel und Hölle
+		Location himmelHoelle = new Location("Himmel und Hölle", "Bar","Die gemütliche und rustikale Atmosphäre sowie die rockige Musik machen die Himmel & Hölle Bar zu der Partylocation der Kreuzstraße!",
+				"Kreuzstraße", "28/29",
+				48143, "Münster",
+				testUser);
+		em.persist(himmelHoelle);
+		logger.info("Location angelegt: " + himmelHoelle.getName());
+		
+		//Palma
+		Location palma = new Location("Palma", "Bar","Der Club Palma ist eine Cocktailbar an der Jüdefelderstraße in Münster und bietet dauerhaft günstige Preise.",
+				"Jüdefelderstrasse", "34",
+				48143, "Münster",
+				testUser);
+		em.persist(palma);
+		logger.info("Location angelegt: " + palma.getName());
+		 
+		
+		//Gorilla
+		Location gorilla = new Location ("Gorilla Bar", "Bar", "Bar in Münster",
+				"Jüdefelderstrasse", "54",
+				48143,"Münster",
+				testUser);
+		em.persist(gorilla);
+		logger.info("Location angelegt: " + gorilla.getName());
+		
+		
+		//Dille
+		Location dille = new Location("Destille","Bar","Seit bald 50 Jahren verwöhnt die Destille in der Jüdefelderstraße im Kuhviertel der westfälischen Stadt Münster ihre ausgewählten Gäste mit einer ganz speziellen Getränkeauswahl und Musik vom Feinsten.",
+				"Kuhstraße", "10",
+				48143,"Münster",
+				testUser);
+		em.persist(dille);
+		logger.info("Location angelegt: " + dille.getName());
+		
 		//Ziege
 		Location ziege = new Location("Ziege", "Kneipe", "Die Ziege ist die wahrscheinlich kleinste Kneipe der Welt, in jedem Falle die kleinste Kneipe Münsters!",
 				"Kreuzstraße", "33 / 34",

@@ -2,14 +2,15 @@ package de.fh_muenster.noobApp;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.TextView;
 
 import de.fh_muenster.noob.NoobOnlineService;
 import de.fh_muenster.noob.UserTO;
 
 /**
- * Created by StillforYou on 15.06.2015.
+ * Created by marco
+ * Dieser AsyncTask holt die akutellen "User-Werte" vom Server
+ * und speichert diese in die Applikation Klasse
+ * @author marco
  */
 public class GetUserDetails extends AsyncTask<String, String, UserTO> {
         private Context context;
@@ -22,6 +23,10 @@ public class GetUserDetails extends AsyncTask<String, String, UserTO> {
             this.context = context;
         }
 
+        /**
+         * Diese Methode, f�hrt einen Thread holt sich  ein UserTO Objekt
+         * @param params
+         */
         @Override
         protected UserTO doInBackground(String... params) {
             NoobOnlineService onlineService;
@@ -36,7 +41,11 @@ public class GetUserDetails extends AsyncTask<String, String, UserTO> {
             userTO = onlineService.getUserDetails(sessionId);
             return userTO;
         }
-
+        /**
+         * Diese Methode wird ausgef�hrt nachdem doInBackground durchgelaufen ist.�berpr�ft den returnCode vom Server,
+         * ob alles geklappt hat
+         * @param userTO
+         */
         @Override
         protected void onPostExecute(UserTO userTO) {
             if (userTO.getReturnCode() == 0) {

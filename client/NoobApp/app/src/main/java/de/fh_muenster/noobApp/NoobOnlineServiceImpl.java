@@ -24,6 +24,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
 
     //private static final String URL = "http://10.0.2.2:8080/noob/NoobOnlineServiceBean";
     private static final String URL = "http://10.70.16.58:8080/noob/NoobOnlineServiceBean";
+    //private static final String URL="http://10.60.70.14:8080/noob/NoobOnlineServiceBean";
 
     private static final String TAG = NoobOnlineServiceImpl.class.getName();
 
@@ -542,7 +543,13 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         String METHOD_NAME = "createLocation";
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         Log.d(TAG, "Create Location:");
-        String bytestring = Base64.encode(image);
+        String bytestring;
+        if(image != null) {
+            bytestring = Base64.encode(image);
+        }
+        else {
+            bytestring = null;
+        }
         SoapObject response;
         try {
             response = executeSoapAction(METHOD_NAME, sessionId, name, category, description, street, number, plz, city, bytestring);
@@ -682,18 +689,16 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
      * @param number
      * @param plz
      * @param city
-     * @param image
      * @return
      */
     @Override
-    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city, byte[] image) {
+    public ReturnCodeResponse setLocationDetails(int sessionId, int locationId, String name, String category, String description, String street, String number, int plz, String city) {
         String METHOD_NAME = "setLocationDetails";
         ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
         Log.d(TAG, "Set Locationdetails:");
-        String bytestring = Base64.encode(image);
         SoapObject response;
         try {
-            response = executeSoapAction(METHOD_NAME, sessionId, locationId, name, category, description, street, number, plz, city, bytestring);
+            response = executeSoapAction(METHOD_NAME, sessionId, locationId, name, category, description, street, number, plz, city);
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
             returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
@@ -804,6 +809,27 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
         String bytestring = Base64.encode(image);
         try {
             response = executeSoapAction(METHOD_NAME, sessionId, locationId, bytestring);
+            Log.d(TAG, response.getProperty("message").toString());
+            Log.d(TAG, response.getProperty("returnCode").toString());
+            returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
+            returnCodeResponse.setMessage(response.getProperty("message").toString());
+        } catch (SoapFault soapFault) {
+            soapFault.printStackTrace();
+        }
+        catch (NullPointerException e) {
+            returnCodeResponse.setReturnCode(10);
+        }
+        return returnCodeResponse;
+    }
+
+    @Override
+    public ReturnCodeResponse deleteLocation(int sessionId, int locationId) {
+        String METHOD_NAME = "deleteLocation";
+        Log.d(TAG, "Delete Location:");
+        SoapObject response;
+        ReturnCodeResponse returnCodeResponse = new ReturnCodeResponse();
+        try {
+            response = executeSoapAction(METHOD_NAME, sessionId, locationId);
             Log.d(TAG, response.getProperty("message").toString());
             Log.d(TAG, response.getProperty("returnCode").toString());
             returnCodeResponse.setReturnCode(Integer.parseInt(response.getPrimitivePropertyAsString("returnCode")));
