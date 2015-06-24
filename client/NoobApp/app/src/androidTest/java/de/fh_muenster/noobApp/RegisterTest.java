@@ -3,7 +3,6 @@ package de.fh_muenster.noobApp;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 /**
  * Created by marco
@@ -34,7 +33,7 @@ public class RegisterTest extends ActivityInstrumentationTestCase2<RegisterActiv
         registerButton = (Button) nRegisterActivity.findViewById(R.id.button6);
     }
 
-    //Hint überprüfen ob diese in der App gesetzt werden
+    //Hint Ã¼berprÃ¼fen ob diese in der App gesetzt werden
     public void testMyFirstTestTextView_labelText() {
         final String expectedEmail ="Email-Adresse";
         final String expectPassword = "Passwort";

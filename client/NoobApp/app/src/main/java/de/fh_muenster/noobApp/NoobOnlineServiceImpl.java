@@ -714,7 +714,7 @@ public class NoobOnlineServiceImpl implements NoobOnlineService {
     }
 
     /**
-     *
+     * Durch diese Methode werden die Benutzerdaten verändert
      * @param sessionId
      * @param name
      * @param password
